@@ -1,8 +1,13 @@
 # Deploy na Vercel
 
 O app foi estruturado para a Vercel (serverless): o simulador é estático em
-`public/` e a API são funções em `api/*.ts`. A lógica de negócio é a mesma do
+`public/` e a API são funções serverless. A lógica de negócio é a mesma do
 servidor local — os handlers em `src/app.ts` servem os dois.
+
+As funções são empacotadas por um passo de build: `npm run build` (esbuild) lê
+`functions-src/*.ts` e gera `api/*.js` autocontidos (todo o `src/` e os SDKs
+inlinados). Isso evita o problema de o Node de produção não importar `.ts`. A
+Vercel roda esse build automaticamente (definido em `vercel.json`).
 
 ## Pré-requisitos (no Supabase, uma vez)
 
@@ -26,8 +31,9 @@ git push -u origin main
 ## 2. Importar na Vercel
 
 1. [vercel.com/new](https://vercel.com/new) → importe o repositório.
-2. Framework Preset: **Other** (não há build; `public/` é estático e `api/` são funções).
-3. Não defina Build Command nem Output Directory — o zero-config resolve.
+2. Framework Preset: **Other**. O `vercel.json` já define o Build Command
+   (`npm run build`), o Output Directory (`public`) e as funções — não precisa
+   configurar nada na tela de import.
 
 ## 3. Variáveis de ambiente (Project Settings → Environment Variables)
 
@@ -64,5 +70,5 @@ Após o deploy, abra a URL da Vercel e valide:
 - **WhatsApp** (fases B/C): a função `api/webhook.ts` já está pronta. Configure na Meta
   a URL `https://<seu-projeto>.vercel.app/webhook` e o `WHATSAPP_VERIFY_TOKEN`
   (mais `WHATSAPP_TOKEN` e `WHATSAPP_PHONE_NUMBER_ID` nas variáveis).
-- Se o build reclamar de importação com extensão `.ts`, me avise — ajusto a
-  configuração do bundler.
+- As funções (`api/*.js`) são geradas pelo build e **não** são versionadas
+  (`.gitignore`); a Vercel as recria a cada deploy.

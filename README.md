@@ -80,7 +80,8 @@ suba para o GitHub, importe na Vercel e configure as variáveis de ambiente
 
 ```
 public/index.html       simulador (estático; servido localmente e na Vercel)
-api/                     funções serverless da Vercel (mensagem, estoque, indicadores, webhook)
+functions-src/          fontes das funções serverless (mensagem, estoque, indicadores, webhook)
+build.mjs               empacota functions-src/*.ts -> api/*.js (esbuild) para a Vercel
 src/
 ├── app.ts              raiz de composição + handlers (usados pelo servidor local E pela Vercel)
 ├── index.ts            servidor HTTP local (fino; delega ao app.ts)
