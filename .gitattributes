@@ -1,0 +1,4 @@
+# Normaliza quebras de linha: LF no repositório para todos os arquivos de texto.
+* text=auto eol=lf
+*.png binary
+*.xlsx binary

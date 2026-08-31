@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simulador — Assistente da Farmácia Municipal</title>
+    <style>
+      :root {
+        --verde: #075e54;
+        --verde-claro: #128c7e;
+        --bolha-bot: #ffffff;
+        --bolha-cidadao: #dcf8c6;
+        --fundo-chat: #e5ddd5;
+        --texto: #111b21;
+        --cinza: #667781;
+        --borda: #d1d7db;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        color: var(--texto);
+        background: #f0f2f5;
+      }
+      header {
+        background: var(--verde);
+        color: #fff;
+        padding: 10px 18px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+      header h1 { font-size: 17px; margin: 0; font-weight: 600; }
+      .demo-badge {
+        background: #fff3cd;
+        color: #7a5b00;
+        border: 1px solid #ffe08a;
+        padding: 3px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .layout { display: flex; gap: 14px; padding: 14px; align-items: flex-start; flex-wrap: wrap; }
+      .conversas { display: flex; gap: 14px; flex: 1; flex-wrap: wrap; min-width: 320px; }
+      .painel-conversa {
+        width: 340px;
+        background: var(--fundo-chat);
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        display: flex;
+        flex-direction: column;
+        height: 560px;
+        overflow: hidden;
+      }
+      .barra-conversa {
+        background: var(--verde-claro);
+        color: #fff;
+        padding: 8px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 13px;
+      }
+      .barra-conversa .id { opacity: 0.85; font-size: 11px; }
+      .barra-conversa button {
+        background: transparent;
+        border: none;
+        color: #fff;
+        cursor: pointer;
+        font-size: 12px;
+        opacity: 0.8;
+      }
+      .mensagens {
+        flex: 1;
+        overflow-y: auto;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .bolha {
+        max-width: 82%;
+        padding: 7px 10px;
+        border-radius: 8px;
+        font-size: 13.5px;
+        line-height: 1.4;
+        white-space: pre-wrap;
+        box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+      }
+      .bolha.bot { background: var(--bolha-bot); align-self: flex-start; border-top-left-radius: 2px; }
+      .bolha.cidadao { background: var(--bolha-cidadao); align-self: flex-end; border-top-right-radius: 2px; }
+      .entrada { display: flex; gap: 6px; padding: 8px; background: #f0f0f0; }
+      .entrada input {
+        flex: 1;
+        border: 1px solid var(--borda);
+        border-radius: 20px;
+        padding: 8px 14px;
+        font-size: 13.5px;
+        outline: none;
+      }
+      .entrada button {
+        background: var(--verde-claro);
+        color: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 38px;
+        height: 38px;
+        cursor: pointer;
+        font-size: 16px;
+      }
+      .chips { padding: 6px 8px; display: flex; flex-wrap: wrap; gap: 5px; background: #f0f0f0; }
+      .chip {
+        font-size: 11px;
+        background: #fff;
+        border: 1px solid var(--borda);
+        border-radius: 14px;
+        padding: 3px 9px;
+        cursor: pointer;
+        color: var(--verde-claro);
+      }
+      .chip:hover { background: #eef; }
+      .lateral {
+        width: 340px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+        position: sticky;
+        top: 14px;
+      }
+      .abas { display: flex; border-bottom: 1px solid var(--borda); }
+      .abas button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        background: #fff;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--cinza);
+      }
+      .abas button.ativa { color: var(--verde); box-shadow: inset 0 -2px 0 var(--verde); }
+      .conteudo-aba { padding: 12px; max-height: 520px; overflow-y: auto; }
+      .busca-estoque, .token-input {
+        width: 100%;
+        padding: 7px 10px;
+        border: 1px solid var(--borda);
+        border-radius: 6px;
+        font-size: 13px;
+      }
+      .token-box {
+        background: #fff8e6;
+        border: 1px solid #ffe08a;
+        border-radius: 6px;
+        padding: 8px;
+        margin-bottom: 10px;
+      }
+      .token-box label { font-size: 11px; color: #7a5b00; font-weight: 600; display: block; margin-bottom: 4px; }
+      table { width: 100%; border-collapse: collapse; font-size: 12px; }
+      th, td { text-align: left; padding: 5px 4px; border-bottom: 1px solid #eee; }
+      th { color: var(--cinza); font-weight: 600; }
+      .sit { font-size: 10px; padding: 1px 6px; border-radius: 10px; font-weight: 700; white-space: nowrap; }
+      .sit.DISPONIVEL { background: #d1f0d9; color: #1a7f3c; }
+      .sit.ESTOQUE { background: #fff0cc; color: #8a6100; }
+      .sit.FALTA { background: #fbd6d6; color: #b32020; }
+      .estoque-input { width: 62px; padding: 3px 5px; border: 1px solid var(--borda); border-radius: 4px; font-size: 12px; }
+      .kpi { display: flex; justify-content: space-between; padding: 9px 4px; border-bottom: 1px solid #eee; font-size: 13px; }
+      .kpi b { font-size: 16px; color: var(--verde); }
+      .add-conversa {
+        background: var(--verde-claro); color: #fff; border: none; border-radius: 8px;
+        padding: 8px 14px; cursor: pointer; font-size: 13px; font-weight: 600;
+      }
+      .dica { font-size: 11px; color: var(--cinza); margin: 4px 0 10px; }
+      .aviso-edicao { font-size: 11px; margin: 6px 0; min-height: 14px; }
+      .aviso-edicao.erro { color: #b32020; }
+      .aviso-edicao.ok { color: #1a7f3c; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>💊 Assistente Virtual — Farmácia Municipal</h1>
+      <span class="demo-badge">⚠️ Demonstração · dados fictícios</span>
+      <button class="add-conversa" onclick="adicionarConversa()">+ Nova conversa</button>
+    </header>
+
+    <div class="layout">
+      <div class="conversas" id="conversas"></div>
+
+      <aside class="lateral">
+        <div class="abas">
+          <button id="aba-estoque" class="ativa" onclick="trocarAba('estoque')">Estoque (ao vivo)</button>
+          <button id="aba-indicadores" onclick="trocarAba('indicadores')">Indicadores</button>
+        </div>
+        <div class="conteudo-aba" id="conteudo-estoque">
+          <p class="dica">Altere o estoque e repita a pergunta numa conversa: a resposta muda na hora — prova de que vem da base, não do modelo.</p>
+          <div class="token-box" id="token-box" style="display: none">
+            <label for="token-input">Token de administrador (necessário para editar)</label>
+            <input class="token-input" id="token-input" type="password" placeholder="cole o ADMIN_TOKEN" oninput="salvarToken()" />
+          </div>
+          <div class="aviso-edicao" id="aviso-edicao"></div>
+          <input class="busca-estoque" id="busca-estoque" placeholder="Filtrar medicamento..." oninput="renderEstoque()" />
+          <table>
+            <thead><tr><th>Medicamento</th><th>Estoque</th><th>Situação</th></tr></thead>
+            <tbody id="corpo-estoque"></tbody>
+          </table>
+        </div>
+        <div class="conteudo-aba" id="conteudo-indicadores" style="display: none">
+          <p class="dica">Indicadores do piloto, calculados a partir do log anônimo das consultas.</p>
+          <div id="kpis"></div>
+          <button class="chip" style="margin-top:10px" onclick="carregarIndicadores()">Atualizar</button>
+        </div>
+      </aside>
+    </div>
+
+    <script>
+      const CHIPS = [
+        "tem dipirona?", "zitromax", "metiformina 850", "bombinha",
+        "dipirona pra criança", "paracetamol gotas",
+        "posso tomar dipirona com o remédio de pressão?", "xpto123", "ATENDENTE",
+      ];
+      let estoqueCache = [];
+      let protegido = false;
+      let contador = 0;
+
+      function novoId() {
+        return "cidadao-" + Math.random().toString(36).slice(2, 8);
+      }
+
+      function adicionarConversa() {
+        contador++;
+        const id = novoId();
+        const div = document.createElement("div");
+        div.className = "painel-conversa";
+        div.dataset.remetente = id;
+        div.innerHTML = `
+          <div class="barra-conversa">
+            <span>Cidadão ${contador} <span class="id">(${id})</span></span>
+            <button onclick="this.closest('.painel-conversa').remove()">✕</button>
+          </div>
+          <div class="mensagens"></div>
+          <div class="chips">${CHIPS.map((c) => `<span class="chip" onclick="usarChip(this, ${JSON.stringify(c).replace(/"/g, "&quot;")})">${c}</span>`).join("")}</div>
+          <div class="entrada">
+            <input placeholder="Digite uma mensagem" onkeydown="if(event.key==='Enter')enviar(this)" />
+            <button onclick="enviar(this.previousElementSibling)">➤</button>
+          </div>`;
+        document.getElementById("conversas").appendChild(div);
+        return div;
+      }
+
+      function usarChip(el, texto) {
+        const painel = el.closest(".painel-conversa");
+        const input = painel.querySelector(".entrada input");
+        input.value = texto;
+        enviar(input);
+      }
+
+      function addBolha(painel, texto, classe) {
+        const msgs = painel.querySelector(".mensagens");
+        const b = document.createElement("div");
+        b.className = "bolha " + classe;
+        b.textContent = texto;
+        msgs.appendChild(b);
+        msgs.scrollTop = msgs.scrollHeight;
+      }
+
+      async function enviar(input) {
+        const texto = input.value.trim();
+        if (!texto) return;
+        const painel = input.closest(".painel-conversa");
+        const remetente = painel.dataset.remetente;
+        addBolha(painel, texto, "cidadao");
+        input.value = "";
+        try {
+          const r = await fetch("/api/mensagem", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ remetente, texto, idMensagem: novoId() }),
+          });
+          const dados = await r.json();
+          for (const m of dados.mensagens || []) addBolha(painel, m, "bot");
+        } catch (e) {
+          addBolha(painel, "Erro de conexão com o simulador.", "bot");
+        }
+      }
+
+      function trocarAba(qual) {
+        const est = qual === "estoque";
+        document.getElementById("conteudo-estoque").style.display = est ? "block" : "none";
+        document.getElementById("conteudo-indicadores").style.display = est ? "none" : "block";
+        document.getElementById("aba-estoque").classList.toggle("ativa", est);
+        document.getElementById("aba-indicadores").classList.toggle("ativa", !est);
+        if (!est) carregarIndicadores();
+      }
+
+      function classeSit(s) {
+        if (s === "DISPONIVEL") return "DISPONIVEL";
+        if (s === "ESTOQUE BAIXO") return "ESTOQUE";
+        return "FALTA";
+      }
+
+      function getToken() {
+        try { return localStorage.getItem("adminToken") || ""; } catch { return ""; }
+      }
+      function salvarToken() {
+        try { localStorage.setItem("adminToken", document.getElementById("token-input").value); } catch {}
+      }
+
+      function aviso(texto, tipo) {
+        const el = document.getElementById("aviso-edicao");
+        el.textContent = texto || "";
+        el.className = "aviso-edicao" + (tipo ? " " + tipo : "");
+      }
+
+      async function carregarEstoque() {
+        try {
+          const r = await fetch("/api/estoque");
+          if (!r.ok) return;
+          const dados = await r.json();
+          estoqueCache = dados.itens || [];
+          protegido = !!dados.protegido;
+          const box = document.getElementById("token-box");
+          box.style.display = protegido ? "block" : "none";
+          if (protegido) document.getElementById("token-input").value = getToken();
+          renderEstoque();
+        } catch {}
+      }
+
+      function renderEstoque() {
+        const filtro = (document.getElementById("busca-estoque").value || "").toLowerCase();
+        const corpo = document.getElementById("corpo-estoque");
+        corpo.innerHTML = estoqueCache
+          .filter((m) => (m.principio_ativo + " " + m.apresentacao + " " + m.codigo).toLowerCase().includes(filtro))
+          .map(
+            (m) => `
+            <tr>
+              <td>${m.principio_ativo}<br><span style="color:#888">${m.apresentacao}</span></td>
+              <td><input class="estoque-input" type="number" min="0" value="${m.estoque_atual}"
+                   onchange="alterarEstoque('${m.codigo}', this.value)" /></td>
+              <td><span class="sit ${classeSit(m.situacao)}">${m.situacao}</span></td>
+            </tr>`,
+          )
+          .join("");
+      }
+
+      async function alterarEstoque(codigo, valor) {
+        const estoque_atual = parseInt(valor, 10);
+        if (!Number.isInteger(estoque_atual) || estoque_atual < 0) return;
+        aviso("");
+        try {
+          const r = await fetch("/api/estoque", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-admin-token": getToken() },
+            body: JSON.stringify({ codigo, estoque_atual }),
+          });
+          const dados = await r.json();
+          if (r.status === 401) {
+            aviso("Token de administrador inválido ou ausente.", "erro");
+            return;
+          }
+          if (!r.ok) {
+            aviso(dados.erro || "Falha ao alterar.", "erro");
+            return;
+          }
+          estoqueCache = dados.itens;
+          renderEstoque();
+          aviso("Estoque atualizado no banco.", "ok");
+          setTimeout(() => aviso(""), 2000);
+        } catch {
+          aviso("Erro de conexão.", "erro");
+        }
+      }
+
+      async function carregarIndicadores() {
+        const r = await fetch("/api/indicadores");
+        const d = await r.json();
+        const box = document.getElementById("kpis");
+        if (d.indisponivel) {
+          box.innerHTML = `<p class="dica">${d.motivo}</p>`;
+          return;
+        }
+        const linha = (rot, val) => `<div class="kpi"><span>${rot}</span><b>${val}</b></div>`;
+        box.innerHTML =
+          linha("Consultas realizadas", d.consultas_totais) +
+          linha("Termo reconhecido", d.taxa_reconhecimento_pct + "%") +
+          linha("Resolução automática", d.taxa_resolucao_automatica_pct + "%") +
+          linha("Encaminhamentos humanos", d.encaminhamentos_humanos) +
+          linha("Consultas de item em falta", d.consultas_itens_em_falta);
+      }
+
+      adicionarConversa();
+      adicionarConversa();
+      carregarEstoque();
+    </script>
+  </body>
+</html>

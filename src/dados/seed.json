@@ -1,0 +1,1143 @@
+{
+  "_origem": "gerado por scripts/gerar-seed.mjs a partir de db/*.sql — nao editar a mao",
+  "corte_similaridade": 0.42,
+  "unidades": [
+    {
+      "id": "UN-01",
+      "nome": "Farmácia Municipal Central",
+      "endereco": "Rua das Flores, 100 - Centro",
+      "horario": "Segunda a sexta, 7h às 17h",
+      "telefone": "(00) 0000-0001"
+    },
+    {
+      "id": "UN-02",
+      "nome": "Farmácia da UBS Bairro Novo",
+      "endereco": "Av. Principal, 500 - Bairro Novo",
+      "horario": "Segunda a sexta, 7h às 16h",
+      "telefone": "(00) 0000-0002"
+    },
+    {
+      "id": "UN-03",
+      "nome": "Farmácia da UBS Vila Esperança",
+      "endereco": "Rua São João, 25 - Vila Esperança",
+      "horario": "Segunda a sexta, 8h às 16h",
+      "telefone": "(00) 0000-0003"
+    }
+  ],
+  "medicamentos": [
+    {
+      "codigo": "MED-001",
+      "principio_ativo": "Dipirona sódica",
+      "apresentacao": "500 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 4820,
+      "estoque_minimo": 800,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-002",
+      "principio_ativo": "Dipirona sódica",
+      "apresentacao": "500 mg/mL solução oral 10 mL",
+      "forma_farmaceutica": "Solução oral",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 0,
+      "estoque_minimo": 60,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-003",
+      "principio_ativo": "Paracetamol",
+      "apresentacao": "500 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 3150,
+      "estoque_minimo": 700,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-004",
+      "principio_ativo": "Paracetamol",
+      "apresentacao": "200 mg/mL solução oral 15 mL",
+      "forma_farmaceutica": "Solução oral",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 42,
+      "estoque_minimo": 50,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-005",
+      "principio_ativo": "Ibuprofeno",
+      "apresentacao": "300 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 1240,
+      "estoque_minimo": 400,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-006",
+      "principio_ativo": "Amoxicilina",
+      "apresentacao": "500 mg",
+      "forma_farmaceutica": "Cápsula",
+      "componente": "Básico",
+      "unidade_medida": "Cápsula",
+      "estoque_atual": 2600,
+      "estoque_minimo": 600,
+      "tipo_receita": "Receita de antimicrobiano (2 vias)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-007",
+      "principio_ativo": "Amoxicilina",
+      "apresentacao": "50 mg/mL pó para suspensão oral 60 mL",
+      "forma_farmaceutica": "Suspensão oral",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 18,
+      "estoque_minimo": 30,
+      "tipo_receita": "Receita de antimicrobiano (2 vias)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-008",
+      "principio_ativo": "Azitromicina",
+      "apresentacao": "500 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 0,
+      "estoque_minimo": 200,
+      "tipo_receita": "Receita de antimicrobiano (2 vias)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-009",
+      "principio_ativo": "Cefalexina",
+      "apresentacao": "500 mg",
+      "forma_farmaceutica": "Cápsula",
+      "componente": "Básico",
+      "unidade_medida": "Cápsula",
+      "estoque_atual": 940,
+      "estoque_minimo": 250,
+      "tipo_receita": "Receita de antimicrobiano (2 vias)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-010",
+      "principio_ativo": "Sulfametoxazol + Trimetoprima",
+      "apresentacao": "400 mg + 80 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 1180,
+      "estoque_minimo": 300,
+      "tipo_receita": "Receita de antimicrobiano (2 vias)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-011",
+      "principio_ativo": "Metronidazol",
+      "apresentacao": "250 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 760,
+      "estoque_minimo": 200,
+      "tipo_receita": "Receita de antimicrobiano (2 vias)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-012",
+      "principio_ativo": "Fluconazol",
+      "apresentacao": "150 mg",
+      "forma_farmaceutica": "Cápsula",
+      "componente": "Básico",
+      "unidade_medida": "Cápsula",
+      "estoque_atual": 210,
+      "estoque_minimo": 60,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-013",
+      "principio_ativo": "Metformina",
+      "apresentacao": "850 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 8600,
+      "estoque_minimo": 1500,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-014",
+      "principio_ativo": "Glibenclamida",
+      "apresentacao": "5 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 3400,
+      "estoque_minimo": 900,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-015",
+      "principio_ativo": "Insulina NPH humana",
+      "apresentacao": "100 UI/mL frasco 10 mL",
+      "forma_farmaceutica": "Suspensão injetável",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 96,
+      "estoque_minimo": 40,
+      "tipo_receita": "Receita simples (rede de frio)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-016",
+      "principio_ativo": "Insulina regular humana",
+      "apresentacao": "100 UI/mL frasco 10 mL",
+      "forma_farmaceutica": "Solução injetável",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 31,
+      "estoque_minimo": 25,
+      "tipo_receita": "Receita simples (rede de frio)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-017",
+      "principio_ativo": "Losartana potássica",
+      "apresentacao": "50 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 12400,
+      "estoque_minimo": 2000,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-018",
+      "principio_ativo": "Enalapril maleato",
+      "apresentacao": "10 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 5900,
+      "estoque_minimo": 1200,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-019",
+      "principio_ativo": "Captopril",
+      "apresentacao": "25 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 2100,
+      "estoque_minimo": 800,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-020",
+      "principio_ativo": "Hidroclorotiazida",
+      "apresentacao": "25 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 7300,
+      "estoque_minimo": 1200,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-021",
+      "principio_ativo": "Anlodipino besilato",
+      "apresentacao": "5 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 4100,
+      "estoque_minimo": 900,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-022",
+      "principio_ativo": "Atenolol",
+      "apresentacao": "50 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 880,
+      "estoque_minimo": 900,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-023",
+      "principio_ativo": "Propranolol cloridrato",
+      "apresentacao": "40 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 2450,
+      "estoque_minimo": 600,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-024",
+      "principio_ativo": "Sinvastatina",
+      "apresentacao": "20 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 6800,
+      "estoque_minimo": 1500,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-025",
+      "principio_ativo": "Ácido acetilsalicílico",
+      "apresentacao": "100 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 9200,
+      "estoque_minimo": 1500,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-026",
+      "principio_ativo": "Omeprazol",
+      "apresentacao": "20 mg",
+      "forma_farmaceutica": "Cápsula",
+      "componente": "Básico",
+      "unidade_medida": "Cápsula",
+      "estoque_atual": 5400,
+      "estoque_minimo": 1000,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-027",
+      "principio_ativo": "Metoclopramida cloridrato",
+      "apresentacao": "10 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 1320,
+      "estoque_minimo": 300,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-028",
+      "principio_ativo": "Prednisona",
+      "apresentacao": "20 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 640,
+      "estoque_minimo": 200,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-029",
+      "principio_ativo": "Prednisolona fosfato sódico",
+      "apresentacao": "3 mg/mL solução oral 60 mL",
+      "forma_farmaceutica": "Solução oral",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 0,
+      "estoque_minimo": 40,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-030",
+      "principio_ativo": "Dexametasona",
+      "apresentacao": "0,1% creme 10 g",
+      "forma_farmaceutica": "Creme dermatológico",
+      "componente": "Básico",
+      "unidade_medida": "Bisnaga",
+      "estoque_atual": 155,
+      "estoque_minimo": 40,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-031",
+      "principio_ativo": "Loratadina",
+      "apresentacao": "10 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 2900,
+      "estoque_minimo": 500,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-032",
+      "principio_ativo": "Salbutamol sulfato",
+      "apresentacao": "100 mcg/dose aerossol",
+      "forma_farmaceutica": "Aerossol oral",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 74,
+      "estoque_minimo": 60,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-033",
+      "principio_ativo": "Beclometasona dipropionato",
+      "apresentacao": "250 mcg/dose aerossol",
+      "forma_farmaceutica": "Aerossol oral",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 58,
+      "estoque_minimo": 30,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-034",
+      "principio_ativo": "Albendazol",
+      "apresentacao": "400 mg",
+      "forma_farmaceutica": "Comprimido mastigável",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 1450,
+      "estoque_minimo": 300,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-035",
+      "principio_ativo": "Ivermectina",
+      "apresentacao": "6 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 0,
+      "estoque_minimo": 150,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-036",
+      "principio_ativo": "Levotiroxina sódica",
+      "apresentacao": "50 mcg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 6100,
+      "estoque_minimo": 1200,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-037",
+      "principio_ativo": "Sulfato ferroso",
+      "apresentacao": "40 mg de ferro elementar",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 8800,
+      "estoque_minimo": 1500,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-038",
+      "principio_ativo": "Ácido fólico",
+      "apresentacao": "5 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 5200,
+      "estoque_minimo": 1000,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-039",
+      "principio_ativo": "Sais para reidratação oral",
+      "apresentacao": "envelope 27,9 g",
+      "forma_farmaceutica": "Pó para solução oral",
+      "componente": "Estratégico",
+      "unidade_medida": "Envelope",
+      "estoque_atual": 620,
+      "estoque_minimo": 200,
+      "tipo_receita": "Não exige receita",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-040",
+      "principio_ativo": "Nistatina",
+      "apresentacao": "100.000 UI/mL suspensão oral 50 mL",
+      "forma_farmaceutica": "Suspensão oral",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 27,
+      "estoque_minimo": 30,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-041",
+      "principio_ativo": "Permetrina",
+      "apresentacao": "5% loção 60 mL",
+      "forma_farmaceutica": "Loção",
+      "componente": "Básico",
+      "unidade_medida": "Frasco",
+      "estoque_atual": 88,
+      "estoque_minimo": 30,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-042",
+      "principio_ativo": "Etinilestradiol + Levonorgestrel",
+      "apresentacao": "0,03 mg + 0,15 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Cartela",
+      "estoque_atual": 430,
+      "estoque_minimo": 120,
+      "tipo_receita": "Receita simples",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-043",
+      "principio_ativo": "Amitriptilina cloridrato",
+      "apresentacao": "25 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 2200,
+      "estoque_minimo": 500,
+      "tipo_receita": "Receita de controle especial (C1)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-044",
+      "principio_ativo": "Fluoxetina cloridrato",
+      "apresentacao": "20 mg",
+      "forma_farmaceutica": "Cápsula",
+      "componente": "Básico",
+      "unidade_medida": "Cápsula",
+      "estoque_atual": 3600,
+      "estoque_minimo": 800,
+      "tipo_receita": "Receita de controle especial (C1)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-045",
+      "principio_ativo": "Carbamazepina",
+      "apresentacao": "200 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 1900,
+      "estoque_minimo": 500,
+      "tipo_receita": "Receita de controle especial (C1)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-046",
+      "principio_ativo": "Clonazepam",
+      "apresentacao": "2 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 340,
+      "estoque_minimo": 400,
+      "tipo_receita": "Notificação de receita B (azul)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-047",
+      "principio_ativo": "Diazepam",
+      "apresentacao": "5 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 0,
+      "estoque_minimo": 300,
+      "tipo_receita": "Notificação de receita B (azul)",
+      "unidade_id": "UN-01"
+    },
+    {
+      "codigo": "MED-048",
+      "principio_ativo": "Fenitoína sódica",
+      "apresentacao": "100 mg",
+      "forma_farmaceutica": "Comprimido",
+      "componente": "Básico",
+      "unidade_medida": "Comprimido",
+      "estoque_atual": 1100,
+      "estoque_minimo": 300,
+      "tipo_receita": "Receita de controle especial (C1)",
+      "unidade_id": "UN-01"
+    }
+  ],
+  "sinonimos": [
+    {
+      "codigo": "MED-001",
+      "termo": "dipirona"
+    },
+    {
+      "codigo": "MED-001",
+      "termo": "novalgina"
+    },
+    {
+      "codigo": "MED-001",
+      "termo": "anador"
+    },
+    {
+      "codigo": "MED-001",
+      "termo": "dipirona sodica"
+    },
+    {
+      "codigo": "MED-001",
+      "termo": "dipirona comprimido"
+    },
+    {
+      "codigo": "MED-001",
+      "termo": "dipirona 500"
+    },
+    {
+      "codigo": "MED-002",
+      "termo": "dipirona gotas"
+    },
+    {
+      "codigo": "MED-002",
+      "termo": "novalgina gotas"
+    },
+    {
+      "codigo": "MED-002",
+      "termo": "dipirona liquida"
+    },
+    {
+      "codigo": "MED-002",
+      "termo": "dipirona crianca"
+    },
+    {
+      "codigo": "MED-002",
+      "termo": "dipirona infantil"
+    },
+    {
+      "codigo": "MED-002",
+      "termo": "dipirona bebe"
+    },
+    {
+      "codigo": "MED-003",
+      "termo": "paracetamol"
+    },
+    {
+      "codigo": "MED-003",
+      "termo": "tylenol"
+    },
+    {
+      "codigo": "MED-003",
+      "termo": "paracetamol 500"
+    },
+    {
+      "codigo": "MED-004",
+      "termo": "paracetamol gotas"
+    },
+    {
+      "codigo": "MED-004",
+      "termo": "tylenol bebe"
+    },
+    {
+      "codigo": "MED-005",
+      "termo": "ibuprofeno"
+    },
+    {
+      "codigo": "MED-005",
+      "termo": "alivium"
+    },
+    {
+      "codigo": "MED-005",
+      "termo": "advil"
+    },
+    {
+      "codigo": "MED-005",
+      "termo": "ibuprofeno 300"
+    },
+    {
+      "codigo": "MED-006",
+      "termo": "amoxicilina"
+    },
+    {
+      "codigo": "MED-006",
+      "termo": "amoxilina"
+    },
+    {
+      "codigo": "MED-006",
+      "termo": "amoxil"
+    },
+    {
+      "codigo": "MED-007",
+      "termo": "amoxicilina suspensao"
+    },
+    {
+      "codigo": "MED-007",
+      "termo": "amoxicilina infantil"
+    },
+    {
+      "codigo": "MED-007",
+      "termo": "amoxicilina xarope"
+    },
+    {
+      "codigo": "MED-008",
+      "termo": "azitromicina"
+    },
+    {
+      "codigo": "MED-008",
+      "termo": "zitromax"
+    },
+    {
+      "codigo": "MED-008",
+      "termo": "azitromicina 500"
+    },
+    {
+      "codigo": "MED-009",
+      "termo": "cefalexina"
+    },
+    {
+      "codigo": "MED-009",
+      "termo": "keflex"
+    },
+    {
+      "codigo": "MED-010",
+      "termo": "bactrim"
+    },
+    {
+      "codigo": "MED-010",
+      "termo": "sulfametoxazol"
+    },
+    {
+      "codigo": "MED-010",
+      "termo": "sulfa"
+    },
+    {
+      "codigo": "MED-010",
+      "termo": "smz tmp"
+    },
+    {
+      "codigo": "MED-011",
+      "termo": "metronidazol"
+    },
+    {
+      "codigo": "MED-011",
+      "termo": "flagyl"
+    },
+    {
+      "codigo": "MED-012",
+      "termo": "fluconazol"
+    },
+    {
+      "codigo": "MED-012",
+      "termo": "zoltec"
+    },
+    {
+      "codigo": "MED-013",
+      "termo": "metformina"
+    },
+    {
+      "codigo": "MED-013",
+      "termo": "glifage"
+    },
+    {
+      "codigo": "MED-013",
+      "termo": "metiformina"
+    },
+    {
+      "codigo": "MED-013",
+      "termo": "remedio de diabetes"
+    },
+    {
+      "codigo": "MED-014",
+      "termo": "glibenclamida"
+    },
+    {
+      "codigo": "MED-014",
+      "termo": "daonil"
+    },
+    {
+      "codigo": "MED-015",
+      "termo": "insulina nph"
+    },
+    {
+      "codigo": "MED-015",
+      "termo": "insulina"
+    },
+    {
+      "codigo": "MED-015",
+      "termo": "insulina lenta"
+    },
+    {
+      "codigo": "MED-016",
+      "termo": "insulina regular"
+    },
+    {
+      "codigo": "MED-016",
+      "termo": "insulina rapida"
+    },
+    {
+      "codigo": "MED-017",
+      "termo": "losartana"
+    },
+    {
+      "codigo": "MED-017",
+      "termo": "losartan"
+    },
+    {
+      "codigo": "MED-017",
+      "termo": "losartana 50"
+    },
+    {
+      "codigo": "MED-017",
+      "termo": "remedio de pressao"
+    },
+    {
+      "codigo": "MED-018",
+      "termo": "enalapril"
+    },
+    {
+      "codigo": "MED-018",
+      "termo": "renitec"
+    },
+    {
+      "codigo": "MED-019",
+      "termo": "captopril"
+    },
+    {
+      "codigo": "MED-019",
+      "termo": "capoten"
+    },
+    {
+      "codigo": "MED-020",
+      "termo": "hidroclorotiazida"
+    },
+    {
+      "codigo": "MED-020",
+      "termo": "clorana"
+    },
+    {
+      "codigo": "MED-020",
+      "termo": "hidroclorotiazida 25"
+    },
+    {
+      "codigo": "MED-021",
+      "termo": "anlodipino"
+    },
+    {
+      "codigo": "MED-021",
+      "termo": "amlodipina"
+    },
+    {
+      "codigo": "MED-021",
+      "termo": "norvasc"
+    },
+    {
+      "codigo": "MED-022",
+      "termo": "atenolol"
+    },
+    {
+      "codigo": "MED-022",
+      "termo": "atenol"
+    },
+    {
+      "codigo": "MED-023",
+      "termo": "propranolol"
+    },
+    {
+      "codigo": "MED-023",
+      "termo": "inderal"
+    },
+    {
+      "codigo": "MED-024",
+      "termo": "sinvastatina"
+    },
+    {
+      "codigo": "MED-024",
+      "termo": "simvastatina"
+    },
+    {
+      "codigo": "MED-024",
+      "termo": "remedio de colesterol"
+    },
+    {
+      "codigo": "MED-025",
+      "termo": "aas"
+    },
+    {
+      "codigo": "MED-025",
+      "termo": "aspirina"
+    },
+    {
+      "codigo": "MED-025",
+      "termo": "acido acetilsalicilico"
+    },
+    {
+      "codigo": "MED-025",
+      "termo": "aas infantil"
+    },
+    {
+      "codigo": "MED-026",
+      "termo": "omeprazol"
+    },
+    {
+      "codigo": "MED-026",
+      "termo": "omeprasol"
+    },
+    {
+      "codigo": "MED-026",
+      "termo": "remedio de gastrite"
+    },
+    {
+      "codigo": "MED-027",
+      "termo": "metoclopramida"
+    },
+    {
+      "codigo": "MED-027",
+      "termo": "plasil"
+    },
+    {
+      "codigo": "MED-028",
+      "termo": "prednisona"
+    },
+    {
+      "codigo": "MED-028",
+      "termo": "meticorten"
+    },
+    {
+      "codigo": "MED-029",
+      "termo": "prednisolona"
+    },
+    {
+      "codigo": "MED-029",
+      "termo": "predsim"
+    },
+    {
+      "codigo": "MED-029",
+      "termo": "corticoide infantil"
+    },
+    {
+      "codigo": "MED-030",
+      "termo": "dexametasona creme"
+    },
+    {
+      "codigo": "MED-030",
+      "termo": "pomada de dexametasona"
+    },
+    {
+      "codigo": "MED-031",
+      "termo": "loratadina"
+    },
+    {
+      "codigo": "MED-031",
+      "termo": "claritin"
+    },
+    {
+      "codigo": "MED-031",
+      "termo": "remedio de alergia"
+    },
+    {
+      "codigo": "MED-032",
+      "termo": "salbutamol"
+    },
+    {
+      "codigo": "MED-032",
+      "termo": "aerolin"
+    },
+    {
+      "codigo": "MED-032",
+      "termo": "bombinha"
+    },
+    {
+      "codigo": "MED-033",
+      "termo": "beclometasona"
+    },
+    {
+      "codigo": "MED-033",
+      "termo": "clenil"
+    },
+    {
+      "codigo": "MED-034",
+      "termo": "albendazol"
+    },
+    {
+      "codigo": "MED-034",
+      "termo": "zentel"
+    },
+    {
+      "codigo": "MED-034",
+      "termo": "remedio de verme"
+    },
+    {
+      "codigo": "MED-035",
+      "termo": "ivermectina"
+    },
+    {
+      "codigo": "MED-035",
+      "termo": "revectina"
+    },
+    {
+      "codigo": "MED-036",
+      "termo": "levotiroxina"
+    },
+    {
+      "codigo": "MED-036",
+      "termo": "puran t4"
+    },
+    {
+      "codigo": "MED-036",
+      "termo": "euthyrox"
+    },
+    {
+      "codigo": "MED-036",
+      "termo": "remedio de tireoide"
+    },
+    {
+      "codigo": "MED-037",
+      "termo": "sulfato ferroso"
+    },
+    {
+      "codigo": "MED-037",
+      "termo": "ferro"
+    },
+    {
+      "codigo": "MED-037",
+      "termo": "remedio de anemia"
+    },
+    {
+      "codigo": "MED-038",
+      "termo": "acido folico"
+    },
+    {
+      "codigo": "MED-038",
+      "termo": "folico"
+    },
+    {
+      "codigo": "MED-039",
+      "termo": "soro de reidratacao"
+    },
+    {
+      "codigo": "MED-039",
+      "termo": "sro"
+    },
+    {
+      "codigo": "MED-039",
+      "termo": "sal de reidratacao"
+    },
+    {
+      "codigo": "MED-040",
+      "termo": "nistatina"
+    },
+    {
+      "codigo": "MED-040",
+      "termo": "micostatin"
+    },
+    {
+      "codigo": "MED-041",
+      "termo": "permetrina"
+    },
+    {
+      "codigo": "MED-041",
+      "termo": "remedio de piolho"
+    },
+    {
+      "codigo": "MED-041",
+      "termo": "nedax"
+    },
+    {
+      "codigo": "MED-042",
+      "termo": "anticoncepcional"
+    },
+    {
+      "codigo": "MED-042",
+      "termo": "ciclo 21"
+    },
+    {
+      "codigo": "MED-042",
+      "termo": "microvlar"
+    },
+    {
+      "codigo": "MED-042",
+      "termo": "pilula"
+    },
+    {
+      "codigo": "MED-043",
+      "termo": "amitriptilina"
+    },
+    {
+      "codigo": "MED-043",
+      "termo": "amytril"
+    },
+    {
+      "codigo": "MED-044",
+      "termo": "fluoxetina"
+    },
+    {
+      "codigo": "MED-044",
+      "termo": "prozac"
+    },
+    {
+      "codigo": "MED-045",
+      "termo": "carbamazepina"
+    },
+    {
+      "codigo": "MED-045",
+      "termo": "tegretol"
+    },
+    {
+      "codigo": "MED-046",
+      "termo": "clonazepam"
+    },
+    {
+      "codigo": "MED-046",
+      "termo": "rivotril"
+    },
+    {
+      "codigo": "MED-047",
+      "termo": "diazepam"
+    },
+    {
+      "codigo": "MED-047",
+      "termo": "valium"
+    },
+    {
+      "codigo": "MED-048",
+      "termo": "fenitoina"
+    },
+    {
+      "codigo": "MED-048",
+      "termo": "hidantal"
+    }
+  ]
+}
