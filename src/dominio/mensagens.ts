@@ -84,41 +84,49 @@ function atualizacaoMaisRecente(estoques: EstoqueUnidade[]): string {
   return formatarAtualizacao(iso);
 }
 
+/** Rotulo curto da situacao de uma unidade. */
+function rotuloSituacao(s: EstoqueUnidade['situacao']): string {
+  if (s === 'DISPONIVEL') return 'disponível';
+  if (s === 'ESTOQUE BAIXO') return 'disponível (estoque baixo)';
+  return 'em falta';
+}
+
 /**
- * Fallback deterministico quando a IA esta fora do ar. Monta a resposta por
- * template a partir do estoque por unidade — informacao correta mesmo com o
- * modelo indisponivel. (CLAUDE.md secao 5.)
+ * Fallback deterministico quando a IA esta fora do ar. Monta a resposta em
+ * lista, uma unidade por linha — informacao correta mesmo com o modelo
+ * indisponivel. (CLAUDE.md secao 5.)
  */
 export function montarRespostaDeterministica(m: MedicamentoComEstoque): string {
   const item = descreverItem(m.medicamento);
-  const disp = m.estoques.filter((e) => e.situacao === 'DISPONIVEL').map((e) => e.unidade_nome);
-  const baixo = m.estoques.filter((e) => e.situacao === 'ESTOQUE BAIXO').map((e) => e.unidade_nome);
-  const falta = m.estoques.filter((e) => e.situacao === 'EM FALTA').map((e) => e.unidade_nome);
 
   if (m.estoques.length === 0) {
     return `${item}: não há registro de estoque em nenhuma unidade no momento. Para mais informações, digite ATENDENTE.`;
   }
 
+  const ordem: Record<EstoqueUnidade['situacao'], number> = {
+    DISPONIVEL: 0,
+    'ESTOQUE BAIXO': 1,
+    'EM FALTA': 2,
+  };
+  const linhas = [...m.estoques]
+    .sort(
+      (a, b) =>
+        ordem[a.situacao] - ordem[b.situacao] ||
+        a.unidade_nome.localeCompare(b.unidade_nome, 'pt-BR'),
+    )
+    .map((e) => `• ${e.unidade_nome}: ${rotuloSituacao(e.situacao)}`);
+
+  const temDisponivel = m.estoques.some((e) => e.situacao !== 'EM FALTA');
   const quando = atualizacaoMaisRecente(m.estoques);
+  const fecho = temDisponivel
+    ? MSG.RESSALVA_ESTOQUE
+    : 'Vale consultar novamente nos próximos dias ou digitar ATENDENTE.';
 
-  if (disp.length === 0 && baixo.length === 0) {
-    return [
-      `${item}: consta em falta em ${listarNomes(falta)} (posição de ${quando}).`,
-      'Vale consultar novamente nos próximos dias. Para falar com a equipe, digite ATENDENTE.',
-    ].join(' ');
-  }
-
-  const partes = [`${item}:`];
-  if (disp.length) partes.push(`consta como disponível em ${listarNomes(disp)}.`);
-  if (baixo.length) {
-    partes.push(
-      `${disp.length ? 'Em' : 'Consta em quantidade reduzida em'} ${listarNomes(baixo)}${
-        disp.length ? ' o estoque está reduzido' : ''
-      } (pode acabar ao longo do dia).`,
-    );
-  }
-  if (falta.length) partes.push(`Consta em falta em ${listarNomes(falta)}.`);
-  partes.push(`Posição registrada em ${quando}.`);
-  partes.push(MSG.RESSALVA_ESTOQUE);
-  return partes.join(' ');
+  return [
+    `${item} — disponibilidade por unidade:`,
+    '',
+    ...linhas,
+    '',
+    `${fecho} Posição registrada em ${quando}.`,
+  ].join('\n');
 }

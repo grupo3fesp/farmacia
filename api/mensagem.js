@@ -33707,10 +33707,6 @@ function montarDesambiguacao(opcoes) {
     `\xC9 s\xF3 responder com o n\xFAmero (1 a ${opcoes.length}).`
   ].join("\n");
 }
-function listarNomes(nomes) {
-  if (nomes.length <= 1) return nomes[0] ?? "";
-  return nomes.slice(0, -1).join(", ") + " e " + nomes[nomes.length - 1];
-}
 function atualizacaoMaisRecente(estoques) {
   const iso = estoques.reduce(
     (max, e2) => e2.atualizado_em > max ? e2.atualizado_em : max,
@@ -33718,32 +33714,34 @@ function atualizacaoMaisRecente(estoques) {
   );
   return formatarAtualizacao(iso);
 }
+function rotuloSituacao(s2) {
+  if (s2 === "DISPONIVEL") return "dispon\xEDvel";
+  if (s2 === "ESTOQUE BAIXO") return "dispon\xEDvel (estoque baixo)";
+  return "em falta";
+}
 function montarRespostaDeterministica(m2) {
   const item = descreverItem(m2.medicamento);
-  const disp = m2.estoques.filter((e2) => e2.situacao === "DISPONIVEL").map((e2) => e2.unidade_nome);
-  const baixo = m2.estoques.filter((e2) => e2.situacao === "ESTOQUE BAIXO").map((e2) => e2.unidade_nome);
-  const falta = m2.estoques.filter((e2) => e2.situacao === "EM FALTA").map((e2) => e2.unidade_nome);
   if (m2.estoques.length === 0) {
     return `${item}: n\xE3o h\xE1 registro de estoque em nenhuma unidade no momento. Para mais informa\xE7\xF5es, digite ATENDENTE.`;
   }
+  const ordem = {
+    DISPONIVEL: 0,
+    "ESTOQUE BAIXO": 1,
+    "EM FALTA": 2
+  };
+  const linhas = [...m2.estoques].sort(
+    (a2, b2) => ordem[a2.situacao] - ordem[b2.situacao] || a2.unidade_nome.localeCompare(b2.unidade_nome, "pt-BR")
+  ).map((e2) => `\u2022 ${e2.unidade_nome}: ${rotuloSituacao(e2.situacao)}`);
+  const temDisponivel = m2.estoques.some((e2) => e2.situacao !== "EM FALTA");
   const quando = atualizacaoMaisRecente(m2.estoques);
-  if (disp.length === 0 && baixo.length === 0) {
-    return [
-      `${item}: consta em falta em ${listarNomes(falta)} (posi\xE7\xE3o de ${quando}).`,
-      "Vale consultar novamente nos pr\xF3ximos dias. Para falar com a equipe, digite ATENDENTE."
-    ].join(" ");
-  }
-  const partes = [`${item}:`];
-  if (disp.length) partes.push(`consta como dispon\xEDvel em ${listarNomes(disp)}.`);
-  if (baixo.length) {
-    partes.push(
-      `${disp.length ? "Em" : "Consta em quantidade reduzida em"} ${listarNomes(baixo)}${disp.length ? " o estoque est\xE1 reduzido" : ""} (pode acabar ao longo do dia).`
-    );
-  }
-  if (falta.length) partes.push(`Consta em falta em ${listarNomes(falta)}.`);
-  partes.push(`Posi\xE7\xE3o registrada em ${quando}.`);
-  partes.push(MSG.RESSALVA_ESTOQUE);
-  return partes.join(" ");
+  const fecho = temDisponivel ? MSG.RESSALVA_ESTOQUE : "Vale consultar novamente nos pr\xF3ximos dias ou digitar ATENDENTE.";
+  return [
+    `${item} \u2014 disponibilidade por unidade:`,
+    "",
+    ...linhas,
+    "",
+    `${fecho} Posi\xE7\xE3o registrada em ${quando}.`
+  ].join("\n");
 }
 
 // src/dominio/decisao.ts
@@ -33896,7 +33894,14 @@ var SISTEMA = [
   "6. N\xE3o diagnostique, n\xE3o indique, n\xE3o sugira substitui\xE7\xE3o, n\xE3o comente posologia/uso.",
   "7. N\xE3o reserve, separe nem prometa medicamento. N\xE3o estime prazo de reposi\xE7\xE3o.",
   "",
-  "Formato: 2 a 5 frases curtas, tom acolhedor, sem emojis excessivos, sem markdown."
+  "FORMATO OBRIGAT\xD3RIO da resposta (siga exatamente):",
+  "- Uma linha de abertura com o nome do medicamento seguido de dois-pontos.",
+  '- Em seguida, UMA LINHA POR UNIDADE, cada uma come\xE7ando com "\u2022 " (bullet),',
+  '  no formato: "\u2022 Nome da unidade: dispon\xEDvel" ou "\u2022 Nome da unidade: em falta"',
+  '  ou "\u2022 Nome da unidade: dispon\xEDvel (estoque baixo)". Liste as dispon\xEDveis primeiro.',
+  "- Depois, uma linha final com a ressalva de que o estoque muda ao longo do dia e a",
+  "  data/hora da \xFAltima atualiza\xE7\xE3o.",
+  "N\xE3o use asteriscos, negrito nem markdown. Tom cordial e objetivo."
 ].join("\n");
 function conteudoUsuario(m2) {
   const situacaoTxt = {

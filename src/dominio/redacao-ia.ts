@@ -24,7 +24,14 @@ const SISTEMA = [
   '6. Não diagnostique, não indique, não sugira substituição, não comente posologia/uso.',
   '7. Não reserve, separe nem prometa medicamento. Não estime prazo de reposição.',
   '',
-  'Formato: 2 a 5 frases curtas, tom acolhedor, sem emojis excessivos, sem markdown.',
+  'FORMATO OBRIGATÓRIO da resposta (siga exatamente):',
+  '- Uma linha de abertura com o nome do medicamento seguido de dois-pontos.',
+  '- Em seguida, UMA LINHA POR UNIDADE, cada uma começando com "• " (bullet),',
+  '  no formato: "• Nome da unidade: disponível" ou "• Nome da unidade: em falta"',
+  '  ou "• Nome da unidade: disponível (estoque baixo)". Liste as disponíveis primeiro.',
+  '- Depois, uma linha final com a ressalva de que o estoque muda ao longo do dia e a',
+  '  data/hora da última atualização.',
+  'Não use asteriscos, negrito nem markdown. Tom cordial e objetivo.',
 ].join('\n');
 
 function conteudoUsuario(m: MedicamentoComEstoque): string {
