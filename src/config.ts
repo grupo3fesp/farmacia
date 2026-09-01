@@ -73,7 +73,9 @@ export const config = {
 
   gemini: {
     apiKey: env.GEMINI_API_KEY ?? '',
-    modelo: env.GEMINI_MODELO ?? 'gemini-2.0-flash',
+    // flash-lite: rápido (~1s) e barato, ideal para redação. O alias -latest
+    // acompanha a versão vigente (modelos datados saem de disponibilidade).
+    modelo: env.GEMINI_MODELO ?? 'gemini-flash-lite-latest',
   },
 
   whatsapp: {

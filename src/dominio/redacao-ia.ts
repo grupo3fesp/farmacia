@@ -91,9 +91,10 @@ async function gerarGemini(r: RegistroMedicamento): Promise<string> {
     throw new Error(`Gemini ${resp.status}: ${corpo.slice(0, 200)}`);
   }
   const data = (await resp.json()) as {
-    candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+    candidates?: Array<{ content?: { parts?: Array<{ text?: string; thought?: boolean }> } }>;
   };
   const texto = (data.candidates?.[0]?.content?.parts ?? [])
+    .filter((p) => !p.thought) // ignora partes de "thinking" (modelos que pensam)
     .map((p) => p.text ?? '')
     .join('')
     .trim();

@@ -31511,7 +31511,9 @@ var config = {
   },
   gemini: {
     apiKey: env.GEMINI_API_KEY ?? "",
-    modelo: env.GEMINI_MODELO ?? "gemini-2.0-flash"
+    // flash-lite: rápido (~1s) e barato, ideal para redação. O alias -latest
+    // acompanha a versão vigente (modelos datados saem de disponibilidade).
+    modelo: env.GEMINI_MODELO ?? "gemini-flash-lite-latest"
   },
   whatsapp: {
     token: env.WHATSAPP_TOKEN ?? "",
@@ -33240,7 +33242,7 @@ async function gerarGemini(r2) {
     throw new Error(`Gemini ${resp.status}: ${corpo.slice(0, 200)}`);
   }
   const data = await resp.json();
-  const texto = (data.candidates?.[0]?.content?.parts ?? []).map((p2) => p2.text ?? "").join("").trim();
+  const texto = (data.candidates?.[0]?.content?.parts ?? []).filter((p2) => !p2.thought).map((p2) => p2.text ?? "").join("").trim();
   if (!texto) throw new Error("Gemini: resposta vazia");
   return texto;
 }
