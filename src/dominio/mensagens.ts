@@ -38,13 +38,20 @@ export function descreverItem(r: RegistroMedicamento): string {
   return `${r.principio_ativo} ${r.apresentacao}${forma}`.trim();
 }
 
-/** Data/hora da ultima atualizacao no formato dd/mm/aaaa às HHhMM. */
+/** Data/hora no formato dd/mm/aaaa às HHhMM, SEMPRE no fuso de São Paulo
+ *  (o servidor pode rodar em UTC, ex.: Vercel). */
 export function formatarAtualizacao(iso: string): string {
-  const d = new Date(iso);
-  const dois = (n: number) => String(n).padStart(2, '0');
-  return `${dois(d.getDate())}/${dois(d.getMonth() + 1)}/${d.getFullYear()}, às ${dois(
-    d.getHours(),
-  )}h${dois(d.getMinutes())}`;
+  const partes = new Intl.DateTimeFormat('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(new Date(iso));
+  const get = (t: string) => partes.find((p) => p.type === t)?.value ?? '';
+  return `${get('day')}/${get('month')}/${get('year')}, às ${get('hour')}h${get('minute')}`;
 }
 
 /**

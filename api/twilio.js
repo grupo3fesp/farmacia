@@ -33693,11 +33693,17 @@ function descreverItem(r2) {
   return `${r2.principio_ativo} ${r2.apresentacao}${forma}`.trim();
 }
 function formatarAtualizacao(iso) {
-  const d2 = new Date(iso);
-  const dois = (n2) => String(n2).padStart(2, "0");
-  return `${dois(d2.getDate())}/${dois(d2.getMonth() + 1)}/${d2.getFullYear()}, \xE0s ${dois(
-    d2.getHours()
-  )}h${dois(d2.getMinutes())}`;
+  const partes = new Intl.DateTimeFormat("pt-BR", {
+    timeZone: "America/Sao_Paulo",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false
+  }).formatToParts(new Date(iso));
+  const get2 = (t2) => partes.find((p2) => p2.type === t2)?.value ?? "";
+  return `${get2("day")}/${get2("month")}/${get2("year")}, \xE0s ${get2("hour")}h${get2("minute")}`;
 }
 function montarUmPorVez() {
   return [
