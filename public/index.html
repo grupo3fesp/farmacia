@@ -317,7 +317,12 @@
       function renderEstoque() {
         const filtro = (document.getElementById("busca-estoque").value || "").toLowerCase();
         const corpo = document.getElementById("corpo-estoque");
-        corpo.innerHTML = estoqueCache
+        corpo.innerHTML = [...estoqueCache]
+          .sort(
+            (a, b) =>
+              a.principio_ativo.localeCompare(b.principio_ativo, "pt-BR") ||
+              a.apresentacao.localeCompare(b.apresentacao, "pt-BR"),
+          )
           .filter((m) => (m.principio_ativo + " " + m.apresentacao + " " + m.codigo).toLowerCase().includes(filtro))
           .map(
             (m) => `
