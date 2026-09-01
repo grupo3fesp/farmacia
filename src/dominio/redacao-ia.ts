@@ -85,6 +85,9 @@ async function gerarGemini(r: RegistroMedicamento): Promise<string> {
       contents: [{ role: 'user', parts: [{ text: conteudoUsuario(r) }] }],
       generationConfig: { maxOutputTokens: 400, temperature: 0.3 },
     }),
+    // Se o Gemini demorar, abortamos e caímos no template antes do limite da
+    // função serverless (15s) — o cidadão nunca fica sem resposta.
+    signal: AbortSignal.timeout(9000),
   });
   if (!resp.ok) {
     const corpo = await resp.text().catch(() => '');
@@ -115,7 +118,12 @@ async function gerarAnthropic(r: RegistroMedicamento): Promise<string> {
     clienteAnthropic = (async () => {
       const mod: any = await import('@anthropic-ai/sdk');
       const Anthropic = mod.default;
-      return new Anthropic({ apiKey: config.anthropic.apiKey }) as ClienteAnthropic;
+      // timeout curto (ms) + sem retries: se demorar, cai no template.
+      return new Anthropic({
+        apiKey: config.anthropic.apiKey,
+        timeout: 9000,
+        maxRetries: 0,
+      }) as ClienteAnthropic;
     })();
   }
   const sb = await clienteAnthropic;

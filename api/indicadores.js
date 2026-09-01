@@ -33235,7 +33235,10 @@ async function gerarGemini(r2) {
       systemInstruction: { parts: [{ text: SISTEMA }] },
       contents: [{ role: "user", parts: [{ text: conteudoUsuario(r2) }] }],
       generationConfig: { maxOutputTokens: 400, temperature: 0.3 }
-    })
+    }),
+    // Se o Gemini demorar, abortamos e caímos no template antes do limite da
+    // função serverless (15s) — o cidadão nunca fica sem resposta.
+    signal: AbortSignal.timeout(9e3)
   });
   if (!resp.ok) {
     const corpo = await resp.text().catch(() => "");
@@ -33252,7 +33255,11 @@ async function gerarAnthropic(r2) {
     clienteAnthropic = (async () => {
       const mod = await Promise.resolve().then(() => (init_sdk(), sdk_exports));
       const Anthropic2 = mod.default;
-      return new Anthropic2({ apiKey: config.anthropic.apiKey });
+      return new Anthropic2({
+        apiKey: config.anthropic.apiKey,
+        timeout: 9e3,
+        maxRetries: 0
+      });
     })();
   }
   const sb = await clienteAnthropic;
