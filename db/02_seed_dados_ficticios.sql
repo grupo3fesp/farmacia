@@ -347,7 +347,24 @@ insert into public.sinonimos (codigo, termo, termo_norm) values
   ('MED-047', 'diazepam', 'diazepam'),
   ('MED-047', 'valium', 'valium'),
   ('MED-048', 'fenitoina', 'fenitoina'),
-  ('MED-048', 'hidantal', 'hidantal')
+  ('MED-048', 'hidantal', 'hidantal'),
+  ('MED-002', 'dipirona xarope', 'dipirona xarope'),
+  ('MED-002', 'dipirona liquido', 'dipirona liquido'),
+  ('MED-004', 'paracetamol xarope', 'paracetamol xarope'),
+  ('MED-004', 'paracetamol liquido', 'paracetamol liquido'),
+  ('MED-007', 'amoxicilina liquido', 'amoxicilina liquido'),
+  ('MED-029', 'prednisolona xarope', 'prednisolona xarope'),
+  ('MED-029', 'prednisolona liquido', 'prednisolona liquido'),
+  ('MED-030', 'dexametasona pomada', 'dexametasona pomada'),
+  ('MED-032', 'salbutamol bombinha', 'salbutamol bombinha'),
+  ('MED-032', 'salbutamol spray', 'salbutamol spray'),
+  ('MED-033', 'beclometasona bombinha', 'beclometasona bombinha'),
+  ('MED-033', 'beclometasona spray', 'beclometasona spray'),
+  ('MED-040', 'nistatina xarope', 'nistatina xarope'),
+  ('MED-040', 'nistatina liquido', 'nistatina liquido'),
+  ('MED-040', 'nistatina suspensao', 'nistatina suspensao'),
+  ('MED-041', 'permetrina locao', 'permetrina locao'),
+  ('MED-041', 'permetrina pomada', 'permetrina pomada')
 on conflict (codigo, termo_norm) do nothing;
 
 commit;

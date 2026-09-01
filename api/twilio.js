@@ -33443,6 +33443,74 @@ var seed_default = {
     {
       codigo: "MED-048",
       termo: "hidantal"
+    },
+    {
+      codigo: "MED-002",
+      termo: "dipirona xarope"
+    },
+    {
+      codigo: "MED-002",
+      termo: "dipirona liquido"
+    },
+    {
+      codigo: "MED-004",
+      termo: "paracetamol xarope"
+    },
+    {
+      codigo: "MED-004",
+      termo: "paracetamol liquido"
+    },
+    {
+      codigo: "MED-007",
+      termo: "amoxicilina liquido"
+    },
+    {
+      codigo: "MED-029",
+      termo: "prednisolona xarope"
+    },
+    {
+      codigo: "MED-029",
+      termo: "prednisolona liquido"
+    },
+    {
+      codigo: "MED-030",
+      termo: "dexametasona pomada"
+    },
+    {
+      codigo: "MED-032",
+      termo: "salbutamol bombinha"
+    },
+    {
+      codigo: "MED-032",
+      termo: "salbutamol spray"
+    },
+    {
+      codigo: "MED-033",
+      termo: "beclometasona bombinha"
+    },
+    {
+      codigo: "MED-033",
+      termo: "beclometasona spray"
+    },
+    {
+      codigo: "MED-040",
+      termo: "nistatina xarope"
+    },
+    {
+      codigo: "MED-040",
+      termo: "nistatina liquido"
+    },
+    {
+      codigo: "MED-040",
+      termo: "nistatina suspensao"
+    },
+    {
+      codigo: "MED-041",
+      termo: "permetrina locao"
+    },
+    {
+      codigo: "MED-041",
+      termo: "permetrina pomada"
     }
   ]
 };

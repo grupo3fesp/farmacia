@@ -88,10 +88,42 @@ out.push('insert into public.estoques (codigo, unidade_id, estoque_atual, estoqu
 out.push(linhasEstoque.join(',\n') + ';');
 out.push('');
 
-// Sinonimos
+// Sinonimos: os do seed + termos populares de forma farmaceutica, cadastrados
+// na apresentacao CERTA (ex.: "paracetamol xarope" -> a solucao oral, nao o
+// comprimido). Assim o cidadao que usa o termo informal cai na forma correta.
+const norm = (s) =>
+  s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .trim();
+const POPULARES = {
+  'Solução oral': ['xarope', 'liquido'],
+  'Suspensão oral': ['xarope', 'liquido', 'suspensao'],
+  'Creme dermatológico': ['creme', 'pomada'],
+  'Loção': ['locao', 'pomada'],
+  'Aerossol oral': ['bombinha', 'spray'],
+};
+const existentes = new Set(seed.sinonimos.map((s) => s.codigo + '|' + norm(s.termo)));
+const populares = [];
+for (const m of seed.medicamentos) {
+  const pops = POPULARES[m.forma_farmaceutica];
+  if (!pops) continue;
+  const base = norm(m.principio_ativo).split(' ')[0];
+  for (const p of pops) {
+    const termo = `${base} ${p}`;
+    const chave = `${m.codigo}|${termo}`;
+    if (!existentes.has(chave)) {
+      populares.push({ codigo: m.codigo, termo });
+      existentes.add(chave);
+    }
+  }
+}
+const todosSinonimos = [...seed.sinonimos, ...populares];
+
 out.push('insert into public.sinonimos (codigo, termo, termo_norm) values');
 out.push(
-  seed.sinonimos.map((s) => `  (${q(s.codigo)}, ${q(s.termo)}, ${q(s.termo)})`).join(',\n') +
+  todosSinonimos.map((s) => `  (${q(s.codigo)}, ${q(s.termo)}, ${q(norm(s.termo))})`).join(',\n') +
     '\non conflict (codigo, termo_norm) do nothing;',
 );
 out.push('');
