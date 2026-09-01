@@ -376,7 +376,15 @@ insert into public.sinonimos (codigo, termo, termo_norm) values
   ('MED-002', 'dipirona sodica', 'dipirona sodica'),
   ('MED-002', 'dipirona 500', 'dipirona 500'),
   ('MED-004', 'paracetamol 500', 'paracetamol 500'),
-  ('MED-007', 'amoxilina', 'amoxilina')
+  ('MED-007', 'amoxilina', 'amoxilina'),
+  ('MED-005', 'biprofeno', 'biprofeno'),
+  ('MED-005', 'ibrufeno', 'ibrufeno'),
+  ('MED-008', 'astomicina', 'astomicina'),
+  ('MED-018', 'nanapril', 'nanapril'),
+  ('MED-019', 'capotril', 'capotril'),
+  ('MED-021', 'andolipino', 'andolipino'),
+  ('MED-029', 'predisilona', 'predisilona'),
+  ('MED-047', 'jazepam', 'jazepam')
 on conflict (codigo, termo_norm) do nothing;
 
 commit;

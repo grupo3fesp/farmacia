@@ -166,7 +166,25 @@ for (const m of seed.medicamentos) {
     }
   }
 }
-const todosSinonimos = [...seed.sinonimos, ...propagados, ...populares];
+// Erros de digitacao "pesados" que caem abaixo do corte de trigramas — casos
+// conhecidos, cadastrados explicitamente.
+const EXTRAS = [
+  ['MED-005', 'biprofeno'], // Ibuprofeno
+  ['MED-005', 'ibrufeno'],
+  ['MED-008', 'astomicina'], // Azitromicina
+  ['MED-018', 'nanapril'], // Enalapril
+  ['MED-019', 'capotril'], // Captopril
+  ['MED-021', 'andolipino'], // Anlodipino
+  ['MED-029', 'predisilona'], // Prednisolona
+  ['MED-047', 'jazepam'], // Diazepam
+].filter(([c, t]) => !existentes.has(`${c}|${norm(t)}`));
+
+const todosSinonimos = [
+  ...seed.sinonimos,
+  ...propagados,
+  ...populares,
+  ...EXTRAS.map(([codigo, termo]) => ({ codigo, termo })),
+];
 
 out.push('insert into public.sinonimos (codigo, termo, termo_norm) values');
 out.push(

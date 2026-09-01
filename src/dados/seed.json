@@ -2004,6 +2004,38 @@
     {
       "codigo": "MED-007",
       "termo": "amoxilina"
+    },
+    {
+      "codigo": "MED-005",
+      "termo": "biprofeno"
+    },
+    {
+      "codigo": "MED-005",
+      "termo": "ibrufeno"
+    },
+    {
+      "codigo": "MED-008",
+      "termo": "astomicina"
+    },
+    {
+      "codigo": "MED-018",
+      "termo": "nanapril"
+    },
+    {
+      "codigo": "MED-019",
+      "termo": "capotril"
+    },
+    {
+      "codigo": "MED-021",
+      "termo": "andolipino"
+    },
+    {
+      "codigo": "MED-029",
+      "termo": "predisilona"
+    },
+    {
+      "codigo": "MED-047",
+      "termo": "jazepam"
     }
   ]
 }
