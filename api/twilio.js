@@ -33391,6 +33391,11 @@ var CanalTwilio = class {
     throw new Error("CanalTwilio responde via TwiML no webhook; enviar() nao se aplica.");
   }
 };
+function montarTwiml(mensagens) {
+  const esc = (s2) => s2.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+  const corpo = mensagens.map((m2) => `<Message>${esc(m2)}</Message>`).join("");
+  return `<?xml version="1.0" encoding="UTF-8"?><Response>${corpo}</Response>`;
+}
 
 // src/app.ts
 function criarArmazenamentoSessao() {
@@ -33412,12 +33417,15 @@ var canalWhatsApp = config.whatsapp.token && config.whatsapp.phoneNumberId ? new
   phoneNumberId: config.whatsapp.phoneNumberId
 }) : null;
 var canalTwilio = new CanalTwilio();
-var ok = (corpo) => ({ status: 200, corpo });
-async function handleIndicadores() {
+async function handleTwilioInbound(corpo) {
+  const msg = canalTwilio.receber(corpo);
+  if (!msg) return { status: 200, xml: montarTwiml([]) };
   try {
-    return ok(await repo.indicadores());
+    const { mensagens, ignorada } = await atendimento.processar(msg);
+    return { status: 200, xml: montarTwiml(ignorada ? [] : mensagens) };
   } catch (e2) {
-    return ok({ indisponivel: true, motivo: e2.message });
+    console.error("Erro no webhook do Twilio:", e2.message);
+    return { status: 200, xml: montarTwiml([]) };
   }
 }
 var infoApp = {
@@ -33429,11 +33437,26 @@ var infoApp = {
   demonstracao: ehDemonstracao
 };
 
-// functions-src/indicadores.ts
+// functions-src/twilio.ts
 async function handler(req, res) {
-  if (req.method !== "GET") return res.status(405).json({ erro: "M\xE9todo n\xE3o permitido" });
-  const r2 = await handleIndicadores();
-  res.status(r2.status).json(r2.corpo);
+  if (req.method === "GET") {
+    res.setHeader("Content-Type", "text/plain; charset=utf-8");
+    return res.status(200).send("Webhook do Twilio ativo. Configure esta URL (POST) no Sandbox.");
+  }
+  if (req.method !== "POST") return res.status(405).json({ erro: "M\xE9todo n\xE3o permitido" });
+  const corpo = normalizarCorpo(req.body);
+  const r2 = await handleTwilioInbound(corpo);
+  res.setHeader("Content-Type", "text/xml; charset=utf-8");
+  res.status(r2.status).send(r2.xml);
+}
+function normalizarCorpo(body) {
+  if (body && typeof body === "object") return body;
+  if (typeof body === "string") {
+    const out = {};
+    for (const [k2, v2] of new URLSearchParams(body)) out[k2] = v2;
+    return out;
+  }
+  return {};
 }
 export {
   handler as default

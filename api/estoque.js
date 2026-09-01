@@ -33375,6 +33375,23 @@ var CanalWhatsApp = class {
   }
 };
 
+// src/canais/twilio.ts
+var CanalTwilio = class {
+  /** Extrai a mensagem do payload do Twilio (campos From, Body, MessageSid). */
+  receber(payload) {
+    const p2 = payload ?? {};
+    const from = p2.From ?? p2.from;
+    const texto = p2.Body ?? p2.body;
+    const id = p2.MessageSid ?? p2.SmsMessageSid ?? p2.SmsSid ?? "";
+    if (!from || !texto) return null;
+    return { remetente: from, texto, idMensagem: id };
+  }
+  /** No fluxo TwiML a resposta vai no corpo do webhook; enviar() nao e usado. */
+  async enviar() {
+    throw new Error("CanalTwilio responde via TwiML no webhook; enviar() nao se aplica.");
+  }
+};
+
 // src/app.ts
 function criarArmazenamentoSessao() {
   if (config.sessao === "supabase") {
@@ -33394,6 +33411,7 @@ var canalWhatsApp = config.whatsapp.token && config.whatsapp.phoneNumberId ? new
   token: config.whatsapp.token,
   phoneNumberId: config.whatsapp.phoneNumberId
 }) : null;
+var canalTwilio = new CanalTwilio();
 var ok = (corpo) => ({ status: 200, corpo });
 var erro = (status, msg) => ({ status, corpo: { erro: msg } });
 async function handleListarEstoque() {

@@ -15,6 +15,7 @@ import {
   handleIndicadores,
   handleWebhookVerify,
   handleWebhookMensagem,
+  handleTwilioInbound,
   infoApp,
 } from './app.ts';
 
@@ -25,10 +26,14 @@ function enviarJson(res: ServerResponse, status: number, corpo: unknown): void {
   res.end(JSON.stringify(corpo));
 }
 
-async function lerCorpo(req: IncomingMessage): Promise<unknown> {
+async function lerBruto(req: IncomingMessage): Promise<string> {
   const partes: Buffer[] = [];
   for await (const parte of req) partes.push(parte as Buffer);
-  const bruto = Buffer.concat(partes).toString('utf8');
+  return Buffer.concat(partes).toString('utf8');
+}
+
+async function lerCorpo(req: IncomingMessage): Promise<unknown> {
+  const bruto = await lerBruto(req);
   if (!bruto) return {};
   try {
     return JSON.parse(bruto);
@@ -95,6 +100,14 @@ const servidor = createServer(async (req, res) => {
         res.end('EVENT_RECEIVED'); // responde <5s; processa depois
         void handleWebhookMensagem(corpo);
         return;
+      }
+      case 'POST /api/twilio': {
+        const bruto = await lerBruto(req);
+        const corpo: Record<string, string> = {};
+        for (const [k, v] of new URLSearchParams(bruto)) corpo[k] = v;
+        const r = await handleTwilioInbound(corpo);
+        res.writeHead(r.status, { 'Content-Type': 'text/xml; charset=utf-8' });
+        return res.end(r.xml);
       }
       default:
         return enviarJson(res, 404, { erro: 'rota nao encontrada', rota });

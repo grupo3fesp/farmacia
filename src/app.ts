@@ -13,6 +13,7 @@ import {
 import { ArmazenamentoSupabaseSessao } from './dados/sessao-supabase.ts';
 import { Atendimento } from './dominio/atendimento.ts';
 import { CanalWhatsApp } from './canais/whatsapp.ts';
+import { CanalTwilio, montarTwiml } from './canais/twilio.ts';
 import { ehDemonstracao } from './config.ts';
 
 function criarArmazenamentoSessao(): ArmazenamentoSessao {
@@ -40,6 +41,8 @@ const canalWhatsApp =
         phoneNumberId: config.whatsapp.phoneNumberId,
       })
     : null;
+// O Twilio nao exige configuracao para responder (fluxo TwiML).
+const canalTwilio = new CanalTwilio();
 
 export type RespostaApp = { status: number; corpo: unknown };
 
@@ -119,6 +122,20 @@ export async function handleWebhookMensagem(corpo: unknown): Promise<void> {
     for (const texto of mensagens) await canalWhatsApp.enviar(msg.remetente, texto);
   } catch (e) {
     console.error('Erro ao processar mensagem do WhatsApp:', (e as Error).message);
+  }
+}
+
+/** POST do webhook do Twilio: processa e responde em TwiML (sem token de saida). */
+export async function handleTwilioInbound(corpo: unknown): Promise<{ status: number; xml: string }> {
+  const msg = canalTwilio.receber(corpo);
+  if (!msg) return { status: 200, xml: montarTwiml([]) };
+  try {
+    const { mensagens, ignorada } = await atendimento.processar(msg);
+    return { status: 200, xml: montarTwiml(ignorada ? [] : mensagens) };
+  } catch (e) {
+    console.error('Erro no webhook do Twilio:', (e as Error).message);
+    // Responde vazio (200) para o Twilio nao reentregar em loop.
+    return { status: 200, xml: montarTwiml([]) };
   }
 }
 
