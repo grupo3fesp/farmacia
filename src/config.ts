@@ -39,6 +39,7 @@ const env = process.env;
 export type Modo = 'demonstracao' | 'piloto';
 export type FonteRepositorio = 'local' | 'supabase';
 export type BackendSessao = 'memoria' | 'supabase';
+export type ProvedorIA = 'template' | 'gemini' | 'anthropic';
 
 export const config = {
   porta: Number(env.PORT ?? 3000),
@@ -54,9 +55,25 @@ export const config = {
     serviceKey: env.SUPABASE_SERVICE_ROLE_KEY || undefined,
   },
 
+  // Provedor da redacao: template (gratis, deterministico) | gemini (Google AI,
+  // tier gratis) | anthropic (Claude, pago). Se nao definido, infere pela chave
+  // presente; sem chave nenhuma, fica no template.
+  iaProvedor: ((): ProvedorIA => {
+    const p = env.IA_PROVEDOR;
+    if (p === 'gemini' || p === 'anthropic' || p === 'template') return p;
+    if ((env.ANTHROPIC_API_KEY ?? '') !== '') return 'anthropic';
+    if ((env.GEMINI_API_KEY ?? '') !== '') return 'gemini';
+    return 'template';
+  })(),
+
   anthropic: {
     apiKey: env.ANTHROPIC_API_KEY ?? '',
     modelo: env.ANTHROPIC_MODELO ?? 'claude-sonnet-5',
+  },
+
+  gemini: {
+    apiKey: env.GEMINI_API_KEY ?? '',
+    modelo: env.GEMINI_MODELO ?? 'gemini-2.0-flash',
   },
 
   whatsapp: {
@@ -74,4 +91,6 @@ export const config = {
 } as const;
 
 export const ehDemonstracao = config.modo === 'demonstracao';
-export const usaIA = config.anthropic.apiKey !== '';
+export const usaIA =
+  (config.iaProvedor === 'anthropic' && config.anthropic.apiKey !== '') ||
+  (config.iaProvedor === 'gemini' && config.gemini.apiKey !== '');

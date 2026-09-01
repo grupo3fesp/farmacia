@@ -121,5 +121,5 @@ servidor.listen(config.porta, () => {
   console.log(`\n  Assistente da Farmácia Municipal`);
   console.log(`  Simulador:   http://localhost:${config.porta}`);
   console.log(`  Modo: ${infoApp.modo} | Repo: ${infoApp.repositorio} | Sessão: ${infoApp.sessao}`);
-  console.log(`  IA: ${infoApp.temIA ? 'ativa' : 'fallback determinístico'} | Edição: ${infoApp.edicaoProtegida ? 'protegida por token' : 'aberta'}\n`);
+  console.log(`  IA: ${infoApp.ia} | Edição: ${infoApp.edicaoProtegida ? 'protegida por token' : 'aberta'}\n`);
 });

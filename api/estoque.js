@@ -31495,9 +31495,23 @@ var config = {
     anonKey: env.SUPABASE_ANON_KEY ?? "",
     serviceKey: env.SUPABASE_SERVICE_ROLE_KEY || void 0
   },
+  // Provedor da redacao: template (gratis, deterministico) | gemini (Google AI,
+  // tier gratis) | anthropic (Claude, pago). Se nao definido, infere pela chave
+  // presente; sem chave nenhuma, fica no template.
+  iaProvedor: (() => {
+    const p2 = env.IA_PROVEDOR;
+    if (p2 === "gemini" || p2 === "anthropic" || p2 === "template") return p2;
+    if ((env.ANTHROPIC_API_KEY ?? "") !== "") return "anthropic";
+    if ((env.GEMINI_API_KEY ?? "") !== "") return "gemini";
+    return "template";
+  })(),
   anthropic: {
     apiKey: env.ANTHROPIC_API_KEY ?? "",
     modelo: env.ANTHROPIC_MODELO ?? "claude-sonnet-5"
+  },
+  gemini: {
+    apiKey: env.GEMINI_API_KEY ?? "",
+    modelo: env.GEMINI_MODELO ?? "gemini-2.0-flash"
   },
   whatsapp: {
     token: env.WHATSAPP_TOKEN ?? "",
@@ -31511,7 +31525,7 @@ var config = {
   adminToken: env.ADMIN_TOKEN ?? ""
 };
 var ehDemonstracao = config.modo === "demonstracao";
-var usaIA = config.anthropic.apiKey !== "";
+var usaIA = config.iaProvedor === "anthropic" && config.anthropic.apiKey !== "" || config.iaProvedor === "gemini" && config.gemini.apiKey !== "";
 
 // src/dominio/texto.ts
 function normalizar(texto) {
@@ -33210,16 +33224,45 @@ function liberar() {
     proximo();
   }
 }
-var clientePromessa = null;
-async function cliente() {
-  if (!clientePromessa) {
-    clientePromessa = (async () => {
+async function gerarGemini(r2) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.gemini.modelo}:generateContent?key=${config.gemini.apiKey}`;
+  const resp = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: SISTEMA }] },
+      contents: [{ role: "user", parts: [{ text: conteudoUsuario(r2) }] }],
+      generationConfig: { maxOutputTokens: 400, temperature: 0.3 }
+    })
+  });
+  if (!resp.ok) {
+    const corpo = await resp.text().catch(() => "");
+    throw new Error(`Gemini ${resp.status}: ${corpo.slice(0, 200)}`);
+  }
+  const data = await resp.json();
+  const texto = (data.candidates?.[0]?.content?.parts ?? []).map((p2) => p2.text ?? "").join("").trim();
+  if (!texto) throw new Error("Gemini: resposta vazia");
+  return texto;
+}
+var clienteAnthropic = null;
+async function gerarAnthropic(r2) {
+  if (!clienteAnthropic) {
+    clienteAnthropic = (async () => {
       const mod = await Promise.resolve().then(() => (init_sdk(), sdk_exports));
       const Anthropic2 = mod.default;
       return new Anthropic2({ apiKey: config.anthropic.apiKey });
     })();
   }
-  return clientePromessa;
+  const sb = await clienteAnthropic;
+  const resp = await sb.messages.create({
+    model: config.anthropic.modelo,
+    max_tokens: 400,
+    system: SISTEMA,
+    messages: [{ role: "user", content: conteudoUsuario(r2) }]
+  });
+  const texto = resp.content.filter((b2) => b2.type === "text").map((b2) => b2.text ?? "").join("").trim();
+  if (!texto) throw new Error("Anthropic: resposta vazia");
+  return texto;
 }
 async function redigirComIA(r2) {
   const texto = await gerar(r2);
@@ -33231,14 +33274,7 @@ async function gerar(r2) {
   if (!usaIA) return montarRespostaDeterministica(r2);
   await adquirir();
   try {
-    const sb = await cliente();
-    const resp = await sb.messages.create({
-      model: config.anthropic.modelo,
-      max_tokens: 400,
-      system: SISTEMA,
-      messages: [{ role: "user", content: conteudoUsuario(r2) }]
-    });
-    const texto = resp.content.filter((b2) => b2.type === "text").map((b2) => b2.text ?? "").join("").trim();
+    const texto = config.iaProvedor === "gemini" ? await gerarGemini(r2) : await gerarAnthropic(r2);
     return texto || montarRespostaDeterministica(r2);
   } catch {
     return montarRespostaDeterministica(r2);
@@ -33441,7 +33477,7 @@ var infoApp = {
   modo: config.modo,
   repositorio: config.repositorio,
   sessao: config.sessao,
-  temIA: config.anthropic.apiKey !== "",
+  ia: config.iaProvedor,
   edicaoProtegida: config.adminToken !== "",
   demonstracao: ehDemonstracao
 };

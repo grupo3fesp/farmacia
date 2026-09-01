@@ -1,9 +1,13 @@
-// Redacao da resposta pela IA, com fallback deterministico OBRIGATORIO.
+// Redacao da resposta, com fallback deterministico OBRIGATORIO.
 //
-// A IA recebe SOMENTE o registro devolvido pelo banco e as regras de redacao.
-// Nunca decide disponibilidade. Se a API falhar, estourar cota (429) ou nao
-// estar configurada, cai em montarRespostaDeterministica — o cidadao recebe a
-// informacao correta montada por template. (CLAUDE.md secoes 5 e 6.)
+// Tres provedores atras da mesma funcao (config.iaProvedor):
+//   - template  -> montarRespostaDeterministica (gratis, sem rede)
+//   - gemini    -> Google Generative Language API (tier gratis), via REST
+//   - anthropic -> Claude (pago), via SDK
+//
+// Em qualquer caso a IA recebe SOMENTE o registro devolvido pelo banco e as
+// regras de redacao; nunca decide disponibilidade. Se a chamada falhar, estourar
+// cota ou nao estar configurada, cai no template. (CLAUDE.md secoes 5 e 6.)
 
 import type { RegistroMedicamento } from './tipos.ts';
 import { montarRespostaDeterministica, descreverItem, formatarAtualizacao } from './mensagens.ts';
@@ -70,29 +74,69 @@ function liberar(): void {
   }
 }
 
+// --- Provedor Gemini (Google AI Studio), via REST — sem dependencia extra ---
+async function gerarGemini(r: RegistroMedicamento): Promise<string> {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.gemini.modelo}:generateContent?key=${config.gemini.apiKey}`;
+  const resp = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      systemInstruction: { parts: [{ text: SISTEMA }] },
+      contents: [{ role: 'user', parts: [{ text: conteudoUsuario(r) }] }],
+      generationConfig: { maxOutputTokens: 400, temperature: 0.3 },
+    }),
+  });
+  if (!resp.ok) {
+    const corpo = await resp.text().catch(() => '');
+    throw new Error(`Gemini ${resp.status}: ${corpo.slice(0, 200)}`);
+  }
+  const data = (await resp.json()) as {
+    candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }>;
+  };
+  const texto = (data.candidates?.[0]?.content?.parts ?? [])
+    .map((p) => p.text ?? '')
+    .join('')
+    .trim();
+  if (!texto) throw new Error('Gemini: resposta vazia');
+  return texto;
+}
+
+// --- Provedor Anthropic (Claude), via SDK (import dinamico) ---
 type ClienteAnthropic = {
   messages: {
     create: (args: unknown) => Promise<{ content: Array<{ type: string; text?: string }> }>;
   };
 };
+let clienteAnthropic: Promise<ClienteAnthropic> | null = null;
 
-let clientePromessa: Promise<ClienteAnthropic> | null = null;
-
-async function cliente(): Promise<ClienteAnthropic> {
-  if (!clientePromessa) {
-    clientePromessa = (async () => {
-      const mod = await import('@anthropic-ai/sdk');
+async function gerarAnthropic(r: RegistroMedicamento): Promise<string> {
+  if (!clienteAnthropic) {
+    clienteAnthropic = (async () => {
+      const mod: any = await import('@anthropic-ai/sdk');
       const Anthropic = mod.default;
-      return new Anthropic({ apiKey: config.anthropic.apiKey }) as unknown as ClienteAnthropic;
+      return new Anthropic({ apiKey: config.anthropic.apiKey }) as ClienteAnthropic;
     })();
   }
-  return clientePromessa;
+  const sb = await clienteAnthropic;
+  const resp = await sb.messages.create({
+    model: config.anthropic.modelo,
+    max_tokens: 400,
+    system: SISTEMA,
+    messages: [{ role: 'user', content: conteudoUsuario(r) }],
+  });
+  const texto = resp.content
+    .filter((b) => b.type === 'text')
+    .map((b) => b.text ?? '')
+    .join('')
+    .trim();
+  if (!texto) throw new Error('Anthropic: resposta vazia');
+  return texto;
 }
 
 /**
- * Redige a resposta. Tenta a IA; em qualquer falha, cai no template
- * deterministico. O aviso de demonstracao (dados ficticios) e anexado aqui,
- * fora do controle da IA, para garantir que sempre apareca.
+ * Redige a resposta. Tenta o provedor configurado; em qualquer falha, cai no
+ * template deterministico. O aviso de demonstracao e anexado aqui, fora do
+ * controle da IA, para garantir que sempre apareca.
  */
 export async function redigirComIA(r: RegistroMedicamento): Promise<string> {
   const texto = await gerar(r);
@@ -103,18 +147,8 @@ async function gerar(r: RegistroMedicamento): Promise<string> {
   if (!usaIA) return montarRespostaDeterministica(r);
   await adquirir();
   try {
-    const sb = await cliente();
-    const resp = await sb.messages.create({
-      model: config.anthropic.modelo,
-      max_tokens: 400,
-      system: SISTEMA,
-      messages: [{ role: 'user', content: conteudoUsuario(r) }],
-    });
-    const texto = resp.content
-      .filter((b) => b.type === 'text')
-      .map((b) => b.text ?? '')
-      .join('')
-      .trim();
+    const texto =
+      config.iaProvedor === 'gemini' ? await gerarGemini(r) : await gerarAnthropic(r);
     return texto || montarRespostaDeterministica(r);
   } catch {
     return montarRespostaDeterministica(r);

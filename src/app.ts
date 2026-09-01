@@ -146,7 +146,7 @@ export const infoApp = {
   modo: config.modo,
   repositorio: config.repositorio,
   sessao: config.sessao,
-  temIA: config.anthropic.apiKey !== '',
+  ia: config.iaProvedor,
   edicaoProtegida: config.adminToken !== '',
   demonstracao: ehDemonstracao,
 };
