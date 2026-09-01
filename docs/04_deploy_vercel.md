@@ -4,10 +4,11 @@ O app foi estruturado para a Vercel (serverless): o simulador é estático em
 `public/` e a API são funções serverless. A lógica de negócio é a mesma do
 servidor local — os handlers em `src/app.ts` servem os dois.
 
-As funções são empacotadas por um passo de build: `npm run build` (esbuild) lê
-`functions-src/*.ts` e gera `api/*.js` autocontidos (todo o `src/` e os SDKs
-inlinados). Isso evita o problema de o Node de produção não importar `.ts`. A
-Vercel roda esse build automaticamente (definido em `vercel.json`).
+As funções são empacotadas por `npm run build` (esbuild): lê `functions-src/*.ts`
+e gera `api/*.js` autocontidos (todo o `src/` e os SDKs inlinados). Isso evita o
+problema de o Node de produção não importar `.ts`. **Os `api/*.js` são versionados**
+(commitados) — a Vercel os usa direto, sem build remoto. **Sempre que mudar código
+em `src/` ou `functions-src/`, rode `npm run build` e commite os `api/*.js`.**
 
 ## Pré-requisitos (no Supabase, uma vez)
 
@@ -70,5 +71,5 @@ Após o deploy, abra a URL da Vercel e valide:
 - **WhatsApp** (fases B/C): a função `api/webhook.ts` já está pronta. Configure na Meta
   a URL `https://<seu-projeto>.vercel.app/webhook` e o `WHATSAPP_VERIFY_TOKEN`
   (mais `WHATSAPP_TOKEN` e `WHATSAPP_PHONE_NUMBER_ID` nas variáveis).
-- As funções (`api/*.js`) são geradas pelo build e **não** são versionadas
-  (`.gitignore`); a Vercel as recria a cada deploy.
+- As funções (`api/*.js`) são geradas por `npm run build` e **versionadas** no
+  repositório; a Vercel as serve direto (o `functions` do `vercel.json` casa com elas).

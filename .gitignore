@@ -3,7 +3,3 @@ node_modules/
 *.log
 .DS_Store
 dist/
-
-# Funções geradas pelo build (esbuild empacota functions-src/ -> api/*.js).
-# A Vercel as gera no deploy via `npm run build`; não versionamos artefatos.
-/api/*.js
