@@ -33511,6 +33511,34 @@ var seed_default = {
     {
       codigo: "MED-041",
       termo: "permetrina pomada"
+    },
+    {
+      codigo: "MED-015",
+      termo: "insulina injecao"
+    },
+    {
+      codigo: "MED-015",
+      termo: "insulina ampola"
+    },
+    {
+      codigo: "MED-015",
+      termo: "insulina injetavel"
+    },
+    {
+      codigo: "MED-016",
+      termo: "insulina injecao"
+    },
+    {
+      codigo: "MED-016",
+      termo: "insulina ampola"
+    },
+    {
+      codigo: "MED-016",
+      termo: "insulina injetavel"
+    },
+    {
+      codigo: "MED-034",
+      termo: "albendazol mastigavel"
     }
   ]
 };

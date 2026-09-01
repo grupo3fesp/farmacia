@@ -103,6 +103,15 @@ const POPULARES = {
   'Creme dermatológico': ['creme', 'pomada'],
   'Loção': ['locao', 'pomada'],
   'Aerossol oral': ['bombinha', 'spray'],
+  'Suspensão injetável': ['injecao', 'ampola', 'injetavel'],
+  'Solução injetável': ['injecao', 'ampola', 'injetavel'],
+  'Comprimido mastigável': ['mastigavel'],
+  // Prontos para quando essas formas entrarem na base (hoje nao geram nada):
+  Colírio: ['colirio'],
+  'Solução oftálmica': ['colirio'],
+  'Pomada oftálmica': ['pomada', 'colirio'],
+  Supositório: ['supositorio'],
+  'Adesivo transdérmico': ['adesivo'],
 };
 const existentes = new Set(seed.sinonimos.map((s) => s.codigo + '|' + norm(s.termo)));
 const populares = [];

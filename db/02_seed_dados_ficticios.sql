@@ -364,7 +364,14 @@ insert into public.sinonimos (codigo, termo, termo_norm) values
   ('MED-040', 'nistatina liquido', 'nistatina liquido'),
   ('MED-040', 'nistatina suspensao', 'nistatina suspensao'),
   ('MED-041', 'permetrina locao', 'permetrina locao'),
-  ('MED-041', 'permetrina pomada', 'permetrina pomada')
+  ('MED-041', 'permetrina pomada', 'permetrina pomada'),
+  ('MED-015', 'insulina injecao', 'insulina injecao'),
+  ('MED-015', 'insulina ampola', 'insulina ampola'),
+  ('MED-015', 'insulina injetavel', 'insulina injetavel'),
+  ('MED-016', 'insulina injecao', 'insulina injecao'),
+  ('MED-016', 'insulina ampola', 'insulina ampola'),
+  ('MED-016', 'insulina injetavel', 'insulina injetavel'),
+  ('MED-034', 'albendazol mastigavel', 'albendazol mastigavel')
 on conflict (codigo, termo_norm) do nothing;
 
 commit;
