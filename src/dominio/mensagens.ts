@@ -22,6 +22,10 @@ export const MSG = {
     'Não posso orientar sobre uso, dosagem ou combinação de medicamentos. Procure o farmacêutico da unidade ou a equipe da sua UBS. Aqui informo apenas a disponibilidade de medicamentos.',
   ENCAMINHAMENTO_HUMANO:
     'Certo. Vou encaminhar seu contato para a equipe da Farmácia Municipal. O atendimento humano ocorre em horário comercial; fora dele, o retorno é no próximo dia útil.',
+  SAUDACAO:
+    'Como posso ajudar? Envie o nome do medicamento que você quer consultar e eu informo se ele consta no estoque.',
+  AGRADECIMENTO:
+    'Por nada! Sempre que precisar, é só enviar o nome de um medicamento para consultar a disponibilidade.',
   ENCERRAMENTO:
     'Consulta encerrada. Sempre que precisar, é só enviar o nome do medicamento.',
   AVISO_DEMO:

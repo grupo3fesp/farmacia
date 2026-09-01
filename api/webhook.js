@@ -33061,6 +33061,8 @@ var MSG = {
   TERMO_NAO_RECONHECIDO: "N\xE3o localizei esse medicamento no cadastro da farm\xE1cia. Voc\xEA pode reescrever o nome ou digitar ATENDENTE.",
   RECUSA_CLINICA: "N\xE3o posso orientar sobre uso, dosagem ou combina\xE7\xE3o de medicamentos. Procure o farmac\xEAutico da unidade ou a equipe da sua UBS. Aqui informo apenas a disponibilidade de medicamentos.",
   ENCAMINHAMENTO_HUMANO: "Certo. Vou encaminhar seu contato para a equipe da Farm\xE1cia Municipal. O atendimento humano ocorre em hor\xE1rio comercial; fora dele, o retorno \xE9 no pr\xF3ximo dia \xFAtil.",
+  SAUDACAO: "Como posso ajudar? Envie o nome do medicamento que voc\xEA quer consultar e eu informo se ele consta no estoque.",
+  AGRADECIMENTO: "Por nada! Sempre que precisar, \xE9 s\xF3 enviar o nome de um medicamento para consultar a disponibilidade.",
   ENCERRAMENTO: "Consulta encerrada. Sempre que precisar, \xE9 s\xF3 enviar o nome do medicamento.",
   AVISO_DEMO: "\u26A0\uFE0F Demonstra\xE7\xE3o com dados fict\xEDcios. Os quantitativos n\xE3o correspondem ao estoque real."
 };
@@ -33107,6 +33109,65 @@ function montarRespostaDeterministica(r2) {
 }
 
 // src/dominio/decisao.ts
+var SAUDACOES = /* @__PURE__ */ new Set([
+  "oi",
+  "ola",
+  "oie",
+  "oii",
+  "opa",
+  "ei",
+  "eae",
+  "e ai",
+  "eai",
+  "salve",
+  "bom dia",
+  "boa tarde",
+  "boa noite",
+  "boas",
+  "ola bom dia",
+  "oi bom dia",
+  "oi boa tarde",
+  "oi boa noite",
+  "tudo bem",
+  "tudo bom",
+  "tudo certo",
+  "como vai",
+  "oi tudo bem",
+  "ola tudo bem",
+  "bom dia tudo bem"
+]);
+var AGRADECIMENTOS = /* @__PURE__ */ new Set([
+  "obrigado",
+  "obrigada",
+  "obg",
+  "obgd",
+  "vlw",
+  "valeu",
+  "agradecido",
+  "agradecida",
+  "grato",
+  "grata",
+  "muito obrigado",
+  "muito obrigada",
+  "obrigado atendente",
+  "ok obrigado",
+  "ok obrigada"
+]);
+var DESPEDIDAS = /* @__PURE__ */ new Set([
+  "tchau",
+  "ate logo",
+  "ate mais",
+  "ate breve",
+  "ate",
+  "falou",
+  "flw",
+  "adeus",
+  "ate mais tarde",
+  "ok tchau"
+]);
+function chaveSocial(texto) {
+  return normalizar(texto).replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim();
+}
 var PADROES_CLINICOS = [
   "posso tomar",
   "pode tomar",
@@ -33139,6 +33200,10 @@ function detectarIntencao(texto) {
   if (t2 === "atendente" || t2.includes("atendente") || t2.includes("quero falar com")) {
     return "atendente";
   }
+  const s2 = chaveSocial(texto);
+  if (SAUDACOES.has(s2)) return "saudacao";
+  if (AGRADECIMENTOS.has(s2)) return "agradecimento";
+  if (DESPEDIDAS.has(s2)) return "despedida";
   if (PADROES_CLINICOS.some((p2) => t2.includes(p2))) return "clinica";
   return "consulta";
 }
@@ -33162,6 +33227,10 @@ function decidirPorResultados(resultados, houveErro) {
 }
 function decisaoRecusaClinica() {
   return { tipo: "recusa_clinica", texto: MSG.RECUSA_CLINICA };
+}
+function decisaoSocial(intencao) {
+  const texto = intencao === "saudacao" ? MSG.SAUDACAO : intencao === "agradecimento" ? MSG.AGRADECIMENTO : MSG.ENCERRAMENTO;
+  return { tipo: "social", texto };
 }
 function decisaoAtendente() {
   return {
@@ -33327,6 +33396,10 @@ var Atendimento = class {
       saida.push(await this.executar(decisaoRecusaClinica(), msg));
       return { mensagens: saida, ignorada: false };
     }
+    if (intencao === "saudacao" || intencao === "agradecimento" || intencao === "despedida") {
+      saida.push(await this.executar(decisaoSocial(intencao), msg));
+      return { mensagens: saida, ignorada: false };
+    }
     let resultados = [];
     let houveErro = false;
     try {
@@ -33360,6 +33433,9 @@ var Atendimento = class {
       }
       case "recusa_clinica": {
         await this.repo.registrarLog({ ...base, motivoEncaminhamento: "duvida_clinica" });
+        return decisao.texto;
+      }
+      case "social": {
         return decisao.texto;
       }
       case "desambiguacao": {

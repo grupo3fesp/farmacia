@@ -11,6 +11,7 @@ import {
   decidirPorResultados,
   decisaoRecusaClinica,
   decisaoAtendente,
+  decisaoSocial,
 } from './decisao.ts';
 import { redigirComIA } from './redacao-ia.ts';
 import { MSG } from './mensagens.ts';
@@ -66,6 +67,10 @@ export class Atendimento {
       saida.push(await this.executar(decisaoRecusaClinica(), msg));
       return { mensagens: saida, ignorada: false };
     }
+    if (intencao === 'saudacao' || intencao === 'agradecimento' || intencao === 'despedida') {
+      saida.push(await this.executar(decisaoSocial(intencao), msg));
+      return { mensagens: saida, ignorada: false };
+    }
 
     // 4. Consulta ao banco + desvios da secao 5.
     let resultados: RegistroMedicamento[] = [];
@@ -103,6 +108,10 @@ export class Atendimento {
       }
       case 'recusa_clinica': {
         await this.repo.registrarLog({ ...base, motivoEncaminhamento: 'duvida_clinica' });
+        return decisao.texto;
+      }
+      case 'social': {
+        // Saudacao/agradecimento/despedida nao e consulta: nao registra no log.
         return decisao.texto;
       }
       case 'desambiguacao': {

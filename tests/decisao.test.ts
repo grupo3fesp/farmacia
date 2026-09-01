@@ -21,6 +21,21 @@ test('detectarIntencao: consulta comum não é clínica', () => {
   assert.equal(detectarIntencao('vocês têm zitromax'), 'consulta');
 });
 
+test('detectarIntencao: saudações, agradecimentos e despedidas', () => {
+  for (const s of ['olá', 'oi', 'Bom dia', 'boa noite!', 'tudo bem?']) {
+    assert.equal(detectarIntencao(s), 'saudacao', `"${s}" deveria ser saudacao`);
+  }
+  assert.equal(detectarIntencao('obrigado'), 'agradecimento');
+  assert.equal(detectarIntencao('valeu!'), 'agradecimento');
+  assert.equal(detectarIntencao('tchau'), 'despedida');
+  assert.equal(detectarIntencao('até logo'), 'despedida');
+});
+
+test('detectarIntencao: saudação junto com remédio ainda é consulta', () => {
+  // Só a mensagem puramente social vira saudacao; com medicamento vai à busca.
+  assert.equal(detectarIntencao('bom dia, tem dipirona?'), 'consulta');
+});
+
 test('decisão 1: falha técnica → texto fixo, sem IA', () => {
   const d = decidirPorResultados([], true);
   assert.equal(d.tipo, 'texto_fixo');

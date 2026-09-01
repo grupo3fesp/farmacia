@@ -39,4 +39,5 @@ export type Decisao =
   | { tipo: 'texto_fixo'; texto: string; motivoEncaminhamento?: MotivoEncaminhamento }
   | { tipo: 'desambiguacao'; texto: string; opcoes: RegistroMedicamento[] }
   | { tipo: 'redigir_ia'; registro: RegistroMedicamento }
-  | { tipo: 'recusa_clinica'; texto: string };
+  | { tipo: 'recusa_clinica'; texto: string }
+  | { tipo: 'social'; texto: string }; // saudacao, agradecimento, despedida

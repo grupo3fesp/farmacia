@@ -9,7 +9,39 @@ import type { Decisao, RegistroMedicamento } from './tipos.ts';
 import { MSG, montarDesambiguacao } from './mensagens.ts';
 import { normalizar } from './texto.ts';
 
-export type Intencao = 'atendente' | 'clinica' | 'consulta';
+export type Intencao =
+  | 'atendente'
+  | 'clinica'
+  | 'saudacao'
+  | 'agradecimento'
+  | 'despedida'
+  | 'consulta';
+
+// Frases sociais (normalizadas). So batem quando a mensagem INTEIRA e uma
+// saudacao/agradecimento/despedida — "bom dia, tem dipirona?" segue para a busca.
+const SAUDACOES = new Set([
+  'oi', 'ola', 'oie', 'oii', 'opa', 'ei', 'eae', 'e ai', 'eai', 'salve',
+  'bom dia', 'boa tarde', 'boa noite', 'boas', 'ola bom dia', 'oi bom dia',
+  'oi boa tarde', 'oi boa noite', 'tudo bem', 'tudo bom', 'tudo certo',
+  'como vai', 'oi tudo bem', 'ola tudo bem', 'bom dia tudo bem',
+]);
+const AGRADECIMENTOS = new Set([
+  'obrigado', 'obrigada', 'obg', 'obgd', 'vlw', 'valeu', 'agradecido',
+  'agradecida', 'grato', 'grata', 'muito obrigado', 'muito obrigada',
+  'obrigado atendente', 'ok obrigado', 'ok obrigada',
+]);
+const DESPEDIDAS = new Set([
+  'tchau', 'ate logo', 'ate mais', 'ate breve', 'ate', 'falou', 'flw',
+  'adeus', 'ate mais tarde', 'ok tchau',
+]);
+
+/** Reduz a mensagem a letras/numeros e espacos simples, para casar frases sociais. */
+function chaveSocial(texto: string): string {
+  return normalizar(texto)
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
 
 // Perguntas clinicas: uso, dose, combinacao, indicacao. Estas nunca vao a busca,
 // e a resposta e uma recusa fixa (CLAUDE.md secao 6, regras 7 a 10).
@@ -50,6 +82,11 @@ export function detectarIntencao(texto: string): Intencao {
   if (t === 'atendente' || t.includes('atendente') || t.includes('quero falar com')) {
     return 'atendente';
   }
+  // Mensagem puramente social (saudacao/agradecimento/despedida).
+  const s = chaveSocial(texto);
+  if (SAUDACOES.has(s)) return 'saudacao';
+  if (AGRADECIMENTOS.has(s)) return 'agradecimento';
+  if (DESPEDIDAS.has(s)) return 'despedida';
   if (PADROES_CLINICOS.some((p) => t.includes(p))) return 'clinica';
   return 'consulta';
 }
@@ -90,6 +127,17 @@ export function decidirPorResultados(
 /** Decisao de intencao clinica: recusa fixa, sem IA e sem busca. */
 export function decisaoRecusaClinica(): Decisao {
   return { tipo: 'recusa_clinica', texto: MSG.RECUSA_CLINICA };
+}
+
+/** Resposta social (saudacao, agradecimento, despedida). Sem busca e sem IA. */
+export function decisaoSocial(intencao: 'saudacao' | 'agradecimento' | 'despedida'): Decisao {
+  const texto =
+    intencao === 'saudacao'
+      ? MSG.SAUDACAO
+      : intencao === 'agradecimento'
+        ? MSG.AGRADECIMENTO
+        : MSG.ENCERRAMENTO;
+  return { tipo: 'social', texto };
 }
 
 /** Encaminhamento humano explicito (o cidadao digitou ATENDENTE). */
