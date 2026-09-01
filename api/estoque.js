@@ -33101,6 +33101,12 @@ function formatarAtualizacao(iso) {
     d2.getHours()
   )}h${dois(d2.getMinutes())}`;
 }
+function montarUmPorVez(nomes) {
+  return [
+    `Voc\xEA mencionou mais de um medicamento (${nomes.join(" e ")}).`,
+    "Consigo verificar a disponibilidade de um por vez \u2014 por favor, envie o nome de apenas um deles."
+  ].join(" ");
+}
 function montarDesambiguacao(opcoes) {
   const linhas = opcoes.map((r2, i2) => `${i2 + 1} \u2013 ${descreverItem(r2)}`);
   return [
@@ -33424,6 +33430,11 @@ var Atendimento = class {
       saida.push(await this.executar(decisaoSocial(intencao), msg));
       return { mensagens: saida, ignorada: false };
     }
+    const citados = await this.medicamentosCitados(msg.texto);
+    if (citados.length >= 2) {
+      saida.push(await this.executar({ tipo: "social", texto: montarUmPorVez(citados) }, msg));
+      return { mensagens: saida, ignorada: false };
+    }
     let resultados = [];
     let houveErro = false;
     try {
@@ -33434,6 +33445,24 @@ var Atendimento = class {
     const decisao = decidirPorResultados(resultados, houveErro);
     saida.push(await this.executar(decisao, msg));
     return { mensagens: saida, ignorada: false };
+  }
+  /**
+   * Detecta se a mensagem cita mais de um medicamento (separados por "e", ",",
+   * "+", "/", "ou"). Retorna os nomes (principio ativo) distintos encontrados;
+   * lista com <2 itens significa "consulta normal de um medicamento".
+   */
+  async medicamentosCitados(texto) {
+    const partes = normalizar(texto).split(/\s+e\s+|\s*,\s*|\s*\+\s*|\s*\/\s*|\s*;\s*|\s+ou\s+/).map((p2) => p2.trim()).filter((p2) => p2.length >= 3).slice(0, 6);
+    if (partes.length < 2) return [];
+    const familias = /* @__PURE__ */ new Map();
+    for (const parte of partes) {
+      try {
+        const r2 = await this.repo.buscar(parte, 1);
+        if (r2.length) familias.set(r2[0].principio_ativo, r2[0].principio_ativo);
+      } catch {
+      }
+    }
+    return [...familias.values()];
   }
   /** Executa uma decisao: produz o texto, ajusta a sessao e grava o log. */
   async executar(decisao, msg) {

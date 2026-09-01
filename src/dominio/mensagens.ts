@@ -47,6 +47,14 @@ export function formatarAtualizacao(iso: string): string {
   )}h${dois(d.getMinutes())}`;
 }
 
+/** Aviso quando o cidadao cita mais de um medicamento na mesma mensagem. */
+export function montarUmPorVez(nomes: string[]): string {
+  return [
+    `Você mencionou mais de um medicamento (${nomes.join(' e ')}).`,
+    'Consigo verificar a disponibilidade de um por vez — por favor, envie o nome de apenas um deles.',
+  ].join(' ');
+}
+
 /** Pergunta de desambiguacao entre apresentacoes do mesmo item. Sem IA. */
 export function montarDesambiguacao(opcoes: RegistroMedicamento[]): string {
   const linhas = opcoes.map((r, i) => `${i + 1} – ${descreverItem(r)}`);

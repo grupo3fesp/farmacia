@@ -14,7 +14,8 @@ import {
   decisaoSocial,
 } from './decisao.ts';
 import { redigirComIA } from './redacao-ia.ts';
-import { MSG } from './mensagens.ts';
+import { MSG, montarUmPorVez } from './mensagens.ts';
+import { normalizar } from './texto.ts';
 import { ehDemonstracao } from '../config.ts';
 
 export type ResultadoAtendimento = {
@@ -72,7 +73,14 @@ export class Atendimento {
       return { mensagens: saida, ignorada: false };
     }
 
-    // 4. Consulta ao banco + desvios da secao 5.
+    // 4. Mais de um medicamento na mesma mensagem? Pedir um por vez.
+    const citados = await this.medicamentosCitados(msg.texto);
+    if (citados.length >= 2) {
+      saida.push(await this.executar({ tipo: 'social', texto: montarUmPorVez(citados) }, msg));
+      return { mensagens: saida, ignorada: false };
+    }
+
+    // 5. Consulta ao banco + desvios da secao 5.
     let resultados: RegistroMedicamento[] = [];
     let houveErro = false;
     try {
@@ -83,6 +91,31 @@ export class Atendimento {
     const decisao = decidirPorResultados(resultados, houveErro);
     saida.push(await this.executar(decisao, msg));
     return { mensagens: saida, ignorada: false };
+  }
+
+  /**
+   * Detecta se a mensagem cita mais de um medicamento (separados por "e", ",",
+   * "+", "/", "ou"). Retorna os nomes (principio ativo) distintos encontrados;
+   * lista com <2 itens significa "consulta normal de um medicamento".
+   */
+  private async medicamentosCitados(texto: string): Promise<string[]> {
+    const partes = normalizar(texto)
+      .split(/\s+e\s+|\s*,\s*|\s*\+\s*|\s*\/\s*|\s*;\s*|\s+ou\s+/)
+      .map((p) => p.trim())
+      .filter((p) => p.length >= 3)
+      .slice(0, 6);
+    if (partes.length < 2) return [];
+
+    const familias = new Map<string, string>(); // principio_ativo -> nome exibido
+    for (const parte of partes) {
+      try {
+        const r = await this.repo.buscar(parte, 1);
+        if (r.length) familias.set(r[0].principio_ativo, r[0].principio_ativo);
+      } catch {
+        // ignora falha numa parte; nao impede o restante
+      }
+    }
+    return [...familias.values()];
   }
 
   /** Executa uma decisao: produz o texto, ajusta a sessao e grava o log. */
