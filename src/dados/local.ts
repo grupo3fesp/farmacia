@@ -97,6 +97,15 @@ export class RepositorioLocal implements Repositorio {
         const sim = similaridade(s.termo_norm, t);
         if (sim > this.corte) considerar(s.codigo, 'aproximado', sim);
       }
+      // Nivel 4: prefixo do principio ativo. "acido" -> Ácido fólico E
+      // Ácido acetilsalicílico (empatam -> desambiguacao). Evita que um termo
+      // parcial ambiguo caia direto num unico medicamento.
+      if (t.length >= 3) {
+        for (const m of this.catalogo.values()) {
+          const pn = normalizar(m.principio_ativo);
+          if (pn !== t && pn.startsWith(t)) considerar(m.codigo, 'aproximado', 0.5);
+        }
+      }
     }
 
     return [...melhor.entries()]

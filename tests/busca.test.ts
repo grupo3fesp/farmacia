@@ -59,6 +59,17 @@ test('xpto123: retorno vazio', async () => {
   assert.equal((await repo.buscar('xpto123')).length, 0);
 });
 
+test('"acido" (prefixo ambíguo) → desambiguação entre os dois ácidos', async () => {
+  const r = await repo.buscar('acido');
+  const topo = r.filter((x) => x.semelhanca === r[0].semelhanca).map((x) => x.principio_ativo).sort();
+  assert.deepEqual(topo, ['Ácido acetilsalicílico', 'Ácido fólico']);
+});
+
+test('"aas" / "aspirina" vão direto ao Ácido acetilsalicílico', async () => {
+  assert.equal((await repo.buscar('aas'))[0].principio_ativo, 'Ácido acetilsalicílico');
+  assert.equal((await repo.buscar('aspirina'))[0].principio_ativo, 'Ácido acetilsalicílico');
+});
+
 test('estoque por unidade: dipirona (MED-001) em 3 unidades; alteração ao vivo', async () => {
   const local = new RepositorioLocal();
   let est = await local.estoquePorCodigo('MED-001');

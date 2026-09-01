@@ -178,6 +178,13 @@ as $$
     select s.codigo, 'aproximado'::text, similarity(s.termo_norm, e.t)
       from public.sinonimos s, entrada e
      where e.t <> '' and similarity(s.termo_norm, e.t) > 0.42
+    union all
+    -- Nivel 4: prefixo do principio ativo ("acido" -> os dois "Ácido...").
+    select m.codigo, 'aproximado'::text, 0.5::real
+      from public.medicamentos m, entrada e
+     where length(e.t) >= 3
+       and starts_with(lower(extensions.unaccent(m.principio_ativo)), e.t)
+       and lower(extensions.unaccent(m.principio_ativo)) <> e.t
   ),
   melhor as (
     select a.codigo, max(a.semelhanca) as semelhanca,

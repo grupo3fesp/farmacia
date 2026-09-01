@@ -33335,6 +33335,12 @@ var RepositorioLocal = class {
         const sim = similaridade(s2.termo_norm, t2);
         if (sim > this.corte) considerar(s2.codigo, "aproximado", sim);
       }
+      if (t2.length >= 3) {
+        for (const m2 of this.catalogo.values()) {
+          const pn = normalizar(m2.principio_ativo);
+          if (pn !== t2 && pn.startsWith(t2)) considerar(m2.codigo, "aproximado", 0.5);
+        }
+      }
     }
     return [...melhor.entries()].map(([codigo, b2]) => {
       const m2 = this.catalogo.get(codigo);
