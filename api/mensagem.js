@@ -31587,10 +31587,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 4820,
-      estoque_minimo: 800,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-002",
@@ -31599,10 +31596,7 @@ var seed_default = {
       forma_farmaceutica: "Solu\xE7\xE3o oral",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 0,
-      estoque_minimo: 60,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-003",
@@ -31611,10 +31605,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 3150,
-      estoque_minimo: 700,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-004",
@@ -31623,10 +31614,7 @@ var seed_default = {
       forma_farmaceutica: "Solu\xE7\xE3o oral",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 42,
-      estoque_minimo: 50,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-005",
@@ -31635,10 +31623,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 1240,
-      estoque_minimo: 400,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-006",
@@ -31647,10 +31632,7 @@ var seed_default = {
       forma_farmaceutica: "C\xE1psula",
       componente: "B\xE1sico",
       unidade_medida: "C\xE1psula",
-      estoque_atual: 2600,
-      estoque_minimo: 600,
-      tipo_receita: "Receita de antimicrobiano (2 vias)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita de antimicrobiano (2 vias)"
     },
     {
       codigo: "MED-007",
@@ -31659,10 +31641,7 @@ var seed_default = {
       forma_farmaceutica: "Suspens\xE3o oral",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 18,
-      estoque_minimo: 30,
-      tipo_receita: "Receita de antimicrobiano (2 vias)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita de antimicrobiano (2 vias)"
     },
     {
       codigo: "MED-008",
@@ -31671,10 +31650,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 0,
-      estoque_minimo: 200,
-      tipo_receita: "Receita de antimicrobiano (2 vias)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita de antimicrobiano (2 vias)"
     },
     {
       codigo: "MED-009",
@@ -31683,10 +31659,7 @@ var seed_default = {
       forma_farmaceutica: "C\xE1psula",
       componente: "B\xE1sico",
       unidade_medida: "C\xE1psula",
-      estoque_atual: 940,
-      estoque_minimo: 250,
-      tipo_receita: "Receita de antimicrobiano (2 vias)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita de antimicrobiano (2 vias)"
     },
     {
       codigo: "MED-010",
@@ -31695,10 +31668,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 1180,
-      estoque_minimo: 300,
-      tipo_receita: "Receita de antimicrobiano (2 vias)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita de antimicrobiano (2 vias)"
     },
     {
       codigo: "MED-011",
@@ -31707,10 +31677,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 760,
-      estoque_minimo: 200,
-      tipo_receita: "Receita de antimicrobiano (2 vias)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita de antimicrobiano (2 vias)"
     },
     {
       codigo: "MED-012",
@@ -31719,10 +31686,7 @@ var seed_default = {
       forma_farmaceutica: "C\xE1psula",
       componente: "B\xE1sico",
       unidade_medida: "C\xE1psula",
-      estoque_atual: 210,
-      estoque_minimo: 60,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-013",
@@ -31731,10 +31695,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 8600,
-      estoque_minimo: 1500,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-014",
@@ -31743,10 +31704,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 3400,
-      estoque_minimo: 900,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-015",
@@ -31755,10 +31713,7 @@ var seed_default = {
       forma_farmaceutica: "Suspens\xE3o injet\xE1vel",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 96,
-      estoque_minimo: 40,
-      tipo_receita: "Receita simples (rede de frio)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples (rede de frio)"
     },
     {
       codigo: "MED-016",
@@ -31767,10 +31722,7 @@ var seed_default = {
       forma_farmaceutica: "Solu\xE7\xE3o injet\xE1vel",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 31,
-      estoque_minimo: 25,
-      tipo_receita: "Receita simples (rede de frio)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples (rede de frio)"
     },
     {
       codigo: "MED-017",
@@ -31779,10 +31731,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 12400,
-      estoque_minimo: 2e3,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-018",
@@ -31791,10 +31740,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 5900,
-      estoque_minimo: 1200,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-019",
@@ -31803,10 +31749,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 2100,
-      estoque_minimo: 800,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-020",
@@ -31815,10 +31758,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 7300,
-      estoque_minimo: 1200,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-021",
@@ -31827,10 +31767,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 4100,
-      estoque_minimo: 900,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-022",
@@ -31839,10 +31776,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 880,
-      estoque_minimo: 900,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-023",
@@ -31851,10 +31785,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 2450,
-      estoque_minimo: 600,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-024",
@@ -31863,10 +31794,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 6800,
-      estoque_minimo: 1500,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-025",
@@ -31875,10 +31803,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 9200,
-      estoque_minimo: 1500,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-026",
@@ -31887,10 +31812,7 @@ var seed_default = {
       forma_farmaceutica: "C\xE1psula",
       componente: "B\xE1sico",
       unidade_medida: "C\xE1psula",
-      estoque_atual: 5400,
-      estoque_minimo: 1e3,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-027",
@@ -31899,10 +31821,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 1320,
-      estoque_minimo: 300,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-028",
@@ -31911,10 +31830,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 640,
-      estoque_minimo: 200,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-029",
@@ -31923,10 +31839,7 @@ var seed_default = {
       forma_farmaceutica: "Solu\xE7\xE3o oral",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 0,
-      estoque_minimo: 40,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-030",
@@ -31935,10 +31848,7 @@ var seed_default = {
       forma_farmaceutica: "Creme dermatol\xF3gico",
       componente: "B\xE1sico",
       unidade_medida: "Bisnaga",
-      estoque_atual: 155,
-      estoque_minimo: 40,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-031",
@@ -31947,10 +31857,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 2900,
-      estoque_minimo: 500,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-032",
@@ -31959,10 +31866,7 @@ var seed_default = {
       forma_farmaceutica: "Aerossol oral",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 74,
-      estoque_minimo: 60,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-033",
@@ -31971,10 +31875,7 @@ var seed_default = {
       forma_farmaceutica: "Aerossol oral",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 58,
-      estoque_minimo: 30,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-034",
@@ -31983,10 +31884,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido mastig\xE1vel",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 1450,
-      estoque_minimo: 300,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-035",
@@ -31995,10 +31893,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 0,
-      estoque_minimo: 150,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-036",
@@ -32007,10 +31902,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 6100,
-      estoque_minimo: 1200,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-037",
@@ -32019,10 +31911,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 8800,
-      estoque_minimo: 1500,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-038",
@@ -32031,10 +31920,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 5200,
-      estoque_minimo: 1e3,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-039",
@@ -32043,10 +31929,7 @@ var seed_default = {
       forma_farmaceutica: "P\xF3 para solu\xE7\xE3o oral",
       componente: "Estrat\xE9gico",
       unidade_medida: "Envelope",
-      estoque_atual: 620,
-      estoque_minimo: 200,
-      tipo_receita: "N\xE3o exige receita",
-      unidade_id: "UN-01"
+      tipo_receita: "N\xE3o exige receita"
     },
     {
       codigo: "MED-040",
@@ -32055,10 +31938,7 @@ var seed_default = {
       forma_farmaceutica: "Suspens\xE3o oral",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 27,
-      estoque_minimo: 30,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-041",
@@ -32067,10 +31947,7 @@ var seed_default = {
       forma_farmaceutica: "Lo\xE7\xE3o",
       componente: "B\xE1sico",
       unidade_medida: "Frasco",
-      estoque_atual: 88,
-      estoque_minimo: 30,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-042",
@@ -32079,10 +31956,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Cartela",
-      estoque_atual: 430,
-      estoque_minimo: 120,
-      tipo_receita: "Receita simples",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita simples"
     },
     {
       codigo: "MED-043",
@@ -32091,10 +31965,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 2200,
-      estoque_minimo: 500,
-      tipo_receita: "Receita de controle especial (C1)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita de controle especial (C1)"
     },
     {
       codigo: "MED-044",
@@ -32103,10 +31974,7 @@ var seed_default = {
       forma_farmaceutica: "C\xE1psula",
       componente: "B\xE1sico",
       unidade_medida: "C\xE1psula",
-      estoque_atual: 3600,
-      estoque_minimo: 800,
-      tipo_receita: "Receita de controle especial (C1)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita de controle especial (C1)"
     },
     {
       codigo: "MED-045",
@@ -32115,10 +31983,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 1900,
-      estoque_minimo: 500,
-      tipo_receita: "Receita de controle especial (C1)",
-      unidade_id: "UN-01"
+      tipo_receita: "Receita de controle especial (C1)"
     },
     {
       codigo: "MED-046",
@@ -32127,10 +31992,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 340,
-      estoque_minimo: 400,
-      tipo_receita: "Notifica\xE7\xE3o de receita B (azul)",
-      unidade_id: "UN-01"
+      tipo_receita: "Notifica\xE7\xE3o de receita B (azul)"
     },
     {
       codigo: "MED-047",
@@ -32139,10 +32001,7 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
-      estoque_atual: 0,
-      estoque_minimo: 300,
-      tipo_receita: "Notifica\xE7\xE3o de receita B (azul)",
-      unidade_id: "UN-01"
+      tipo_receita: "Notifica\xE7\xE3o de receita B (azul)"
     },
     {
       codigo: "MED-048",
@@ -32151,10 +32010,705 @@ var seed_default = {
       forma_farmaceutica: "Comprimido",
       componente: "B\xE1sico",
       unidade_medida: "Comprimido",
+      tipo_receita: "Receita de controle especial (C1)"
+    }
+  ],
+  estoques: [
+    {
+      codigo: "MED-001",
+      unidade_id: "UN-01",
+      estoque_atual: 4820,
+      estoque_minimo: 800
+    },
+    {
+      codigo: "MED-001",
+      unidade_id: "UN-02",
+      estoque_atual: 2651,
+      estoque_minimo: 480
+    },
+    {
+      codigo: "MED-001",
+      unidade_id: "UN-03",
+      estoque_atual: 400,
+      estoque_minimo: 320
+    },
+    {
+      codigo: "MED-002",
+      unidade_id: "UN-01",
+      estoque_atual: 0,
+      estoque_minimo: 60
+    },
+    {
+      codigo: "MED-002",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 36
+    },
+    {
+      codigo: "MED-002",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 24
+    },
+    {
+      codigo: "MED-003",
+      unidade_id: "UN-01",
+      estoque_atual: 3150,
+      estoque_minimo: 700
+    },
+    {
+      codigo: "MED-003",
+      unidade_id: "UN-02",
+      estoque_atual: 350,
+      estoque_minimo: 420
+    },
+    {
+      codigo: "MED-004",
+      unidade_id: "UN-01",
+      estoque_atual: 42,
+      estoque_minimo: 50
+    },
+    {
+      codigo: "MED-004",
+      unidade_id: "UN-03",
+      estoque_atual: 13,
+      estoque_minimo: 20
+    },
+    {
+      codigo: "MED-005",
+      unidade_id: "UN-01",
+      estoque_atual: 1240,
+      estoque_minimo: 400
+    },
+    {
+      codigo: "MED-005",
+      unidade_id: "UN-02",
+      estoque_atual: 682,
+      estoque_minimo: 240
+    },
+    {
+      codigo: "MED-005",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 160
+    },
+    {
+      codigo: "MED-006",
+      unidade_id: "UN-01",
+      estoque_atual: 2600,
+      estoque_minimo: 600
+    },
+    {
+      codigo: "MED-006",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 360
+    },
+    {
+      codigo: "MED-007",
+      unidade_id: "UN-01",
+      estoque_atual: 18,
+      estoque_minimo: 30
+    },
+    {
+      codigo: "MED-007",
+      unidade_id: "UN-02",
+      estoque_atual: 10,
+      estoque_minimo: 18
+    },
+    {
+      codigo: "MED-007",
+      unidade_id: "UN-03",
+      estoque_atual: 5,
+      estoque_minimo: 12
+    },
+    {
+      codigo: "MED-008",
+      unidade_id: "UN-01",
+      estoque_atual: 0,
+      estoque_minimo: 200
+    },
+    {
+      codigo: "MED-008",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 80
+    },
+    {
+      codigo: "MED-009",
+      unidade_id: "UN-01",
+      estoque_atual: 940,
+      estoque_minimo: 250
+    },
+    {
+      codigo: "MED-009",
+      unidade_id: "UN-02",
+      estoque_atual: 125,
+      estoque_minimo: 150
+    },
+    {
+      codigo: "MED-010",
+      unidade_id: "UN-01",
+      estoque_atual: 1180,
+      estoque_minimo: 300
+    },
+    {
+      codigo: "MED-010",
+      unidade_id: "UN-02",
+      estoque_atual: 649,
+      estoque_minimo: 180
+    },
+    {
+      codigo: "MED-010",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 120
+    },
+    {
+      codigo: "MED-011",
+      unidade_id: "UN-01",
+      estoque_atual: 760,
+      estoque_minimo: 200
+    },
+    {
+      codigo: "MED-011",
+      unidade_id: "UN-02",
+      estoque_atual: 418,
+      estoque_minimo: 120
+    },
+    {
+      codigo: "MED-011",
+      unidade_id: "UN-03",
+      estoque_atual: 100,
+      estoque_minimo: 80
+    },
+    {
+      codigo: "MED-012",
+      unidade_id: "UN-01",
+      estoque_atual: 210,
+      estoque_minimo: 60
+    },
+    {
+      codigo: "MED-013",
+      unidade_id: "UN-01",
+      estoque_atual: 8600,
+      estoque_minimo: 1500
+    },
+    {
+      codigo: "MED-013",
+      unidade_id: "UN-02",
+      estoque_atual: 4730,
+      estoque_minimo: 900
+    },
+    {
+      codigo: "MED-013",
+      unidade_id: "UN-03",
+      estoque_atual: 2580,
+      estoque_minimo: 600
+    },
+    {
+      codigo: "MED-014",
+      unidade_id: "UN-01",
+      estoque_atual: 3400,
+      estoque_minimo: 900
+    },
+    {
+      codigo: "MED-014",
+      unidade_id: "UN-02",
+      estoque_atual: 1870,
+      estoque_minimo: 540
+    },
+    {
+      codigo: "MED-014",
+      unidade_id: "UN-03",
+      estoque_atual: 1020,
+      estoque_minimo: 360
+    },
+    {
+      codigo: "MED-015",
+      unidade_id: "UN-01",
+      estoque_atual: 96,
+      estoque_minimo: 40
+    },
+    {
+      codigo: "MED-015",
+      unidade_id: "UN-02",
+      estoque_atual: 20,
+      estoque_minimo: 24
+    },
+    {
+      codigo: "MED-016",
+      unidade_id: "UN-01",
+      estoque_atual: 31,
+      estoque_minimo: 25
+    },
+    {
+      codigo: "MED-016",
+      unidade_id: "UN-03",
+      estoque_atual: 13,
+      estoque_minimo: 10
+    },
+    {
+      codigo: "MED-017",
+      unidade_id: "UN-01",
+      estoque_atual: 12400,
+      estoque_minimo: 2e3
+    },
+    {
+      codigo: "MED-017",
+      unidade_id: "UN-02",
+      estoque_atual: 6820,
+      estoque_minimo: 1200
+    },
+    {
+      codigo: "MED-017",
+      unidade_id: "UN-03",
+      estoque_atual: 3720,
+      estoque_minimo: 800
+    },
+    {
+      codigo: "MED-018",
+      unidade_id: "UN-01",
+      estoque_atual: 5900,
+      estoque_minimo: 1200
+    },
+    {
+      codigo: "MED-018",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 720
+    },
+    {
+      codigo: "MED-019",
+      unidade_id: "UN-01",
+      estoque_atual: 2100,
+      estoque_minimo: 800
+    },
+    {
+      codigo: "MED-019",
+      unidade_id: "UN-02",
+      estoque_atual: 1155,
+      estoque_minimo: 480
+    },
+    {
+      codigo: "MED-019",
+      unidade_id: "UN-03",
+      estoque_atual: 630,
+      estoque_minimo: 320
+    },
+    {
+      codigo: "MED-020",
+      unidade_id: "UN-01",
+      estoque_atual: 7300,
+      estoque_minimo: 1200
+    },
+    {
+      codigo: "MED-020",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 480
+    },
+    {
+      codigo: "MED-021",
+      unidade_id: "UN-01",
+      estoque_atual: 4100,
+      estoque_minimo: 900
+    },
+    {
+      codigo: "MED-021",
+      unidade_id: "UN-02",
+      estoque_atual: 450,
+      estoque_minimo: 540
+    },
+    {
+      codigo: "MED-022",
+      unidade_id: "UN-01",
+      estoque_atual: 880,
+      estoque_minimo: 900
+    },
+    {
+      codigo: "MED-022",
+      unidade_id: "UN-02",
+      estoque_atual: 484,
+      estoque_minimo: 540
+    },
+    {
+      codigo: "MED-022",
+      unidade_id: "UN-03",
+      estoque_atual: 264,
+      estoque_minimo: 360
+    },
+    {
+      codigo: "MED-023",
+      unidade_id: "UN-01",
+      estoque_atual: 2450,
+      estoque_minimo: 600
+    },
+    {
+      codigo: "MED-023",
+      unidade_id: "UN-02",
+      estoque_atual: 1348,
+      estoque_minimo: 360
+    },
+    {
+      codigo: "MED-023",
+      unidade_id: "UN-03",
+      estoque_atual: 735,
+      estoque_minimo: 240
+    },
+    {
+      codigo: "MED-024",
+      unidade_id: "UN-01",
+      estoque_atual: 6800,
+      estoque_minimo: 1500
+    },
+    {
+      codigo: "MED-025",
+      unidade_id: "UN-01",
+      estoque_atual: 9200,
+      estoque_minimo: 1500
+    },
+    {
+      codigo: "MED-025",
+      unidade_id: "UN-02",
+      estoque_atual: 5060,
+      estoque_minimo: 900
+    },
+    {
+      codigo: "MED-025",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 600
+    },
+    {
+      codigo: "MED-026",
+      unidade_id: "UN-01",
+      estoque_atual: 5400,
+      estoque_minimo: 1e3
+    },
+    {
+      codigo: "MED-026",
+      unidade_id: "UN-02",
+      estoque_atual: 2970,
+      estoque_minimo: 600
+    },
+    {
+      codigo: "MED-026",
+      unidade_id: "UN-03",
+      estoque_atual: 500,
+      estoque_minimo: 400
+    },
+    {
+      codigo: "MED-027",
+      unidade_id: "UN-01",
+      estoque_atual: 1320,
+      estoque_minimo: 300
+    },
+    {
+      codigo: "MED-027",
+      unidade_id: "UN-02",
+      estoque_atual: 150,
+      estoque_minimo: 180
+    },
+    {
+      codigo: "MED-028",
+      unidade_id: "UN-01",
+      estoque_atual: 640,
+      estoque_minimo: 200
+    },
+    {
+      codigo: "MED-028",
+      unidade_id: "UN-03",
+      estoque_atual: 192,
+      estoque_minimo: 80
+    },
+    {
+      codigo: "MED-029",
+      unidade_id: "UN-01",
+      estoque_atual: 0,
+      estoque_minimo: 40
+    },
+    {
+      codigo: "MED-029",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 24
+    },
+    {
+      codigo: "MED-029",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 16
+    },
+    {
+      codigo: "MED-030",
+      unidade_id: "UN-01",
+      estoque_atual: 155,
+      estoque_minimo: 40
+    },
+    {
+      codigo: "MED-030",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 24
+    },
+    {
+      codigo: "MED-031",
+      unidade_id: "UN-01",
+      estoque_atual: 2900,
+      estoque_minimo: 500
+    },
+    {
+      codigo: "MED-031",
+      unidade_id: "UN-02",
+      estoque_atual: 1595,
+      estoque_minimo: 300
+    },
+    {
+      codigo: "MED-031",
+      unidade_id: "UN-03",
+      estoque_atual: 250,
+      estoque_minimo: 200
+    },
+    {
+      codigo: "MED-032",
+      unidade_id: "UN-01",
+      estoque_atual: 74,
+      estoque_minimo: 60
+    },
+    {
+      codigo: "MED-032",
+      unidade_id: "UN-03",
+      estoque_atual: 22,
+      estoque_minimo: 24
+    },
+    {
+      codigo: "MED-033",
+      unidade_id: "UN-01",
+      estoque_atual: 58,
+      estoque_minimo: 30
+    },
+    {
+      codigo: "MED-033",
+      unidade_id: "UN-02",
+      estoque_atual: 15,
+      estoque_minimo: 18
+    },
+    {
+      codigo: "MED-034",
+      unidade_id: "UN-01",
+      estoque_atual: 1450,
+      estoque_minimo: 300
+    },
+    {
+      codigo: "MED-034",
+      unidade_id: "UN-02",
+      estoque_atual: 798,
+      estoque_minimo: 180
+    },
+    {
+      codigo: "MED-034",
+      unidade_id: "UN-03",
+      estoque_atual: 435,
+      estoque_minimo: 120
+    },
+    {
+      codigo: "MED-035",
+      unidade_id: "UN-01",
+      estoque_atual: 0,
+      estoque_minimo: 150
+    },
+    {
+      codigo: "MED-035",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 90
+    },
+    {
+      codigo: "MED-035",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 60
+    },
+    {
+      codigo: "MED-036",
+      unidade_id: "UN-01",
+      estoque_atual: 6100,
+      estoque_minimo: 1200
+    },
+    {
+      codigo: "MED-037",
+      unidade_id: "UN-01",
+      estoque_atual: 8800,
+      estoque_minimo: 1500
+    },
+    {
+      codigo: "MED-037",
+      unidade_id: "UN-02",
+      estoque_atual: 4840,
+      estoque_minimo: 900
+    },
+    {
+      codigo: "MED-037",
+      unidade_id: "UN-03",
+      estoque_atual: 2640,
+      estoque_minimo: 600
+    },
+    {
+      codigo: "MED-038",
+      unidade_id: "UN-01",
+      estoque_atual: 5200,
+      estoque_minimo: 1e3
+    },
+    {
+      codigo: "MED-038",
+      unidade_id: "UN-02",
+      estoque_atual: 2860,
+      estoque_minimo: 600
+    },
+    {
+      codigo: "MED-038",
+      unidade_id: "UN-03",
+      estoque_atual: 1560,
+      estoque_minimo: 400
+    },
+    {
+      codigo: "MED-039",
+      unidade_id: "UN-01",
+      estoque_atual: 620,
+      estoque_minimo: 200
+    },
+    {
+      codigo: "MED-039",
+      unidade_id: "UN-02",
+      estoque_atual: 100,
+      estoque_minimo: 120
+    },
+    {
+      codigo: "MED-040",
+      unidade_id: "UN-01",
+      estoque_atual: 27,
+      estoque_minimo: 30
+    },
+    {
+      codigo: "MED-040",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 12
+    },
+    {
+      codigo: "MED-041",
+      unidade_id: "UN-01",
+      estoque_atual: 88,
+      estoque_minimo: 30
+    },
+    {
+      codigo: "MED-041",
+      unidade_id: "UN-02",
+      estoque_atual: 48,
+      estoque_minimo: 18
+    },
+    {
+      codigo: "MED-041",
+      unidade_id: "UN-03",
+      estoque_atual: 15,
+      estoque_minimo: 12
+    },
+    {
+      codigo: "MED-042",
+      unidade_id: "UN-01",
+      estoque_atual: 430,
+      estoque_minimo: 120
+    },
+    {
+      codigo: "MED-042",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 72
+    },
+    {
+      codigo: "MED-043",
+      unidade_id: "UN-01",
+      estoque_atual: 2200,
+      estoque_minimo: 500
+    },
+    {
+      codigo: "MED-043",
+      unidade_id: "UN-02",
+      estoque_atual: 1210,
+      estoque_minimo: 300
+    },
+    {
+      codigo: "MED-043",
+      unidade_id: "UN-03",
+      estoque_atual: 660,
+      estoque_minimo: 200
+    },
+    {
+      codigo: "MED-044",
+      unidade_id: "UN-01",
+      estoque_atual: 3600,
+      estoque_minimo: 800
+    },
+    {
+      codigo: "MED-044",
+      unidade_id: "UN-03",
+      estoque_atual: 1080,
+      estoque_minimo: 320
+    },
+    {
+      codigo: "MED-045",
+      unidade_id: "UN-01",
+      estoque_atual: 1900,
+      estoque_minimo: 500
+    },
+    {
+      codigo: "MED-045",
+      unidade_id: "UN-02",
+      estoque_atual: 250,
+      estoque_minimo: 300
+    },
+    {
+      codigo: "MED-046",
+      unidade_id: "UN-01",
+      estoque_atual: 340,
+      estoque_minimo: 400
+    },
+    {
+      codigo: "MED-046",
+      unidade_id: "UN-02",
+      estoque_atual: 187,
+      estoque_minimo: 240
+    },
+    {
+      codigo: "MED-046",
+      unidade_id: "UN-03",
+      estoque_atual: 200,
+      estoque_minimo: 160
+    },
+    {
+      codigo: "MED-047",
+      unidade_id: "UN-01",
+      estoque_atual: 0,
+      estoque_minimo: 300
+    },
+    {
+      codigo: "MED-047",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 180
+    },
+    {
+      codigo: "MED-047",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 120
+    },
+    {
+      codigo: "MED-048",
+      unidade_id: "UN-01",
       estoque_atual: 1100,
-      estoque_minimo: 300,
-      tipo_receita: "Receita de controle especial (C1)",
-      unidade_id: "UN-01"
+      estoque_minimo: 300
     }
   ],
   sinonimos: [
@@ -32722,9 +33276,9 @@ var seed_default = {
 };
 
 // src/dados/local.ts
-function situacaoDe(estoque_atual, estoque_minimo) {
-  if (estoque_atual === 0) return "EM FALTA";
-  if (estoque_atual <= estoque_minimo) return "ESTOQUE BAIXO";
+function situacaoDe(atual, minimo) {
+  if (atual === 0) return "EM FALTA";
+  if (atual <= minimo) return "ESTOQUE BAIXO";
   return "DISPONIVEL";
 }
 function carimboInicial() {
@@ -32735,35 +33289,28 @@ function carimboInicial() {
 var RepositorioLocal = class {
   corte;
   unidades = /* @__PURE__ */ new Map();
-  medicamentos = /* @__PURE__ */ new Map();
+  catalogo = /* @__PURE__ */ new Map();
+  estoques = /* @__PURE__ */ new Map();
+  // chave: `${codigo}|${unidade_id}`
   sinonimos = [];
   log = [];
   constructor() {
     this.corte = seed_default.corte_similaridade ?? 0.42;
     const carimbo = carimboInicial();
     for (const u2 of seed_default.unidades) this.unidades.set(u2.id, u2);
-    for (const m2 of seed_default.medicamentos) {
-      this.medicamentos.set(m2.codigo, { ...m2, atualizado_em: carimbo });
+    for (const m2 of seed_default.medicamentos) this.catalogo.set(m2.codigo, m2);
+    for (const e2 of seed_default.estoques) {
+      this.estoques.set(`${e2.codigo}|${e2.unidade_id}`, {
+        codigo: e2.codigo,
+        unidade_id: e2.unidade_id,
+        estoque_atual: e2.estoque_atual,
+        estoque_minimo: e2.estoque_minimo,
+        atualizado_em: carimbo
+      });
     }
     for (const s2 of seed_default.sinonimos) {
-      this.sinonimos.push({ codigo: s2.codigo, termo: s2.termo, termo_norm: normalizar(s2.termo) });
+      this.sinonimos.push({ codigo: s2.codigo, termo_norm: normalizar(s2.termo) });
     }
-  }
-  montarRegistro(m2, origem, semelhanca) {
-    return {
-      codigo: m2.codigo,
-      principio_ativo: m2.principio_ativo,
-      apresentacao: m2.apresentacao,
-      forma_farmaceutica: m2.forma_farmaceutica,
-      unidade_medida: m2.unidade_medida,
-      estoque_atual: m2.estoque_atual,
-      situacao: situacaoDe(m2.estoque_atual, m2.estoque_minimo),
-      tipo_receita: m2.tipo_receita,
-      unidade_nome: m2.unidade_id ? this.unidades.get(m2.unidade_id)?.nome ?? null : null,
-      atualizado_em: m2.atualizado_em,
-      origem,
-      semelhanca
-    };
   }
   async buscar(termo, limite = 5) {
     const t2 = normalizar(termo);
@@ -32780,10 +33327,8 @@ var RepositorioLocal = class {
       }
     };
     if (t2 !== "") {
-      for (const s2 of this.sinonimos) {
-        if (s2.termo_norm === t2) considerar(s2.codigo, "sinonimo_exato", 1);
-      }
-      for (const m2 of this.medicamentos.values()) {
+      for (const s2 of this.sinonimos) if (s2.termo_norm === t2) considerar(s2.codigo, "sinonimo_exato", 1);
+      for (const m2 of this.catalogo.values()) {
         if (normalizar(m2.principio_ativo) === t2) considerar(m2.codigo, "principio_ativo", 0.95);
       }
       for (const s2 of this.sinonimos) {
@@ -32791,11 +33336,34 @@ var RepositorioLocal = class {
         if (sim > this.corte) considerar(s2.codigo, "aproximado", sim);
       }
     }
-    const registros = [...melhor.entries()].map(([codigo, b2]) => {
-      const m2 = this.medicamentos.get(codigo);
-      return this.montarRegistro(m2, b2.origem, b2.semelhanca);
-    }).sort((a2, b2) => b2.semelhanca - a2.semelhanca || a2.principio_ativo.localeCompare(b2.principio_ativo));
-    return registros.slice(0, limite);
+    return [...melhor.entries()].map(([codigo, b2]) => {
+      const m2 = this.catalogo.get(codigo);
+      return {
+        codigo: m2.codigo,
+        principio_ativo: m2.principio_ativo,
+        apresentacao: m2.apresentacao,
+        forma_farmaceutica: m2.forma_farmaceutica,
+        unidade_medida: m2.unidade_medida,
+        tipo_receita: m2.tipo_receita,
+        origem: b2.origem,
+        semelhanca: b2.semelhanca
+      };
+    }).sort((a2, b2) => b2.semelhanca - a2.semelhanca || a2.principio_ativo.localeCompare(b2.principio_ativo)).slice(0, limite);
+  }
+  async estoquePorCodigo(codigo) {
+    return [...this.estoques.values()].filter((e2) => e2.codigo === codigo).map((e2) => {
+      const u2 = this.unidades.get(e2.unidade_id);
+      return {
+        unidade_id: e2.unidade_id,
+        unidade_nome: u2?.nome ?? e2.unidade_id,
+        endereco: u2?.endereco ?? null,
+        horario: u2?.horario ?? null,
+        estoque_atual: e2.estoque_atual,
+        estoque_minimo: e2.estoque_minimo,
+        situacao: situacaoDe(e2.estoque_atual, e2.estoque_minimo),
+        atualizado_em: e2.atualizado_em
+      };
+    }).sort((a2, b2) => a2.unidade_nome.localeCompare(b2.unidade_nome, "pt-BR"));
   }
   async registrarLog(registro) {
     this.log.push(registro);
@@ -32815,25 +33383,30 @@ var RepositorioLocal = class {
       consultas_itens_em_falta: emFalta
     };
   }
-  // --- Operacoes do painel editor ao vivo ---
-  /** Lista o estoque atual, para o painel editor. */
   async listarEstoque() {
-    return [...this.medicamentos.values()].map((m2) => ({
-      codigo: m2.codigo,
-      principio_ativo: m2.principio_ativo,
-      apresentacao: m2.apresentacao,
-      estoque_atual: m2.estoque_atual,
-      estoque_minimo: m2.estoque_minimo,
-      situacao: situacaoDe(m2.estoque_atual, m2.estoque_minimo)
-    })).sort((a2, b2) => a2.codigo.localeCompare(b2.codigo));
+    return [...this.estoques.values()].map((e2) => {
+      const m2 = this.catalogo.get(e2.codigo);
+      return {
+        codigo: e2.codigo,
+        principio_ativo: m2.principio_ativo,
+        apresentacao: m2.apresentacao,
+        unidade_id: e2.unidade_id,
+        unidade_nome: this.unidades.get(e2.unidade_id)?.nome ?? e2.unidade_id,
+        estoque_atual: e2.estoque_atual,
+        estoque_minimo: e2.estoque_minimo,
+        situacao: situacaoDe(e2.estoque_atual, e2.estoque_minimo)
+      };
+    }).sort(
+      (a2, b2) => a2.principio_ativo.localeCompare(b2.principio_ativo, "pt-BR") || a2.apresentacao.localeCompare(b2.apresentacao, "pt-BR") || a2.unidade_nome.localeCompare(b2.unidade_nome, "pt-BR")
+    );
   }
-  /** Altera o estoque de um item ao vivo e recarimba a data (imita o gatilho). */
-  async alterarEstoque(codigo, estoqueAtual) {
-    const m2 = this.medicamentos.get(codigo);
-    if (!m2 || !Number.isInteger(estoqueAtual) || estoqueAtual < 0) return false;
-    if (m2.estoque_atual !== estoqueAtual) {
-      m2.estoque_atual = estoqueAtual;
-      m2.atualizado_em = (/* @__PURE__ */ new Date()).toISOString();
+  async alterarEstoque(codigo, unidadeId, estoqueAtual) {
+    const chave = `${codigo}|${unidadeId}`;
+    const e2 = this.estoques.get(chave);
+    if (!e2 || !Number.isInteger(estoqueAtual) || estoqueAtual < 0) return false;
+    if (e2.estoque_atual !== estoqueAtual) {
+      e2.estoque_atual = estoqueAtual;
+      e2.atualizado_em = (/* @__PURE__ */ new Date()).toISOString();
     }
     return true;
   }
@@ -32866,7 +33439,7 @@ var RepositorioSupabase = class {
   }
   async clienteServico() {
     if (!this.cfg.serviceKey) {
-      throw new Error("SUPABASE_SERVICE_ROLE_KEY ausente: necessaria para ler indicadores.");
+      throw new Error("SUPABASE_SERVICE_ROLE_KEY ausente: necessaria para editar estoque e ler indicadores.");
     }
     if (!this.servico) this.servico = await criarClienteSupabase(this.cfg.url, this.cfg.serviceKey);
     return this.servico;
@@ -32876,6 +33449,12 @@ var RepositorioSupabase = class {
     const { data, error } = await sb.rpc("buscar_medicamento", { p_termo: termo, p_limite: limite });
     if (error) throw new Error(`Falha na RPC buscar_medicamento: ${JSON.stringify(error)}`);
     return data ?? [];
+  }
+  async estoquePorCodigo(codigo) {
+    const sb = await this.clienteAnon();
+    const { data, error } = await sb.rpc("estoque_medicamento", { p_codigo: codigo });
+    if (error) throw new Error(`Falha na RPC estoque_medicamento: ${JSON.stringify(error)}`);
+    return (data ?? []).map((l2) => ({ ...l2 }));
   }
   async registrarLog(r2) {
     try {
@@ -32899,14 +33478,27 @@ var RepositorioSupabase = class {
   }
   async listarEstoque() {
     const sb = await this.clienteAnon();
-    const { data, error } = await sb.from("medicamentos").select("codigo, principio_ativo, apresentacao, estoque_atual, estoque_minimo, situacao").order("codigo");
+    const { data, error } = await sb.from("estoques").select(
+      "codigo, unidade_id, estoque_atual, estoque_minimo, situacao, medicamentos!inner(principio_ativo, apresentacao), unidades!inner(nome)"
+    );
     if (error) throw new Error(`Falha ao listar estoque: ${JSON.stringify(error)}`);
-    return data ?? [];
+    return (data ?? []).map((l2) => ({
+      codigo: l2.codigo,
+      principio_ativo: l2.medicamentos.principio_ativo,
+      apresentacao: l2.medicamentos.apresentacao,
+      unidade_id: l2.unidade_id,
+      unidade_nome: l2.unidades.nome,
+      estoque_atual: l2.estoque_atual,
+      estoque_minimo: l2.estoque_minimo,
+      situacao: l2.situacao
+    })).sort(
+      (a2, b2) => a2.principio_ativo.localeCompare(b2.principio_ativo, "pt-BR") || a2.apresentacao.localeCompare(b2.apresentacao, "pt-BR") || a2.unidade_nome.localeCompare(b2.unidade_nome, "pt-BR")
+    );
   }
-  async alterarEstoque(codigo, estoqueAtual) {
+  async alterarEstoque(codigo, unidadeId, estoqueAtual) {
     if (!Number.isInteger(estoqueAtual) || estoqueAtual < 0) return false;
     const sb = await this.clienteServico();
-    const { data, error } = await sb.from("medicamentos").update({ estoque_atual: estoqueAtual }).eq("codigo", codigo).select("codigo");
+    const { data, error } = await sb.from("estoques").update({ estoque_atual: estoqueAtual }).eq("codigo", codigo).eq("unidade_id", unidadeId).select("codigo");
     if (error) throw new Error(`Falha ao alterar estoque: ${JSON.stringify(error)}`);
     return Array.isArray(data) && data.length > 0;
   }
@@ -33115,27 +33707,43 @@ function montarDesambiguacao(opcoes) {
     `\xC9 s\xF3 responder com o n\xFAmero (1 a ${opcoes.length}).`
   ].join("\n");
 }
-function montarRespostaDeterministica(r2) {
-  const item = descreverItem(r2);
-  const quando = formatarAtualizacao(r2.atualizado_em);
-  const unidade = r2.unidade_nome ? ` na ${r2.unidade_nome}` : "";
-  if (r2.situacao === "DISPONIVEL") {
+function listarNomes(nomes) {
+  if (nomes.length <= 1) return nomes[0] ?? "";
+  return nomes.slice(0, -1).join(", ") + " e " + nomes[nomes.length - 1];
+}
+function atualizacaoMaisRecente(estoques) {
+  const iso = estoques.reduce(
+    (max, e2) => e2.atualizado_em > max ? e2.atualizado_em : max,
+    estoques[0]?.atualizado_em ?? (/* @__PURE__ */ new Date()).toISOString()
+  );
+  return formatarAtualizacao(iso);
+}
+function montarRespostaDeterministica(m2) {
+  const item = descreverItem(m2.medicamento);
+  const disp = m2.estoques.filter((e2) => e2.situacao === "DISPONIVEL").map((e2) => e2.unidade_nome);
+  const baixo = m2.estoques.filter((e2) => e2.situacao === "ESTOQUE BAIXO").map((e2) => e2.unidade_nome);
+  const falta = m2.estoques.filter((e2) => e2.situacao === "EM FALTA").map((e2) => e2.unidade_nome);
+  if (m2.estoques.length === 0) {
+    return `${item}: n\xE3o h\xE1 registro de estoque em nenhuma unidade no momento. Para mais informa\xE7\xF5es, digite ATENDENTE.`;
+  }
+  const quando = atualizacaoMaisRecente(m2.estoques);
+  if (disp.length === 0 && baixo.length === 0) {
     return [
-      `${item}: consta como dispon\xEDvel${unidade}.`,
-      `Posi\xE7\xE3o registrada em ${quando}.`,
-      MSG.RESSALVA_ESTOQUE
+      `${item}: consta em falta em ${listarNomes(falta)} (posi\xE7\xE3o de ${quando}).`,
+      "Vale consultar novamente nos pr\xF3ximos dias. Para falar com a equipe, digite ATENDENTE."
     ].join(" ");
   }
-  if (r2.situacao === "ESTOQUE BAIXO") {
-    return [
-      `${item}: consta como dispon\xEDvel em quantidade reduzida${unidade} (posi\xE7\xE3o de ${quando}).`,
-      "Como restam poucas unidades, a retirada pode n\xE3o ser poss\xEDvel se houver procura ao longo do dia."
-    ].join(" ");
+  const partes = [`${item}:`];
+  if (disp.length) partes.push(`consta como dispon\xEDvel em ${listarNomes(disp)}.`);
+  if (baixo.length) {
+    partes.push(
+      `${disp.length ? "Em" : "Consta em quantidade reduzida em"} ${listarNomes(baixo)}${disp.length ? " o estoque est\xE1 reduzido" : ""} (pode acabar ao longo do dia).`
+    );
   }
-  return [
-    `${item}: consta como em falta${unidade} na posi\xE7\xE3o de ${quando}.`,
-    "Vale consultar novamente nos pr\xF3ximos dias. Para falar com a equipe, digite ATENDENTE."
-  ].join(" ");
+  if (falta.length) partes.push(`Consta em falta em ${listarNomes(falta)}.`);
+  partes.push(`Posi\xE7\xE3o registrada em ${quando}.`);
+  partes.push(MSG.RESSALVA_ESTOQUE);
+  return partes.join(" ");
 }
 
 // src/dominio/decisao.ts
@@ -33273,38 +33881,39 @@ function decisaoAtendente() {
 // src/dominio/redacao-ia.ts
 var SISTEMA = [
   "Voc\xEA \xE9 o assistente virtual informativo de uma Farm\xE1cia Municipal, no WhatsApp.",
-  "Sua \xFAnica fun\xE7\xE3o \xE9 redigir, em portugu\xEAs claro e cordial, a resposta sobre a DISPONIBILIDADE",
-  "de um medicamento, a partir EXCLUSIVAMENTE do registro fornecido pelo sistema.",
+  "A rede tem mais de uma unidade (farm\xE1cia). Sua \xFAnica fun\xE7\xE3o \xE9 redigir, em portugu\xEAs",
+  "claro e cordial, a resposta sobre a DISPONIBILIDADE de um medicamento, informando EM QUAIS",
+  "UNIDADES ele consta, a partir EXCLUSIVAMENTE do estoque por unidade fornecido pelo sistema.",
   "",
   "Regras obrigat\xF3rias:",
-  "1. Baseie-se apenas no registro fornecido. Nunca invente dados que n\xE3o estejam nele.",
-  "2. Nunca afirme disponibilidade sem o registro. Voc\xEA sempre recebe um registro v\xE1lido.",
-  "3. Em resposta positiva, inclua a ressalva de que o estoque muda ao longo do dia.",
-  "4. Informe a data/hora da \xFAltima atualiza\xE7\xE3o exatamente como fornecida.",
+  "1. Baseie-se apenas nos dados fornecidos. Nunca invente unidades, quantidades ou datas.",
+  "2. Diga claramente em quais unidades est\xE1 dispon\xEDvel, em quais est\xE1 em falta ou com estoque baixo.",
+  "3. Inclua a ressalva de que o estoque muda ao longo do dia.",
+  "4. Informe a data/hora da \xFAltima atualiza\xE7\xE3o como fornecida.",
   "5. N\xE3o pe\xE7a CPF, cart\xE3o SUS, nome, endere\xE7o, receita ou qualquer dado de sa\xFAde.",
   "",
   "Proibi\xE7\xF5es:",
-  "6. N\xE3o diagnostique, n\xE3o indique, n\xE3o sugira substitui\xE7\xE3o, n\xE3o comente posologia,",
-  "   efeitos, intera\xE7\xF5es ou uso. Isso \xE9 papel do profissional de sa\xFAde.",
-  "7. N\xE3o reserve, separe nem prometa medicamento.",
-  "8. N\xE3o estime prazo de reposi\xE7\xE3o.",
+  "6. N\xE3o diagnostique, n\xE3o indique, n\xE3o sugira substitui\xE7\xE3o, n\xE3o comente posologia/uso.",
+  "7. N\xE3o reserve, separe nem prometa medicamento. N\xE3o estime prazo de reposi\xE7\xE3o.",
   "",
-  "Formato: 2 a 4 frases curtas, tom acolhedor, sem emojis excessivos. N\xE3o use markdown."
+  "Formato: 2 a 5 frases curtas, tom acolhedor, sem emojis excessivos, sem markdown."
 ].join("\n");
-function conteudoUsuario(r2) {
-  const situacaoTexto = {
-    DISPONIVEL: "consta como DISPON\xCDVEL",
-    "ESTOQUE BAIXO": "consta como DISPON\xCDVEL em quantidade reduzida (estoque baixo)",
-    "EM FALTA": "consta como EM FALTA"
-  }[r2.situacao];
+function conteudoUsuario(m2) {
+  const situacaoTxt = {
+    DISPONIVEL: "DISPON\xCDVEL",
+    "ESTOQUE BAIXO": "DISPON\xCDVEL em quantidade reduzida (estoque baixo)",
+    "EM FALTA": "EM FALTA"
+  };
+  const linhas = m2.estoques.map(
+    (e2) => `- ${e2.unidade_nome}: ${situacaoTxt[e2.situacao]} (atualizado em ${formatarAtualizacao(e2.atualizado_em)})`
+  );
   return [
-    "Registro devolvido pelo sistema (\xFAnica fonte permitida):",
-    `- Medicamento: ${descreverItem(r2)}`,
-    `- Situa\xE7\xE3o: ${situacaoTexto}`,
-    `- Unidade: ${r2.unidade_nome ?? "n\xE3o informada"}`,
-    `- \xDAltima atualiza\xE7\xE3o: ${formatarAtualizacao(r2.atualizado_em)}`,
+    `Medicamento: ${descreverItem(m2.medicamento)}`,
     "",
-    "Redija a resposta ao cidad\xE3o seguindo as regras."
+    "Estoque por unidade (\xFAnica fonte permitida):",
+    ...linhas.length ? linhas : ["- Sem registro de estoque em nenhuma unidade."],
+    "",
+    "Redija a resposta ao cidad\xE3o, dizendo em quais unidades ele encontra o medicamento."
   ].join("\n");
 }
 var MAX_CONCORRENCIA = 4;
@@ -33325,18 +33934,16 @@ function liberar() {
     proximo();
   }
 }
-async function gerarGemini(r2) {
+async function gerarGemini(m2) {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.gemini.modelo}:generateContent?key=${config.gemini.apiKey}`;
   const resp = await fetch(url, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: SISTEMA }] },
-      contents: [{ role: "user", parts: [{ text: conteudoUsuario(r2) }] }],
-      generationConfig: { maxOutputTokens: 400, temperature: 0.3 }
+      contents: [{ role: "user", parts: [{ text: conteudoUsuario(m2) }] }],
+      generationConfig: { maxOutputTokens: 500, temperature: 0.3 }
     }),
-    // Se o Gemini demorar, abortamos e caímos no template antes do limite da
-    // função serverless (15s) — o cidadão nunca fica sem resposta.
     signal: AbortSignal.timeout(9e3)
   });
   if (!resp.ok) {
@@ -33349,7 +33956,7 @@ async function gerarGemini(r2) {
   return texto;
 }
 var clienteAnthropic = null;
-async function gerarAnthropic(r2) {
+async function gerarAnthropic(m2) {
   if (!clienteAnthropic) {
     clienteAnthropic = (async () => {
       const mod = await Promise.resolve().then(() => (init_sdk(), sdk_exports));
@@ -33364,34 +33971,40 @@ async function gerarAnthropic(r2) {
   const sb = await clienteAnthropic;
   const resp = await sb.messages.create({
     model: config.anthropic.modelo,
-    max_tokens: 400,
+    max_tokens: 500,
     system: SISTEMA,
-    messages: [{ role: "user", content: conteudoUsuario(r2) }]
+    messages: [{ role: "user", content: conteudoUsuario(m2) }]
   });
   const texto = resp.content.filter((b2) => b2.type === "text").map((b2) => b2.text ?? "").join("").trim();
   if (!texto) throw new Error("Anthropic: resposta vazia");
   return texto;
 }
-async function redigirComIA(r2) {
-  const texto = await gerar(r2);
+async function redigirComIA(m2) {
+  const texto = await gerar(m2);
   return ehDemonstracao ? `${texto}
 
 \u26A0\uFE0F Demonstra\xE7\xE3o com dados fict\xEDcios.` : texto;
 }
-async function gerar(r2) {
-  if (!usaIA) return montarRespostaDeterministica(r2);
+async function gerar(m2) {
+  if (!usaIA) return montarRespostaDeterministica(m2);
   await adquirir();
   try {
-    const texto = config.iaProvedor === "gemini" ? await gerarGemini(r2) : await gerarAnthropic(r2);
-    return texto || montarRespostaDeterministica(r2);
+    const texto = config.iaProvedor === "gemini" ? await gerarGemini(m2) : await gerarAnthropic(m2);
+    return texto || montarRespostaDeterministica(m2);
   } catch {
-    return montarRespostaDeterministica(r2);
+    return montarRespostaDeterministica(m2);
   } finally {
     liberar();
   }
 }
 
 // src/dominio/atendimento.ts
+function resumirSituacao(estoques) {
+  if (estoques.length === 0) return "EM FALTA";
+  if (estoques.some((e2) => e2.situacao === "DISPONIVEL")) return "DISPONIVEL";
+  if (estoques.some((e2) => e2.situacao === "ESTOQUE BAIXO")) return "ESTOQUE BAIXO";
+  return "EM FALTA";
+}
 var Atendimento = class {
   repo;
   sessao;
@@ -33497,11 +34110,12 @@ var Atendimento = class {
       }
       case "redigir_ia": {
         const r2 = decisao.registro;
-        const texto = await redigirComIA(r2);
+        const estoques = await this.repo.estoquePorCodigo(r2.codigo);
+        const texto = await redigirComIA({ medicamento: r2, estoques });
         await this.repo.registrarLog({
           ...base,
           codigoEncontrado: r2.codigo,
-          situacaoRetornada: r2.situacao
+          situacaoRetornada: resumirSituacao(estoques)
         });
         return texto;
       }

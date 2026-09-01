@@ -1,8 +1,9 @@
 -- =====================================================================
 -- Assistente Virtual Inteligente - Farmacia Municipal
--- Programa Aperfeicoando a Gestao Publica
--- Schema Supabase (PostgreSQL) para o prototipo
--- Executar no SQL Editor do Supabase, na ordem: este arquivo, depois o seed.
+-- Schema Supabase (PostgreSQL) - MODELO MULTIUNIDADE
+-- O estoque e por unidade: o mesmo medicamento pode existir em varias
+-- farmacias, cada uma com sua quantidade.
+-- Executar no SQL Editor, na ordem: este arquivo, depois o seed.
 -- =====================================================================
 
 -- ---------------------------------------------------------------------
@@ -24,8 +25,9 @@ create table if not exists public.unidades (
 );
 
 comment on table public.unidades is
-  'Unidades dispensadoras. No prototipo, dados ficticios.';
+  'Unidades dispensadoras (farmacias). No prototipo, dados ficticios.';
 
+-- Catalogo de medicamentos (SEM estoque - o estoque e por unidade).
 create table if not exists public.medicamentos (
   codigo             text primary key,
   principio_ativo    text not null,
@@ -33,24 +35,32 @@ create table if not exists public.medicamentos (
   forma_farmaceutica text,
   componente         text,
   unidade_medida     text,
-  estoque_atual      integer not null default 0 check (estoque_atual >= 0),
-  estoque_minimo     integer not null default 0 check (estoque_minimo >= 0),
-  tipo_receita       text,
-  unidade_id         text references public.unidades (id),
-  atualizado_em      timestamptz not null default now(),
-  -- A situacao e derivada do estoque: nao pode ser gravada a mao,
-  -- o que impede divergencia entre o numero e a resposta ao cidadao.
+  tipo_receita       text
+);
+
+comment on table public.medicamentos is
+  'Catalogo de medicamentos. O estoque fica na tabela estoques, por unidade.';
+
+-- Estoque por unidade: uma linha por (medicamento, unidade).
+create table if not exists public.estoques (
+  codigo         text not null references public.medicamentos (codigo) on delete cascade,
+  unidade_id     text not null references public.unidades (id),
+  estoque_atual  integer not null default 0 check (estoque_atual >= 0),
+  estoque_minimo integer not null default 0 check (estoque_minimo >= 0),
+  atualizado_em  timestamptz not null default now(),
+  -- Situacao derivada do estoque daquela unidade (coluna gerada, nao gravavel).
   situacao text generated always as (
     case
       when estoque_atual = 0                then 'EM FALTA'
       when estoque_atual <= estoque_minimo  then 'ESTOQUE BAIXO'
       else 'DISPONIVEL'
     end
-  ) stored
+  ) stored,
+  primary key (codigo, unidade_id)
 );
 
-comment on table public.medicamentos is
-  'Posicao de estoque. No prototipo, quantitativos ficticios para demonstracao.';
+comment on table public.estoques is
+  'Posicao de estoque por unidade. situacao e coluna gerada pelo banco.';
 
 create table if not exists public.sinonimos (
   id         bigint generated always as identity primary key,
@@ -63,42 +73,37 @@ create table if not exists public.sinonimos (
 comment on table public.sinonimos is
   'Nomes comerciais, apelidos populares e erros de digitacao mapeados ao medicamento.';
 
--- Log de consultas: sem qualquer dado pessoal ou de saude do cidadao.
--- O identificador da sessao deve chegar aqui ja anonimizado (hash).
 create table if not exists public.consultas_log (
-  id                   bigint generated always as identity primary key,
-  sessao_hash          text,
-  termo_digitado       text,
-  codigo_encontrado    text,
-  situacao_retornada   text,
-  encaminhado_humano   boolean not null default false,
+  id                    bigint generated always as identity primary key,
+  sessao_hash           text,
+  termo_digitado        text,
+  codigo_encontrado     text,
+  situacao_retornada    text,
+  encaminhado_humano    boolean not null default false,
   motivo_encaminhamento text,
-  criado_em            timestamptz not null default now()
+  criado_em             timestamptz not null default now()
 );
 
 comment on table public.consultas_log is
-  'Registro anonimo de atendimentos, base dos indicadores do piloto (LGPD: sem dado pessoal).';
+  'Registro anonimo de atendimentos, base dos indicadores (LGPD: sem dado pessoal).';
 
 -- ---------------------------------------------------------------------
 -- 3. Indices
 -- ---------------------------------------------------------------------
 create index if not exists idx_sinonimos_termo_norm
   on public.sinonimos using gin (termo_norm extensions.gin_trgm_ops);
-
 create index if not exists idx_sinonimos_codigo
   on public.sinonimos (codigo);
-
 create index if not exists idx_medicamentos_principio
   on public.medicamentos using gin (principio_ativo extensions.gin_trgm_ops);
-
+create index if not exists idx_estoques_unidade
+  on public.estoques (unidade_id);
 create index if not exists idx_log_criado_em
   on public.consultas_log (criado_em desc);
 
 -- ---------------------------------------------------------------------
 -- 4. Gatilhos
 -- ---------------------------------------------------------------------
-
--- Normaliza o termo automaticamente (minusculas, sem acento).
 create or replace function public.fn_normaliza_termo()
 returns trigger
 language plpgsql
@@ -114,7 +119,7 @@ create trigger trg_normaliza_termo
   before insert or update of termo on public.sinonimos
   for each row execute function public.fn_normaliza_termo();
 
--- Carimba a data e hora sempre que o estoque muda.
+-- Carimba data/hora quando o estoque de uma unidade muda.
 create or replace function public.fn_carimba_atualizacao()
 returns trigger
 language plpgsql
@@ -128,34 +133,30 @@ begin
 end;
 $$;
 
-drop trigger if exists trg_carimba_atualizacao on public.medicamentos;
+drop trigger if exists trg_carimba_atualizacao on public.estoques;
 create trigger trg_carimba_atualizacao
-  before update on public.medicamentos
+  before update on public.estoques
   for each row execute function public.fn_carimba_atualizacao();
 
 -- ---------------------------------------------------------------------
--- 5. Funcao de busca
---    Estrategia em tres niveis: termo exato -> principio ativo -> aproximado.
---    Se nada for encontrado, retorna vazio e a aplicacao responde com a
---    mensagem padrao, SEM acionar o modelo de linguagem.
+-- 5. Busca (nivel de catalogo, SEM estoque)
+--    Tres niveis: sinonimo exato -> principio ativo -> aproximado.
+--    Retorna um registro por medicamento (codigo). O estoque por unidade
+--    vem depois, por estoque_medicamento(codigo).
 -- ---------------------------------------------------------------------
 create or replace function public.buscar_medicamento(
   p_termo text,
   p_limite integer default 5
 )
 returns table (
-  codigo          text,
-  principio_ativo text,
-  apresentacao    text,
+  codigo             text,
+  principio_ativo    text,
+  apresentacao       text,
   forma_farmaceutica text,
-  unidade_medida  text,
-  estoque_atual   integer,
-  situacao        text,
-  tipo_receita    text,
-  unidade_nome    text,
-  atualizado_em   timestamptz,
-  origem          text,
-  semelhanca      real
+  unidade_medida     text,
+  tipo_receita       text,
+  origem             text,
+  semelhanca         real
 )
 language sql
 stable
@@ -166,21 +167,14 @@ as $$
     select lower(extensions.unaccent(coalesce(p_termo, ''))) as t
   ),
   achados as (
-    -- Nivel 1: correspondencia exata no dicionario de sinonimos
     select s.codigo, 'sinonimo_exato'::text as origem, 1.0::real as semelhanca
       from public.sinonimos s, entrada e
      where s.termo_norm = e.t
-
     union all
-
-    -- Nivel 2: o proprio principio ativo
     select m.codigo, 'principio_ativo'::text, 0.95::real
       from public.medicamentos m, entrada e
      where lower(extensions.unaccent(m.principio_ativo)) = e.t
-
     union all
-
-    -- Nivel 3: aproximado, tolera erro de digitacao
     select s.codigo, 'aproximado'::text, similarity(s.termo_norm, e.t)
       from public.sinonimos s, entrada e
      where e.t <> '' and similarity(s.termo_norm, e.t) > 0.42
@@ -192,17 +186,43 @@ as $$
      group by a.codigo
   )
   select m.codigo, m.principio_ativo, m.apresentacao, m.forma_farmaceutica,
-         m.unidade_medida, m.estoque_atual, m.situacao, m.tipo_receita,
-         u.nome, m.atualizado_em, b.origem, b.semelhanca
+         m.unidade_medida, m.tipo_receita, b.origem, b.semelhanca
     from melhor b
     join public.medicamentos m on m.codigo = b.codigo
-    left join public.unidades u on u.id = m.unidade_id
    order by b.semelhanca desc, m.principio_ativo
    limit p_limite;
 $$;
 
 comment on function public.buscar_medicamento is
-  'Busca usada pelo assistente. A IA redige a resposta apenas a partir do que esta funcao retorna.';
+  'Busca no catalogo. O estoque por unidade vem de estoque_medicamento(codigo).';
+
+-- Estoque de um medicamento em todas as unidades que o possuem.
+create or replace function public.estoque_medicamento(p_codigo text)
+returns table (
+  unidade_id     text,
+  unidade_nome   text,
+  endereco       text,
+  horario        text,
+  estoque_atual  integer,
+  estoque_minimo integer,
+  situacao       text,
+  atualizado_em  timestamptz
+)
+language sql
+stable
+security definer
+set search_path = public, extensions
+as $$
+  select e.unidade_id, u.nome, u.endereco, u.horario,
+         e.estoque_atual, e.estoque_minimo, e.situacao, e.atualizado_em
+    from public.estoques e
+    join public.unidades u on u.id = e.unidade_id
+   where e.codigo = p_codigo
+   order by u.nome;
+$$;
+
+comment on function public.estoque_medicamento is
+  'Estoque de um medicamento por unidade. A IA redige a partir do que isto devolve.';
 
 -- ---------------------------------------------------------------------
 -- 6. Indicadores do piloto
@@ -220,8 +240,7 @@ select
 from public.consultas_log;
 
 create or replace view public.vw_mais_consultados as
-select codigo_encontrado as codigo,
-       count(*)          as consultas
+select codigo_encontrado as codigo, count(*) as consultas
   from public.consultas_log
  where codigo_encontrado is not null
  group by codigo_encontrado
@@ -229,18 +248,19 @@ select codigo_encontrado as codigo,
 
 -- ---------------------------------------------------------------------
 -- 7. Seguranca (RLS)
---    O prototipo consulta com a chave anon, exposta no navegador.
---    Por isso: leitura liberada, escrita bloqueada. A unica escrita
---    permitida e a insercao no log anonimo de consultas.
---    A chave service_role NUNCA deve ficar no codigo do simulador.
 -- ---------------------------------------------------------------------
 alter table public.medicamentos  enable row level security;
+alter table public.estoques      enable row level security;
 alter table public.sinonimos     enable row level security;
 alter table public.unidades      enable row level security;
 alter table public.consultas_log enable row level security;
 
 drop policy if exists p_medicamentos_leitura on public.medicamentos;
 create policy p_medicamentos_leitura on public.medicamentos
+  for select to anon, authenticated using (true);
+
+drop policy if exists p_estoques_leitura on public.estoques;
+create policy p_estoques_leitura on public.estoques
   for select to anon, authenticated using (true);
 
 drop policy if exists p_sinonimos_leitura on public.sinonimos;
@@ -254,15 +274,4 @@ create policy p_unidades_leitura on public.unidades
 drop policy if exists p_log_insercao on public.consultas_log;
 create policy p_log_insercao on public.consultas_log
   for insert to anon, authenticated with check (true);
-
--- Log nao e legivel pela chave anon: so pelo painel do Supabase
--- ou por uma chave de servico da equipe.
-
--- ---------------------------------------------------------------------
--- 8. Consultas uteis na apresentacao
--- ---------------------------------------------------------------------
--- select * from public.buscar_medicamento('novalgina');
--- select * from public.buscar_medicamento('metiformina');   -- erro de digitacao
--- select * from public.buscar_medicamento('bombinha');
--- update public.medicamentos set estoque_atual = 0 where codigo = 'MED-001';  -- demo ao vivo
--- select * from public.vw_indicadores;
+-- Escrita em estoques so pela service_role (backend); anon nao tem policy de escrita.

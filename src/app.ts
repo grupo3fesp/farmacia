@@ -77,13 +77,18 @@ export async function handleAlterarEstoque(corpo: unknown, tokenRecebido: string
   if (config.adminToken && tokenRecebido !== config.adminToken) {
     return erro(401, 'Edicao protegida: token de admin invalido ou ausente.');
   }
-  const c = corpo as { codigo?: string; estoque_atual?: number } | null;
-  if (!c || typeof c.codigo !== 'string' || typeof c.estoque_atual !== 'number') {
-    return erro(400, 'Informe { codigo, estoque_atual }');
+  const c = corpo as { codigo?: string; unidade_id?: string; estoque_atual?: number } | null;
+  if (
+    !c ||
+    typeof c.codigo !== 'string' ||
+    typeof c.unidade_id !== 'string' ||
+    typeof c.estoque_atual !== 'number'
+  ) {
+    return erro(400, 'Informe { codigo, unidade_id, estoque_atual }');
   }
   try {
-    const okAlt = await repo.alterarEstoque(c.codigo, c.estoque_atual);
-    if (!okAlt) return erro(400, 'Codigo inexistente ou valor invalido');
+    const okAlt = await repo.alterarEstoque(c.codigo, c.unidade_id, c.estoque_atual);
+    if (!okAlt) return erro(400, 'Item (medicamento/unidade) inexistente ou valor invalido');
     return ok({ ok: true, itens: await repo.listarEstoque() });
   } catch (e) {
     return erro(502, (e as Error).message);

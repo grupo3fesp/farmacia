@@ -202,6 +202,7 @@
             <input class="token-input" id="token-input" type="password" placeholder="cole o ADMIN_TOKEN" oninput="salvarToken()" />
           </div>
           <div class="aviso-edicao" id="aviso-edicao"></div>
+          <select class="busca-estoque" id="filtro-unidade" style="margin-bottom: 8px" onchange="renderEstoque()"></select>
           <input class="busca-estoque" id="busca-estoque" placeholder="Filtrar medicamento..." oninput="renderEstoque()" />
           <table>
             <thead><tr><th>Medicamento</th><th>Estoque</th><th>Situação</th></tr></thead>
@@ -310,33 +311,60 @@
           const box = document.getElementById("token-box");
           box.style.display = protegido ? "block" : "none";
           if (protegido) document.getElementById("token-input").value = getToken();
+          preencherUnidades();
           renderEstoque();
         } catch {}
       }
 
+      function preencherUnidades() {
+        const sel = document.getElementById("filtro-unidade");
+        const anterior = sel.value;
+        const unidades = [];
+        const vistos = new Set();
+        for (const m of estoqueCache) {
+          if (!vistos.has(m.unidade_id)) {
+            vistos.add(m.unidade_id);
+            unidades.push({ id: m.unidade_id, nome: m.unidade_nome });
+          }
+        }
+        unidades.sort((a, b) => a.nome.localeCompare(b.nome, "pt-BR"));
+        sel.innerHTML =
+          '<option value="__todas">Todas as unidades</option>' +
+          unidades.map((u) => `<option value="${u.id}">${u.nome}</option>`).join("");
+        // Mantém a seleção ou começa na primeira unidade real.
+        sel.value = anterior || (unidades[0] ? unidades[0].id : "__todas");
+        if (!sel.value) sel.value = unidades[0] ? unidades[0].id : "__todas";
+      }
+
       function renderEstoque() {
         const filtro = (document.getElementById("busca-estoque").value || "").toLowerCase();
+        const unidadeSel = document.getElementById("filtro-unidade").value || "__todas";
+        const todas = unidadeSel === "__todas";
         const corpo = document.getElementById("corpo-estoque");
         corpo.innerHTML = [...estoqueCache]
+          .filter((m) => todas || m.unidade_id === unidadeSel)
           .sort(
             (a, b) =>
               a.principio_ativo.localeCompare(b.principio_ativo, "pt-BR") ||
-              a.apresentacao.localeCompare(b.apresentacao, "pt-BR"),
+              a.apresentacao.localeCompare(b.apresentacao, "pt-BR") ||
+              a.unidade_nome.localeCompare(b.unidade_nome, "pt-BR"),
           )
           .filter((m) => (m.principio_ativo + " " + m.apresentacao + " " + m.codigo).toLowerCase().includes(filtro))
           .map(
             (m) => `
             <tr>
-              <td>${m.principio_ativo}<br><span style="color:#888">${m.apresentacao}</span></td>
+              <td>${m.principio_ativo}<br><span style="color:#888">${m.apresentacao}</span>${
+                todas ? `<br><span style="color:#128c7e;font-size:10px">${m.unidade_nome}</span>` : ""
+              }</td>
               <td><input class="estoque-input" type="number" min="0" value="${m.estoque_atual}"
-                   onchange="alterarEstoque('${m.codigo}', this.value)" /></td>
+                   onchange="alterarEstoque('${m.codigo}', '${m.unidade_id}', this.value)" /></td>
               <td><span class="sit ${classeSit(m.situacao)}">${m.situacao}</span></td>
             </tr>`,
           )
           .join("");
       }
 
-      async function alterarEstoque(codigo, valor) {
+      async function alterarEstoque(codigo, unidade_id, valor) {
         const estoque_atual = parseInt(valor, 10);
         if (!Number.isInteger(estoque_atual) || estoque_atual < 0) return;
         aviso("");
@@ -344,7 +372,7 @@
           const r = await fetch("/api/estoque", {
             method: "POST",
             headers: { "Content-Type": "application/json", "x-admin-token": getToken() },
-            body: JSON.stringify({ codigo, estoque_atual }),
+            body: JSON.stringify({ codigo, unidade_id, estoque_atual }),
           });
           const dados = await r.json();
           if (r.status === 401) {

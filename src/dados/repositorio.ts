@@ -1,10 +1,7 @@
-// Abstracao de dados. A camada de negocio depende apenas desta interface,
-// nunca de Supabase ou do seed diretamente. Duas implementacoes a satisfazem:
-//   - RepositorioLocal  (src/dados/local.ts)    -> roda offline, a partir do seed
-//   - RepositorioSupabase (src/dados/supabase.ts) -> chama a RPC buscar_medicamento
-// Trocar de uma para a outra e so configuracao (ver src/dados/index.ts).
+// Abstracao de dados (modelo multiunidade). A camada de negocio depende so
+// desta interface. Implementacoes: local (offline, seed) e supabase (RPC).
 
-import type { RegistroMedicamento } from '../dominio/tipos.ts';
+import type { RegistroMedicamento, EstoqueUnidade } from '../dominio/tipos.ts';
 
 export type RegistroLog = {
   sessaoHash: string | null;
@@ -24,30 +21,30 @@ export type Indicadores = {
   consultas_itens_em_falta: number;
 };
 
+/** Uma linha do painel editor: estoque de um medicamento numa unidade. */
 export type ItemEstoque = {
   codigo: string;
   principio_ativo: string;
   apresentacao: string;
+  unidade_id: string;
+  unidade_nome: string;
   estoque_atual: number;
   estoque_minimo: number;
   situacao: string;
 };
 
 export interface Repositorio {
-  /** Espelha public.buscar_medicamento(p_termo, p_limite). */
+  /** Espelha public.buscar_medicamento — devolve o catalogo (sem estoque). */
   buscar(termo: string, limite?: number): Promise<RegistroMedicamento[]>;
+  /** Espelha public.estoque_medicamento — estoque de um medicamento por unidade. */
+  estoquePorCodigo(codigo: string): Promise<EstoqueUnidade[]>;
   /** Insere um registro anonimo em consultas_log. Nunca lanca para o chamador. */
   registrarLog(registro: RegistroLog): Promise<void>;
   /** Indicadores do piloto (vw_indicadores). */
   indicadores(): Promise<Indicadores>;
 
-  /** Lista o estoque atual, para o painel editor ao vivo. */
+  // --- Painel editor ao vivo (por unidade) ---
   listarEstoque(): Promise<ItemEstoque[]>;
-
-  /**
-   * Altera o estoque de um item e recarimba a data. Escrita administrativa:
-   * no Supabase exige a service_role (RLS bloqueia escrita para anon), que
-   * fica somente no backend. Retorna false se o codigo nao existe.
-   */
-  alterarEstoque(codigo: string, estoqueAtual: number): Promise<boolean>;
+  /** Altera o estoque de um item numa unidade. Retorna false se nao existir. */
+  alterarEstoque(codigo: string, unidadeId: string, estoqueAtual: number): Promise<boolean>;
 }

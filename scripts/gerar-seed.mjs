@@ -80,19 +80,9 @@ const unidades = tuplas(blocoValues(seedSql, 'unidades')).map(
   }),
 );
 
+// Catalogo (modelo multiunidade: sem estoque na tabela medicamentos).
 const medicamentos = tuplas(blocoValues(seedSql, 'medicamentos')).map((c) => {
-  const [
-    codigo,
-    principio_ativo,
-    apresentacao,
-    forma_farmaceutica,
-    componente,
-    unidade_medida,
-    estoque_atual,
-    estoque_minimo,
-    tipo_receita,
-    unidade_id,
-  ] = c;
+  const [codigo, principio_ativo, apresentacao, forma_farmaceutica, componente, unidade_medida, tipo_receita] = c;
   return {
     codigo,
     principio_ativo,
@@ -100,10 +90,18 @@ const medicamentos = tuplas(blocoValues(seedSql, 'medicamentos')).map((c) => {
     forma_farmaceutica: nulo(forma_farmaceutica),
     componente: nulo(componente),
     unidade_medida: nulo(unidade_medida),
+    tipo_receita: nulo(tipo_receita),
+  };
+});
+
+// Estoque por unidade.
+const estoques = tuplas(blocoValues(seedSql, 'estoques')).map((c) => {
+  const [codigo, unidade_id, estoque_atual, estoque_minimo] = c;
+  return {
+    codigo,
+    unidade_id,
     estoque_atual: Number(estoque_atual),
     estoque_minimo: Number(estoque_minimo),
-    tipo_receita: nulo(tipo_receita),
-    unidade_id: nulo(unidade_id),
   };
 });
 
@@ -120,6 +118,7 @@ const seed = {
   corte_similaridade: Number(corte),
   unidades,
   medicamentos,
+  estoques,
   sinonimos,
 };
 
@@ -127,12 +126,12 @@ const destino = join(raiz, 'src', 'dados', 'seed.json');
 mkdirSync(dirname(destino), { recursive: true });
 writeFileSync(destino, JSON.stringify(seed, null, 2) + '\n', 'utf8');
 
-const contagem = medicamentos.reduce(
-  (acc, m) => {
+const contagem = estoques.reduce(
+  (acc, e) => {
     const s =
-      m.estoque_atual === 0
+      e.estoque_atual === 0
         ? 'EM FALTA'
-        : m.estoque_atual <= m.estoque_minimo
+        : e.estoque_atual <= e.estoque_minimo
           ? 'ESTOQUE BAIXO'
           : 'DISPONIVEL';
     acc[s] = (acc[s] ?? 0) + 1;
@@ -142,6 +141,6 @@ const contagem = medicamentos.reduce(
 );
 
 console.log(
-  `seed.json gerado: ${unidades.length} unidades, ${medicamentos.length} medicamentos, ${sinonimos.length} sinonimos`,
+  `seed.json gerado: ${unidades.length} unidades, ${medicamentos.length} medicamentos, ${estoques.length} linhas de estoque, ${sinonimos.length} sinonimos`,
 );
-console.log('situacao:', contagem, '| corte:', seed.corte_similaridade);
+console.log('situacao (por linha de estoque):', contagem, '| corte:', seed.corte_similaridade);

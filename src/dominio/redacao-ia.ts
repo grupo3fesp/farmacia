@@ -1,62 +1,56 @@
-// Redacao da resposta, com fallback deterministico OBRIGATORIO.
-//
-// Tres provedores atras da mesma funcao (config.iaProvedor):
-//   - template  -> montarRespostaDeterministica (gratis, sem rede)
-//   - gemini    -> Google Generative Language API (tier gratis), via REST
-//   - anthropic -> Claude (pago), via SDK
-//
-// Em qualquer caso a IA recebe SOMENTE o registro devolvido pelo banco e as
-// regras de redacao; nunca decide disponibilidade. Se a chamada falhar, estourar
-// cota ou nao estar configurada, cai no template. (CLAUDE.md secoes 5 e 6.)
+// Redacao da resposta, com fallback deterministico OBRIGATORIO. Modelo
+// multiunidade: a IA recebe o medicamento + seu estoque em cada unidade e
+// redige informando ONDE esta disponivel. Nunca decide disponibilidade.
+// Provedores: template (gratis) | gemini (Google, gratis) | anthropic (pago).
 
-import type { RegistroMedicamento } from './tipos.ts';
+import type { MedicamentoComEstoque } from './tipos.ts';
 import { montarRespostaDeterministica, descreverItem, formatarAtualizacao } from './mensagens.ts';
 import { config, usaIA, ehDemonstracao } from '../config.ts';
 
 const SISTEMA = [
   'Você é o assistente virtual informativo de uma Farmácia Municipal, no WhatsApp.',
-  'Sua única função é redigir, em português claro e cordial, a resposta sobre a DISPONIBILIDADE',
-  'de um medicamento, a partir EXCLUSIVAMENTE do registro fornecido pelo sistema.',
+  'A rede tem mais de uma unidade (farmácia). Sua única função é redigir, em português',
+  'claro e cordial, a resposta sobre a DISPONIBILIDADE de um medicamento, informando EM QUAIS',
+  'UNIDADES ele consta, a partir EXCLUSIVAMENTE do estoque por unidade fornecido pelo sistema.',
   '',
   'Regras obrigatórias:',
-  '1. Baseie-se apenas no registro fornecido. Nunca invente dados que não estejam nele.',
-  '2. Nunca afirme disponibilidade sem o registro. Você sempre recebe um registro válido.',
-  '3. Em resposta positiva, inclua a ressalva de que o estoque muda ao longo do dia.',
-  '4. Informe a data/hora da última atualização exatamente como fornecida.',
+  '1. Baseie-se apenas nos dados fornecidos. Nunca invente unidades, quantidades ou datas.',
+  '2. Diga claramente em quais unidades está disponível, em quais está em falta ou com estoque baixo.',
+  '3. Inclua a ressalva de que o estoque muda ao longo do dia.',
+  '4. Informe a data/hora da última atualização como fornecida.',
   '5. Não peça CPF, cartão SUS, nome, endereço, receita ou qualquer dado de saúde.',
   '',
   'Proibições:',
-  '6. Não diagnostique, não indique, não sugira substituição, não comente posologia,',
-  '   efeitos, interações ou uso. Isso é papel do profissional de saúde.',
-  '7. Não reserve, separe nem prometa medicamento.',
-  '8. Não estime prazo de reposição.',
+  '6. Não diagnostique, não indique, não sugira substituição, não comente posologia/uso.',
+  '7. Não reserve, separe nem prometa medicamento. Não estime prazo de reposição.',
   '',
-  'Formato: 2 a 4 frases curtas, tom acolhedor, sem emojis excessivos. Não use markdown.',
+  'Formato: 2 a 5 frases curtas, tom acolhedor, sem emojis excessivos, sem markdown.',
 ].join('\n');
 
-function conteudoUsuario(r: RegistroMedicamento): string {
-  const situacaoTexto = {
-    DISPONIVEL: 'consta como DISPONÍVEL',
-    'ESTOQUE BAIXO': 'consta como DISPONÍVEL em quantidade reduzida (estoque baixo)',
-    'EM FALTA': 'consta como EM FALTA',
-  }[r.situacao];
-
+function conteudoUsuario(m: MedicamentoComEstoque): string {
+  const situacaoTxt: Record<string, string> = {
+    DISPONIVEL: 'DISPONÍVEL',
+    'ESTOQUE BAIXO': 'DISPONÍVEL em quantidade reduzida (estoque baixo)',
+    'EM FALTA': 'EM FALTA',
+  };
+  const linhas = m.estoques.map(
+    (e) =>
+      `- ${e.unidade_nome}: ${situacaoTxt[e.situacao]} (atualizado em ${formatarAtualizacao(e.atualizado_em)})`,
+  );
   return [
-    'Registro devolvido pelo sistema (única fonte permitida):',
-    `- Medicamento: ${descreverItem(r)}`,
-    `- Situação: ${situacaoTexto}`,
-    `- Unidade: ${r.unidade_nome ?? 'não informada'}`,
-    `- Última atualização: ${formatarAtualizacao(r.atualizado_em)}`,
+    `Medicamento: ${descreverItem(m.medicamento)}`,
     '',
-    'Redija a resposta ao cidadão seguindo as regras.',
+    'Estoque por unidade (única fonte permitida):',
+    ...(linhas.length ? linhas : ['- Sem registro de estoque em nenhuma unidade.']),
+    '',
+    'Redija a resposta ao cidadão, dizendo em quais unidades ele encontra o medicamento.',
   ].join('\n');
 }
 
-// Limitador simples de concorrencia para nao estourar a cota da API.
+// Limitador de concorrencia para nao estourar cota.
 const MAX_CONCORRENCIA = 4;
 let emVoo = 0;
 const fila: Array<() => void> = [];
-
 function adquirir(): Promise<void> {
   if (emVoo < MAX_CONCORRENCIA) {
     emVoo++;
@@ -64,7 +58,6 @@ function adquirir(): Promise<void> {
   }
   return new Promise((resolve) => fila.push(resolve));
 }
-
 function liberar(): void {
   emVoo--;
   const proximo = fila.shift();
@@ -74,19 +67,17 @@ function liberar(): void {
   }
 }
 
-// --- Provedor Gemini (Google AI Studio), via REST — sem dependencia extra ---
-async function gerarGemini(r: RegistroMedicamento): Promise<string> {
+// --- Gemini (Google AI Studio), via REST ---
+async function gerarGemini(m: MedicamentoComEstoque): Promise<string> {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.gemini.modelo}:generateContent?key=${config.gemini.apiKey}`;
   const resp = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       systemInstruction: { parts: [{ text: SISTEMA }] },
-      contents: [{ role: 'user', parts: [{ text: conteudoUsuario(r) }] }],
-      generationConfig: { maxOutputTokens: 400, temperature: 0.3 },
+      contents: [{ role: 'user', parts: [{ text: conteudoUsuario(m) }] }],
+      generationConfig: { maxOutputTokens: 500, temperature: 0.3 },
     }),
-    // Se o Gemini demorar, abortamos e caímos no template antes do limite da
-    // função serverless (15s) — o cidadão nunca fica sem resposta.
     signal: AbortSignal.timeout(9000),
   });
   if (!resp.ok) {
@@ -97,7 +88,7 @@ async function gerarGemini(r: RegistroMedicamento): Promise<string> {
     candidates?: Array<{ content?: { parts?: Array<{ text?: string; thought?: boolean }> } }>;
   };
   const texto = (data.candidates?.[0]?.content?.parts ?? [])
-    .filter((p) => !p.thought) // ignora partes de "thinking" (modelos que pensam)
+    .filter((p) => !p.thought)
     .map((p) => p.text ?? '')
     .join('')
     .trim();
@@ -105,20 +96,18 @@ async function gerarGemini(r: RegistroMedicamento): Promise<string> {
   return texto;
 }
 
-// --- Provedor Anthropic (Claude), via SDK (import dinamico) ---
+// --- Anthropic (Claude), via SDK (import dinamico) ---
 type ClienteAnthropic = {
   messages: {
     create: (args: unknown) => Promise<{ content: Array<{ type: string; text?: string }> }>;
   };
 };
 let clienteAnthropic: Promise<ClienteAnthropic> | null = null;
-
-async function gerarAnthropic(r: RegistroMedicamento): Promise<string> {
+async function gerarAnthropic(m: MedicamentoComEstoque): Promise<string> {
   if (!clienteAnthropic) {
     clienteAnthropic = (async () => {
       const mod: any = await import('@anthropic-ai/sdk');
       const Anthropic = mod.default;
-      // timeout curto (ms) + sem retries: se demorar, cai no template.
       return new Anthropic({
         apiKey: config.anthropic.apiKey,
         timeout: 9000,
@@ -129,9 +118,9 @@ async function gerarAnthropic(r: RegistroMedicamento): Promise<string> {
   const sb = await clienteAnthropic;
   const resp = await sb.messages.create({
     model: config.anthropic.modelo,
-    max_tokens: 400,
+    max_tokens: 500,
     system: SISTEMA,
-    messages: [{ role: 'user', content: conteudoUsuario(r) }],
+    messages: [{ role: 'user', content: conteudoUsuario(m) }],
   });
   const texto = resp.content
     .filter((b) => b.type === 'text')
@@ -142,25 +131,20 @@ async function gerarAnthropic(r: RegistroMedicamento): Promise<string> {
   return texto;
 }
 
-/**
- * Redige a resposta. Tenta o provedor configurado; em qualquer falha, cai no
- * template deterministico. O aviso de demonstracao e anexado aqui, fora do
- * controle da IA, para garantir que sempre apareca.
- */
-export async function redigirComIA(r: RegistroMedicamento): Promise<string> {
-  const texto = await gerar(r);
+/** Redige a resposta; em qualquer falha, cai no template deterministico. */
+export async function redigirComIA(m: MedicamentoComEstoque): Promise<string> {
+  const texto = await gerar(m);
   return ehDemonstracao ? `${texto}\n\n⚠️ Demonstração com dados fictícios.` : texto;
 }
 
-async function gerar(r: RegistroMedicamento): Promise<string> {
-  if (!usaIA) return montarRespostaDeterministica(r);
+async function gerar(m: MedicamentoComEstoque): Promise<string> {
+  if (!usaIA) return montarRespostaDeterministica(m);
   await adquirir();
   try {
-    const texto =
-      config.iaProvedor === 'gemini' ? await gerarGemini(r) : await gerarAnthropic(r);
-    return texto || montarRespostaDeterministica(r);
+    const texto = config.iaProvedor === 'gemini' ? await gerarGemini(m) : await gerarAnthropic(m);
+    return texto || montarRespostaDeterministica(m);
   } catch {
-    return montarRespostaDeterministica(r);
+    return montarRespostaDeterministica(m);
   } finally {
     liberar();
   }

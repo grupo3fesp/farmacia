@@ -1,18 +1,11 @@
-// Repositorio Supabase: chama a RPC public.buscar_medicamento e grava o log.
-// Ativa-se quando REPOSITORIO=supabase e as credenciais estao no ambiente.
-//
-// O SDK entra por import dinamico: o caminho local (fase A) roda sem ele
-// instalado. Instale com `npm install` quando for conectar o banco real.
+// Repositorio Supabase (modelo multiunidade): chama as RPCs buscar_medicamento
+// e estoque_medicamento, e edita a tabela estoques por unidade (service_role).
 
-import type { RegistroMedicamento } from '../dominio/tipos.ts';
+import type { RegistroMedicamento, EstoqueUnidade, Situacao } from '../dominio/tipos.ts';
 import type { Repositorio, RegistroLog, Indicadores, ItemEstoque } from './repositorio.ts';
 import { criarClienteSupabase, type ClienteSupabase } from './cliente-supabase.ts';
 
-type Config = {
-  url: string;
-  anonKey: string;
-  serviceKey?: string;
-};
+type Config = { url: string; anonKey: string; serviceKey?: string };
 
 export class RepositorioSupabase implements Repositorio {
   private readonly cfg: Config;
@@ -30,7 +23,7 @@ export class RepositorioSupabase implements Repositorio {
 
   private async clienteServico(): Promise<ClienteSupabase> {
     if (!this.cfg.serviceKey) {
-      throw new Error('SUPABASE_SERVICE_ROLE_KEY ausente: necessaria para ler indicadores.');
+      throw new Error('SUPABASE_SERVICE_ROLE_KEY ausente: necessaria para editar estoque e ler indicadores.');
     }
     if (!this.servico) this.servico = await criarClienteSupabase(this.cfg.url, this.cfg.serviceKey);
     return this.servico;
@@ -41,6 +34,23 @@ export class RepositorioSupabase implements Repositorio {
     const { data, error } = await sb.rpc('buscar_medicamento', { p_termo: termo, p_limite: limite });
     if (error) throw new Error(`Falha na RPC buscar_medicamento: ${JSON.stringify(error)}`);
     return (data as RegistroMedicamento[]) ?? [];
+  }
+
+  async estoquePorCodigo(codigo: string): Promise<EstoqueUnidade[]> {
+    const sb = await this.clienteAnon();
+    const { data, error } = await sb.rpc('estoque_medicamento', { p_codigo: codigo });
+    if (error) throw new Error(`Falha na RPC estoque_medicamento: ${JSON.stringify(error)}`);
+    type Linha = {
+      unidade_id: string;
+      unidade_nome: string;
+      endereco: string | null;
+      horario: string | null;
+      estoque_atual: number;
+      estoque_minimo: number;
+      situacao: Situacao;
+      atualizado_em: string;
+    };
+    return ((data as Linha[]) ?? []).map((l) => ({ ...l }));
   }
 
   async registrarLog(r: RegistroLog): Promise<void> {
@@ -55,7 +65,7 @@ export class RepositorioSupabase implements Repositorio {
         motivo_encaminhamento: r.motivoEncaminhamento,
       });
     } catch {
-      // Log e best-effort: nunca derruba o atendimento ao cidadao.
+      // best-effort: nunca derruba o atendimento.
     }
   }
 
@@ -69,22 +79,47 @@ export class RepositorioSupabase implements Repositorio {
   async listarEstoque(): Promise<ItemEstoque[]> {
     const sb = await this.clienteAnon();
     const { data, error } = await sb
-      .from('medicamentos')
-      .select('codigo, principio_ativo, apresentacao, estoque_atual, estoque_minimo, situacao')
-      .order('codigo');
+      .from('estoques')
+      .select(
+        'codigo, unidade_id, estoque_atual, estoque_minimo, situacao, medicamentos!inner(principio_ativo, apresentacao), unidades!inner(nome)',
+      );
     if (error) throw new Error(`Falha ao listar estoque: ${JSON.stringify(error)}`);
-    return (data as ItemEstoque[]) ?? [];
+    type Linha = {
+      codigo: string;
+      unidade_id: string;
+      estoque_atual: number;
+      estoque_minimo: number;
+      situacao: string;
+      medicamentos: { principio_ativo: string; apresentacao: string };
+      unidades: { nome: string };
+    };
+    return ((data as Linha[]) ?? [])
+      .map((l) => ({
+        codigo: l.codigo,
+        principio_ativo: l.medicamentos.principio_ativo,
+        apresentacao: l.medicamentos.apresentacao,
+        unidade_id: l.unidade_id,
+        unidade_nome: l.unidades.nome,
+        estoque_atual: l.estoque_atual,
+        estoque_minimo: l.estoque_minimo,
+        situacao: l.situacao,
+      }))
+      .sort(
+        (a, b) =>
+          a.principio_ativo.localeCompare(b.principio_ativo, 'pt-BR') ||
+          a.apresentacao.localeCompare(b.apresentacao, 'pt-BR') ||
+          a.unidade_nome.localeCompare(b.unidade_nome, 'pt-BR'),
+      );
   }
 
-  async alterarEstoque(codigo: string, estoqueAtual: number): Promise<boolean> {
+  async alterarEstoque(codigo: string, unidadeId: string, estoqueAtual: number): Promise<boolean> {
     if (!Number.isInteger(estoqueAtual) || estoqueAtual < 0) return false;
-    // Escrita administrativa: exige a service_role. O gatilho fn_carimba_atualizacao
-    // atualiza `atualizado_em` no banco automaticamente.
     const sb = await this.clienteServico();
     const { data, error } = await sb
-      .from('medicamentos')
+      .from('estoques')
       .update({ estoque_atual: estoqueAtual })
       .eq('codigo', codigo)
+      .eq('unidade_id', unidadeId)
       .select('codigo');
     if (error) throw new Error(`Falha ao alterar estoque: ${JSON.stringify(error)}`);
     return Array.isArray(data) && data.length > 0;

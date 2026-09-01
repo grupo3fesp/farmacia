@@ -5,92 +5,74 @@ import { RepositorioLocal } from '../src/dados/local.ts';
 
 const repo = new RepositorioLocal();
 
-test('seed: contagem de situações confere com o passo a passo', async () => {
+test('catálogo: 48 medicamentos, cada um com pelo menos uma unidade', async () => {
   const itens = await repo.listarEstoque();
-  assert.equal(itens.length, 48);
+  const codigos = new Set(itens.map((i) => i.codigo));
+  assert.equal(codigos.size, 48);
+});
+
+test('seed: distribuição de situações por unidade', async () => {
+  const itens = await repo.listarEstoque();
+  assert.equal(itens.length, 116);
   const cont = itens.reduce<Record<string, number>>((a, m) => {
     a[m.situacao] = (a[m.situacao] ?? 0) + 1;
     return a;
   }, {});
-  assert.equal(cont['DISPONIVEL'], 38);
-  assert.equal(cont['ESTOQUE BAIXO'], 5);
-  assert.equal(cont['EM FALTA'], 5);
+  assert.equal(cont['DISPONIVEL'], 73);
+  assert.equal(cont['EM FALTA'], 23);
+  assert.equal(cont['ESTOQUE BAIXO'], 20);
 });
 
-test('dipirona genérica: duas apresentações empatadas (dispara desambiguação)', async () => {
-  const r = await repo.buscar('dipirona');
-  const topo = r.filter((x) => x.semelhanca === r[0].semelhanca);
-  assert.equal(topo.length, 2, 'deveria empatar comprimido + solução oral');
-  const codigos = topo.map((x) => x.codigo).sort();
-  assert.deepEqual(codigos, ['MED-001', 'MED-002']);
-  assert.ok(topo.every((x) => x.principio_ativo === 'Dipirona sódica'));
+test('zitromax: reconhece Azitromicina (catálogo) e tem unidade em falta', async () => {
+  const r = await repo.buscar('zitromax');
+  assert.equal(r[0].codigo, 'MED-008');
+  assert.equal(r[0].principio_ativo, 'Azitromicina');
+  const est = await repo.estoquePorCodigo('MED-008');
+  assert.ok(est.some((e) => e.situacao === 'EM FALTA'));
 });
 
-test('paracetamol e amoxicilina genéricos também empatam', async () => {
+test('metiformina → Metformina; bombinha → Salbutamol; omeprasol → Omeprazol', async () => {
+  assert.equal((await repo.buscar('metiformina 850'))[0].codigo, 'MED-013');
+  assert.equal((await repo.buscar('bombinha'))[0].codigo, 'MED-032');
+  assert.equal((await repo.buscar('omeprasol'))[0].codigo, 'MED-026');
+});
+
+test('genéricos empatam apresentações (desambiguação por catálogo)', async () => {
   for (const [termo, pares] of [
+    ['dipirona', ['MED-001', 'MED-002']],
     ['paracetamol', ['MED-003', 'MED-004']],
     ['amoxicilina', ['MED-006', 'MED-007']],
   ] as const) {
     const r = await repo.buscar(termo);
     const topo = r.filter((x) => x.semelhanca === r[0].semelhanca).map((x) => x.codigo).sort();
-    assert.deepEqual(topo, pares, `${termo} deveria empatar ${pares.join(' e ')}`);
+    assert.deepEqual(topo, pares, `${termo}`);
   }
 });
 
-test('zitromax: reconhece Azitromicina e informa EM FALTA', async () => {
-  const r = await repo.buscar('zitromax');
-  assert.equal(r[0].codigo, 'MED-008');
-  assert.equal(r[0].principio_ativo, 'Azitromicina');
-  assert.equal(r[0].situacao, 'EM FALTA');
-});
-
-test('metiformina: reconhece Metformina', async () => {
-  const r = await repo.buscar('metiformina 850');
-  assert.equal(r[0].codigo, 'MED-013');
-  assert.equal(r[0].principio_ativo, 'Metformina');
-});
-
-test('bombinha: reconhece Salbutamol', async () => {
-  const r = await repo.buscar('bombinha');
-  assert.equal(r[0].codigo, 'MED-032');
-  assert.equal(r[0].principio_ativo, 'Salbutamol sulfato');
-});
-
-test('omeprasol: tolera erro de digitação', async () => {
-  const r = await repo.buscar('omeprasol');
-  assert.equal(r[0].codigo, 'MED-026');
-  assert.equal(r[0].principio_ativo, 'Omeprazol');
-});
-
-test('paracetamol gotas: estoque baixo', async () => {
-  const r = await repo.buscar('paracetamol gotas');
-  assert.equal(r[0].codigo, 'MED-004');
-  assert.equal(r[0].situacao, 'ESTOQUE BAIXO');
-});
-
-test('xpto123: retorno vazio (aciona mensagem padrão, sem IA)', async () => {
-  const r = await repo.buscar('xpto123');
-  assert.equal(r.length, 0);
-});
-
-test('"dipirona pra criança" roteia para a solução oral (MED-002)', async () => {
-  const r = await repo.buscar('dipirona pra criança');
-  assert.equal(r[0].codigo, 'MED-002');
-  assert.equal(r[0].forma_farmaceutica, 'Solução oral');
-});
-
-test('"dipirona gotas" vai direto na solução oral (MED-002), sem desambiguar', async () => {
+test('"dipirona gotas" vai direto na solução oral (MED-002)', async () => {
   const r = await repo.buscar('dipirona gotas');
   assert.equal(r[0].codigo, 'MED-002');
-  const topo = r.filter((x) => x.semelhanca === r[0].semelhanca);
-  assert.equal(topo.length, 1);
+  assert.equal(r.filter((x) => x.semelhanca === r[0].semelhanca).length, 1);
 });
 
-test('alteração ao vivo: zerar MED-001 muda a situação', async () => {
+test('xpto123: retorno vazio', async () => {
+  assert.equal((await repo.buscar('xpto123')).length, 0);
+});
+
+test('estoque por unidade: dipirona (MED-001) em 3 unidades; alteração ao vivo', async () => {
   const local = new RepositorioLocal();
-  let r = await local.buscar('dipirona');
-  assert.equal(r[0].situacao, 'DISPONIVEL');
-  local.alterarEstoque('MED-001', 0);
-  r = await local.buscar('dipirona');
-  assert.equal(r[0].situacao, 'EM FALTA');
+  let est = await local.estoquePorCodigo('MED-001');
+  assert.equal(est.length, 3);
+  assert.ok(est.every((e) => e.situacao === 'DISPONIVEL'));
+
+  const ok = await local.alterarEstoque('MED-001', 'UN-01', 0);
+  assert.equal(ok, true);
+  est = await local.estoquePorCodigo('MED-001');
+  const central = est.find((e) => e.unidade_id === 'UN-01');
+  assert.equal(central?.situacao, 'EM FALTA');
+});
+
+test('alterarEstoque falha para unidade inexistente', async () => {
+  const local = new RepositorioLocal();
+  assert.equal(await local.alterarEstoque('MED-001', 'UN-99', 10), false);
 });

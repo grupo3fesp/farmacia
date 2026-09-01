@@ -5,7 +5,7 @@
 // usam estes textos diretamente. montarRespostaDeterministica e o fallback
 // quando a API da IA falha: monta a frase por template, sempre correta.
 
-import type { RegistroMedicamento } from './tipos.ts';
+import type { RegistroMedicamento, MedicamentoComEstoque, EstoqueUnidade } from './tipos.ts';
 
 export const MSG = {
   BOAS_VINDAS:
@@ -69,31 +69,56 @@ export function montarDesambiguacao(opcoes: RegistroMedicamento[]): string {
   ].join('\n');
 }
 
+/** Junta nomes em "A", "A e B", "A, B e C". */
+export function listarNomes(nomes: string[]): string {
+  if (nomes.length <= 1) return nomes[0] ?? '';
+  return nomes.slice(0, -1).join(', ') + ' e ' + nomes[nomes.length - 1];
+}
+
+/** Data/hora da posicao mais recente entre as unidades. */
+function atualizacaoMaisRecente(estoques: EstoqueUnidade[]): string {
+  const iso = estoques.reduce(
+    (max, e) => (e.atualizado_em > max ? e.atualizado_em : max),
+    estoques[0]?.atualizado_em ?? new Date().toISOString(),
+  );
+  return formatarAtualizacao(iso);
+}
+
 /**
  * Fallback deterministico quando a IA esta fora do ar. Monta a resposta por
- * template a partir dos campos do registro — o cidadao recebe a informacao
- * correta mesmo com o modelo indisponivel. (CLAUDE.md secao 5.)
+ * template a partir do estoque por unidade — informacao correta mesmo com o
+ * modelo indisponivel. (CLAUDE.md secao 5.)
  */
-export function montarRespostaDeterministica(r: RegistroMedicamento): string {
-  const item = descreverItem(r);
-  const quando = formatarAtualizacao(r.atualizado_em);
-  const unidade = r.unidade_nome ? ` na ${r.unidade_nome}` : '';
+export function montarRespostaDeterministica(m: MedicamentoComEstoque): string {
+  const item = descreverItem(m.medicamento);
+  const disp = m.estoques.filter((e) => e.situacao === 'DISPONIVEL').map((e) => e.unidade_nome);
+  const baixo = m.estoques.filter((e) => e.situacao === 'ESTOQUE BAIXO').map((e) => e.unidade_nome);
+  const falta = m.estoques.filter((e) => e.situacao === 'EM FALTA').map((e) => e.unidade_nome);
 
-  if (r.situacao === 'DISPONIVEL') {
+  if (m.estoques.length === 0) {
+    return `${item}: não há registro de estoque em nenhuma unidade no momento. Para mais informações, digite ATENDENTE.`;
+  }
+
+  const quando = atualizacaoMaisRecente(m.estoques);
+
+  if (disp.length === 0 && baixo.length === 0) {
     return [
-      `${item}: consta como disponível${unidade}.`,
-      `Posição registrada em ${quando}.`,
-      MSG.RESSALVA_ESTOQUE,
+      `${item}: consta em falta em ${listarNomes(falta)} (posição de ${quando}).`,
+      'Vale consultar novamente nos próximos dias. Para falar com a equipe, digite ATENDENTE.',
     ].join(' ');
   }
-  if (r.situacao === 'ESTOQUE BAIXO') {
-    return [
-      `${item}: consta como disponível em quantidade reduzida${unidade} (posição de ${quando}).`,
-      'Como restam poucas unidades, a retirada pode não ser possível se houver procura ao longo do dia.',
-    ].join(' ');
+
+  const partes = [`${item}:`];
+  if (disp.length) partes.push(`consta como disponível em ${listarNomes(disp)}.`);
+  if (baixo.length) {
+    partes.push(
+      `${disp.length ? 'Em' : 'Consta em quantidade reduzida em'} ${listarNomes(baixo)}${
+        disp.length ? ' o estoque está reduzido' : ''
+      } (pode acabar ao longo do dia).`,
+    );
   }
-  return [
-    `${item}: consta como em falta${unidade} na posição de ${quando}.`,
-    'Vale consultar novamente nos próximos dias. Para falar com a equipe, digite ATENDENTE.',
-  ].join(' ');
+  if (falta.length) partes.push(`Consta em falta em ${listarNomes(falta)}.`);
+  partes.push(`Posição registrada em ${quando}.`);
+  partes.push(MSG.RESSALVA_ESTOQUE);
+  return partes.join(' ');
 }

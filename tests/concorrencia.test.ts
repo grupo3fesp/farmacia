@@ -4,8 +4,8 @@ import assert from 'node:assert/strict';
 import { Atendimento } from '../src/dominio/atendimento.ts';
 import { GerenciadorSessao } from '../src/dominio/sessao.ts';
 import type { Repositorio, RegistroLog, Indicadores, ItemEstoque } from '../src/dados/repositorio.ts';
-import type { RegistroMedicamento } from '../src/dominio/tipos.ts';
-import { registro } from './ajuda.ts';
+import type { RegistroMedicamento, EstoqueUnidade } from '../src/dominio/tipos.ts';
+import { registro, estoqueUnidade } from './ajuda.ts';
 
 // Repositorio-stub: o termo "empate" devolve duas apresentacoes com a mesma
 // semelhanca (forca a desambiguacao). Isola o que este teste verifica: que o
@@ -20,6 +20,9 @@ class RepoStub implements Repositorio {
       ];
     }
     return [];
+  }
+  async estoquePorCodigo(): Promise<EstoqueUnidade[]> {
+    return [estoqueUnidade({ situacao: 'DISPONIVEL' })];
   }
   async registrarLog(r: RegistroLog): Promise<void> {
     this.logs.push(r);
@@ -37,7 +40,7 @@ class RepoStub implements Repositorio {
   async listarEstoque(): Promise<ItemEstoque[]> {
     return [];
   }
-  async alterarEstoque(): Promise<boolean> {
+  async alterarEstoque(_codigo: string, _unidade: string, _valor: number): Promise<boolean> {
     return false;
   }
 }

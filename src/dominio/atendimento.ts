@@ -3,7 +3,7 @@
 // Ordem: deduplicacao -> sessao/boas-vindas -> desambiguacao pendente ->
 // intencao -> busca -> decisao (secao 5) -> [IA] -> log.
 
-import type { MensagemRecebida, Decisao, RegistroMedicamento } from './tipos.ts';
+import type { MensagemRecebida, Decisao, RegistroMedicamento, EstoqueUnidade } from './tipos.ts';
 import type { Repositorio, RegistroLog } from '../dados/repositorio.ts';
 import { GerenciadorSessao } from './sessao.ts';
 import {
@@ -22,6 +22,14 @@ export type ResultadoAtendimento = {
   mensagens: string[];
   ignorada: boolean; // true quando descartada por deduplicacao
 };
+
+/** Resumo da situacao entre unidades, para o log/indicadores. */
+function resumirSituacao(estoques: EstoqueUnidade[]): string | null {
+  if (estoques.length === 0) return 'EM FALTA';
+  if (estoques.some((e) => e.situacao === 'DISPONIVEL')) return 'DISPONIVEL';
+  if (estoques.some((e) => e.situacao === 'ESTOQUE BAIXO')) return 'ESTOQUE BAIXO';
+  return 'EM FALTA';
+}
 
 export class Atendimento {
   private readonly repo: Repositorio;
@@ -154,11 +162,12 @@ export class Atendimento {
       }
       case 'redigir_ia': {
         const r = decisao.registro;
-        const texto = await redigirComIA(r);
+        const estoques = await this.repo.estoquePorCodigo(r.codigo);
+        const texto = await redigirComIA({ medicamento: r, estoques });
         await this.repo.registrarLog({
           ...base,
           codigoEncontrado: r.codigo,
-          situacaoRetornada: r.situacao,
+          situacaoRetornada: resumirSituacao(estoques),
         });
         return texto;
       }
