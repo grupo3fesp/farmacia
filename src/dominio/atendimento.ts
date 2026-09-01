@@ -76,7 +76,7 @@ export class Atendimento {
     // 4. Mais de um medicamento na mesma mensagem? Pedir um por vez.
     const citados = await this.medicamentosCitados(msg.texto);
     if (citados.length >= 2) {
-      saida.push(await this.executar({ tipo: 'social', texto: montarUmPorVez(citados) }, msg));
+      saida.push(await this.executar({ tipo: 'social', texto: montarUmPorVez() }, msg));
       return { mensagens: saida, ignorada: false };
     }
 

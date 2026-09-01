@@ -33101,9 +33101,9 @@ function formatarAtualizacao(iso) {
     d2.getHours()
   )}h${dois(d2.getMinutes())}`;
 }
-function montarUmPorVez(nomes) {
+function montarUmPorVez() {
   return [
-    `Voc\xEA mencionou mais de um medicamento (${nomes.join(" e ")}).`,
+    "Percebi que voc\xEA mencionou mais de um medicamento.",
     "Consigo verificar a disponibilidade de um por vez \u2014 por favor, envie o nome de apenas um deles."
   ].join(" ");
 }
@@ -33432,7 +33432,7 @@ var Atendimento = class {
     }
     const citados = await this.medicamentosCitados(msg.texto);
     if (citados.length >= 2) {
-      saida.push(await this.executar({ tipo: "social", texto: montarUmPorVez(citados) }, msg));
+      saida.push(await this.executar({ tipo: "social", texto: montarUmPorVez() }, msg));
       return { mensagens: saida, ignorada: false };
     }
     let resultados = [];

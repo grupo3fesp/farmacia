@@ -47,10 +47,14 @@ export function formatarAtualizacao(iso: string): string {
   )}h${dois(d.getMinutes())}`;
 }
 
-/** Aviso quando o cidadao cita mais de um medicamento na mesma mensagem. */
-export function montarUmPorVez(nomes: string[]): string {
+/**
+ * Aviso quando o cidadao cita mais de um medicamento na mesma mensagem.
+ * Nao enumera os nomes de proposito: se algum nao estiver no cadastro, listar
+ * daria a impressao de que "faltou um".
+ */
+export function montarUmPorVez(): string {
   return [
-    `Você mencionou mais de um medicamento (${nomes.join(' e ')}).`,
+    'Percebi que você mencionou mais de um medicamento.',
     'Consigo verificar a disponibilidade de um por vez — por favor, envie o nome de apenas um deles.',
   ].join(' ');
 }

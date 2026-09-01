@@ -10,18 +10,19 @@ function novo(): Atendimento {
 }
 const ultima = (m: string[]) => m[m.length - 1];
 
-test('dois medicamentos numa mensagem → pede um por vez', async () => {
+test('dois medicamentos numa mensagem → pede um por vez (sem enumerar)', async () => {
   const at = novo();
   const r = await at.processar({ remetente: 'A', texto: 'dipirona e amoxicilina', idMensagem: 'a1' });
-  const msg = ultima(r.mensagens);
-  assert.match(msg, /mais de um medicamento/);
-  assert.match(msg, /Dipirona sódica/);
-  assert.match(msg, /Amoxicilina/);
+  assert.match(ultima(r.mensagens), /mais de um medicamento/);
 });
 
-test('"dipirona, paracetamol" também pede um por vez', async () => {
+test('três medicamentos (um fora do cadastro) ainda pede um por vez', async () => {
   const at = novo();
-  const r = await at.processar({ remetente: 'B', texto: 'dipirona, paracetamol', idMensagem: 'b1' });
+  const r = await at.processar({
+    remetente: 'B',
+    texto: 'dipirona, metformina e neosaldina',
+    idMensagem: 'b1',
+  });
   assert.match(ultima(r.mensagens), /mais de um medicamento/);
 });
 
