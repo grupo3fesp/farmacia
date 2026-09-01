@@ -214,11 +214,6 @@
     </div>
 
     <script>
-      const CHIPS = [
-        "tem dipirona?", "zitromax", "metiformina 850", "bombinha",
-        "dipirona pra criança", "paracetamol gotas",
-        "posso tomar dipirona com o remédio de pressão?", "xpto123", "ATENDENTE",
-      ];
       let estoqueCache = [];
       let protegido = false;
       let contador = 0;
@@ -239,20 +234,12 @@
             <button onclick="this.closest('.painel-conversa').remove()">✕</button>
           </div>
           <div class="mensagens"></div>
-          <div class="chips">${CHIPS.map((c) => `<span class="chip" onclick="usarChip(this, ${JSON.stringify(c).replace(/"/g, "&quot;")})">${c}</span>`).join("")}</div>
           <div class="entrada">
             <input placeholder="Digite uma mensagem" onkeydown="if(event.key==='Enter')enviar(this)" />
             <button onclick="enviar(this.previousElementSibling)">➤</button>
           </div>`;
         document.getElementById("conversas").appendChild(div);
         return div;
-      }
-
-      function usarChip(el, texto) {
-        const painel = el.closest(".painel-conversa");
-        const input = painel.querySelector(".entrada input");
-        input.value = texto;
-        enviar(input);
       }
 
       function addBolha(painel, texto, classe) {
