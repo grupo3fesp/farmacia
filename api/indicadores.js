@@ -33109,6 +33109,10 @@ var seed_default = {
       termo: "insulina rapida"
     },
     {
+      codigo: "MED-016",
+      termo: "insulina"
+    },
+    {
       codigo: "MED-017",
       termo: "losartana"
     },

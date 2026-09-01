@@ -264,6 +264,7 @@ insert into public.sinonimos (codigo, termo, termo_norm) values
   ('MED-015', 'insulina lenta', 'insulina lenta'),
   ('MED-016', 'insulina regular', 'insulina regular'),
   ('MED-016', 'insulina rapida', 'insulina rapida'),
+  ('MED-016', 'insulina', 'insulina'),
   ('MED-017', 'losartana', 'losartana'),
   ('MED-017', 'losartan', 'losartan'),
   ('MED-017', 'losartana 50', 'losartana 50'),
