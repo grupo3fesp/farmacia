@@ -68,8 +68,9 @@ Após o deploy, abra a URL da Vercel e valide:
 ## Notas
 
 - **Node**: a Vercel usa a versão de `engines.node` do `package.json` (22.x).
-- **WhatsApp** (fases B/C): a função `api/webhook.ts` já está pronta. Configure na Meta
-  a URL `https://<seu-projeto>.vercel.app/webhook` e o `WHATSAPP_VERIFY_TOKEN`
-  (mais `WHATSAPP_TOKEN` e `WHATSAPP_PHONE_NUMBER_ID` nas variáveis).
+- **WhatsApp** (fases B/C): a função do webhook já está pronta. Callback URL na Meta:
+  `https://grupo3fesp.vercel.app/api/webhook` (ou `/webhook`, que reescreve para ela).
+  Configure `WHATSAPP_VERIFY_TOKEN`, `WHATSAPP_TOKEN` e `WHATSAPP_PHONE_NUMBER_ID`
+  nas variáveis de ambiente e faça Redeploy.
 - As funções (`api/*.js`) são geradas por `npm run build` e **versionadas** no
   repositório; a Vercel as serve direto (o `functions` do `vercel.json` casa com elas).
