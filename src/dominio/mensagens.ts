@@ -51,7 +51,7 @@ export function formatarAtualizacao(iso: string): string {
 export function montarDesambiguacao(opcoes: RegistroMedicamento[]): string {
   const linhas = opcoes.map((r, i) => `${i + 1} – ${descreverItem(r)}`);
   return [
-    'Encontrei mais de uma apresentação para esse medicamento. Qual delas você procura?',
+    'Encontrei mais de uma opção para esse medicamento. Qual delas você procura?',
     ...linhas,
     `É só responder com o número (1 a ${opcoes.length}).`,
   ].join('\n');

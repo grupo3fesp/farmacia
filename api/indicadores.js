@@ -33104,7 +33104,7 @@ function formatarAtualizacao(iso) {
 function montarDesambiguacao(opcoes) {
   const linhas = opcoes.map((r2, i2) => `${i2 + 1} \u2013 ${descreverItem(r2)}`);
   return [
-    "Encontrei mais de uma apresenta\xE7\xE3o para esse medicamento. Qual delas voc\xEA procura?",
+    "Encontrei mais de uma op\xE7\xE3o para esse medicamento. Qual delas voc\xEA procura?",
     ...linhas,
     `\xC9 s\xF3 responder com o n\xFAmero (1 a ${opcoes.length}).`
   ].join("\n");
