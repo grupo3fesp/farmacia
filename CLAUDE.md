@@ -20,7 +20,7 @@ substitui profissional de saúde.
 | Item | Situação |
 |---|---|
 | Termo de Referência | Aprovado, define objetivos e produto esperado |
-| Base de dados fictícia | Pronta — 48 medicamentos, 134 sinônimos, 3 unidades |
+| Base de dados fictícia | Pronta — 48 medicamentos, 140 sinônimos, 3 unidades |
 | Schema Supabase | Pronto — `01_schema_supabase.sql` |
 | Seed de dados | Pronto — `02_seed_dados_ficticios.sql` |
 | Fluxo de conversa e regras | Pronto — `fluxo_conversa_assistente_farmacia.md` |

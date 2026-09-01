@@ -17,11 +17,24 @@ test('seed: contagem de situações confere com o passo a passo', async () => {
   assert.equal(cont['EM FALTA'], 5);
 });
 
-test('dipirona: disponível, via sinônimo exato', async () => {
-  const r = await repo.buscar('tem dipirona?'.replace('tem ', '').replace('?', '')); // "dipirona"
-  assert.equal(r[0].codigo, 'MED-001');
-  assert.equal(r[0].situacao, 'DISPONIVEL');
-  assert.equal(r[0].origem, 'sinonimo_exato');
+test('dipirona genérica: duas apresentações empatadas (dispara desambiguação)', async () => {
+  const r = await repo.buscar('dipirona');
+  const topo = r.filter((x) => x.semelhanca === r[0].semelhanca);
+  assert.equal(topo.length, 2, 'deveria empatar comprimido + solução oral');
+  const codigos = topo.map((x) => x.codigo).sort();
+  assert.deepEqual(codigos, ['MED-001', 'MED-002']);
+  assert.ok(topo.every((x) => x.principio_ativo === 'Dipirona sódica'));
+});
+
+test('paracetamol e amoxicilina genéricos também empatam', async () => {
+  for (const [termo, pares] of [
+    ['paracetamol', ['MED-003', 'MED-004']],
+    ['amoxicilina', ['MED-006', 'MED-007']],
+  ] as const) {
+    const r = await repo.buscar(termo);
+    const topo = r.filter((x) => x.semelhanca === r[0].semelhanca).map((x) => x.codigo).sort();
+    assert.deepEqual(topo, pares, `${termo} deveria empatar ${pares.join(' e ')}`);
+  }
 });
 
 test('zitromax: reconhece Azitromicina e informa EM FALTA', async () => {
@@ -66,9 +79,11 @@ test('"dipirona pra criança" roteia para a solução oral (MED-002)', async () 
   assert.equal(r[0].forma_farmaceutica, 'Solução oral');
 });
 
-test('"dipirona" (sem qualificador) continua no comprimido (MED-001)', async () => {
-  const r = await repo.buscar('dipirona');
-  assert.equal(r[0].codigo, 'MED-001');
+test('"dipirona gotas" vai direto na solução oral (MED-002), sem desambiguar', async () => {
+  const r = await repo.buscar('dipirona gotas');
+  assert.equal(r[0].codigo, 'MED-002');
+  const topo = r.filter((x) => x.semelhanca === r[0].semelhanca);
+  assert.equal(topo.length, 1);
 });
 
 test('alteração ao vivo: zerar MED-001 muda a situação', async () => {

@@ -32207,6 +32207,14 @@ var seed_default = {
       termo: "dipirona bebe"
     },
     {
+      codigo: "MED-002",
+      termo: "dipirona"
+    },
+    {
+      codigo: "MED-002",
+      termo: "novalgina"
+    },
+    {
       codigo: "MED-003",
       termo: "paracetamol"
     },
@@ -32225,6 +32233,14 @@ var seed_default = {
     {
       codigo: "MED-004",
       termo: "tylenol bebe"
+    },
+    {
+      codigo: "MED-004",
+      termo: "paracetamol"
+    },
+    {
+      codigo: "MED-004",
+      termo: "tylenol"
     },
     {
       codigo: "MED-005",
@@ -32265,6 +32281,14 @@ var seed_default = {
     {
       codigo: "MED-007",
       termo: "amoxicilina xarope"
+    },
+    {
+      codigo: "MED-007",
+      termo: "amoxicilina"
+    },
+    {
+      codigo: "MED-007",
+      termo: "amoxil"
     },
     {
       codigo: "MED-008",

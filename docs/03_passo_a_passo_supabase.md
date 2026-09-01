@@ -24,7 +24,7 @@ Isso cria:
 
 ## 3. Carregar os dados fictícios
 
-Nova query, cole `02_seed_dados_ficticios.sql` e execute. Devem entrar 3 unidades, 48 medicamentos e 134 sinônimos.
+Nova query, cole `02_seed_dados_ficticios.sql` e execute. Devem entrar 3 unidades, 48 medicamentos e 140 sinônimos.
 
 Confira com:
 
