@@ -1,5 +1,4 @@
--- Atualiza a função de busca: adiciona o nível de prefixo do princípio ativo
--- ("acido" -> desambiguação entre os dois Ácidos). Rode no SQL Editor.
+-- Atualiza a função de busca (prefixo de 2+ princípios -> desambiguação). Rode no SQL Editor.
 
 create or replace function public.buscar_medicamento(
   p_termo text,
@@ -23,6 +22,14 @@ as $$
   with entrada as (
     select lower(extensions.unaccent(coalesce(p_termo, ''))) as t
   ),
+  -- Medicamentos cujo principio ativo COMECA com o termo (prefixo).
+  prefixos as (
+    select m.codigo, m.principio_ativo as pa
+      from public.medicamentos m, entrada e
+     where length(e.t) >= 3
+       and starts_with(lower(extensions.unaccent(m.principio_ativo)), e.t)
+       and lower(extensions.unaccent(m.principio_ativo)) <> e.t
+  ),
   achados as (
     select s.codigo, 'sinonimo_exato'::text as origem, 1.0::real as semelhanca
       from public.sinonimos s, entrada e
@@ -36,12 +43,11 @@ as $$
       from public.sinonimos s, entrada e
      where e.t <> '' and similarity(s.termo_norm, e.t) > 0.42
     union all
-    -- Nivel 4: prefixo do principio ativo ("acido" -> os dois "Ácido...").
-    select m.codigo, 'aproximado'::text, 0.5::real
-      from public.medicamentos m, entrada e
-     where length(e.t) >= 3
-       and starts_with(lower(extensions.unaccent(m.principio_ativo)), e.t)
-       and lower(extensions.unaccent(m.principio_ativo)) <> e.t
+    -- Nivel 4: prefixo do principio ativo. Se casa 2+ principios distintos
+    -- ("insulina", "acido"), eleva a 1.0 para empatar -> desambiguacao; senao 0.5.
+    select p.codigo, 'aproximado'::text,
+           (case when (select count(distinct pa) from prefixos) >= 2 then 1.0 else 0.5 end)::real
+      from prefixos p
   ),
   melhor as (
     select a.codigo, max(a.semelhanca) as semelhanca,

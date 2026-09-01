@@ -32063,10 +32063,22 @@ var seed_default = {
       estoque_minimo: 420
     },
     {
+      codigo: "MED-003",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 280
+    },
+    {
       codigo: "MED-004",
       unidade_id: "UN-01",
       estoque_atual: 42,
       estoque_minimo: 50
+    },
+    {
+      codigo: "MED-004",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 30
     },
     {
       codigo: "MED-004",
@@ -32105,6 +32117,12 @@ var seed_default = {
       estoque_minimo: 360
     },
     {
+      codigo: "MED-006",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 240
+    },
+    {
       codigo: "MED-007",
       unidade_id: "UN-01",
       estoque_atual: 18,
@@ -32130,6 +32148,12 @@ var seed_default = {
     },
     {
       codigo: "MED-008",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 120
+    },
+    {
+      codigo: "MED-008",
       unidade_id: "UN-03",
       estoque_atual: 0,
       estoque_minimo: 80
@@ -32145,6 +32169,12 @@ var seed_default = {
       unidade_id: "UN-02",
       estoque_atual: 125,
       estoque_minimo: 150
+    },
+    {
+      codigo: "MED-009",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 100
     },
     {
       codigo: "MED-010",
@@ -32187,6 +32217,18 @@ var seed_default = {
       unidade_id: "UN-01",
       estoque_atual: 210,
       estoque_minimo: 60
+    },
+    {
+      codigo: "MED-012",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 36
+    },
+    {
+      codigo: "MED-012",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 24
     },
     {
       codigo: "MED-013",
@@ -32237,10 +32279,22 @@ var seed_default = {
       estoque_minimo: 24
     },
     {
+      codigo: "MED-015",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 16
+    },
+    {
       codigo: "MED-016",
       unidade_id: "UN-01",
       estoque_atual: 31,
       estoque_minimo: 25
+    },
+    {
+      codigo: "MED-016",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 15
     },
     {
       codigo: "MED-016",
@@ -32279,6 +32333,12 @@ var seed_default = {
       estoque_minimo: 720
     },
     {
+      codigo: "MED-018",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 480
+    },
+    {
       codigo: "MED-019",
       unidade_id: "UN-01",
       estoque_atual: 2100,
@@ -32304,6 +32364,12 @@ var seed_default = {
     },
     {
       codigo: "MED-020",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 720
+    },
+    {
+      codigo: "MED-020",
       unidade_id: "UN-03",
       estoque_atual: 0,
       estoque_minimo: 480
@@ -32319,6 +32385,12 @@ var seed_default = {
       unidade_id: "UN-02",
       estoque_atual: 450,
       estoque_minimo: 540
+    },
+    {
+      codigo: "MED-021",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 360
     },
     {
       codigo: "MED-022",
@@ -32361,6 +32433,18 @@ var seed_default = {
       unidade_id: "UN-01",
       estoque_atual: 6800,
       estoque_minimo: 1500
+    },
+    {
+      codigo: "MED-024",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 900
+    },
+    {
+      codigo: "MED-024",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 600
     },
     {
       codigo: "MED-025",
@@ -32411,10 +32495,22 @@ var seed_default = {
       estoque_minimo: 180
     },
     {
+      codigo: "MED-027",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 120
+    },
+    {
       codigo: "MED-028",
       unidade_id: "UN-01",
       estoque_atual: 640,
       estoque_minimo: 200
+    },
+    {
+      codigo: "MED-028",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 120
     },
     {
       codigo: "MED-028",
@@ -32453,6 +32549,12 @@ var seed_default = {
       estoque_minimo: 24
     },
     {
+      codigo: "MED-030",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 16
+    },
+    {
       codigo: "MED-031",
       unidade_id: "UN-01",
       estoque_atual: 2900,
@@ -32478,6 +32580,12 @@ var seed_default = {
     },
     {
       codigo: "MED-032",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 36
+    },
+    {
+      codigo: "MED-032",
       unidade_id: "UN-03",
       estoque_atual: 22,
       estoque_minimo: 24
@@ -32493,6 +32601,12 @@ var seed_default = {
       unidade_id: "UN-02",
       estoque_atual: 15,
       estoque_minimo: 18
+    },
+    {
+      codigo: "MED-033",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 12
     },
     {
       codigo: "MED-034",
@@ -32535,6 +32649,18 @@ var seed_default = {
       unidade_id: "UN-01",
       estoque_atual: 6100,
       estoque_minimo: 1200
+    },
+    {
+      codigo: "MED-036",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 720
+    },
+    {
+      codigo: "MED-036",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 480
     },
     {
       codigo: "MED-037",
@@ -32585,10 +32711,22 @@ var seed_default = {
       estoque_minimo: 120
     },
     {
+      codigo: "MED-039",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 80
+    },
+    {
       codigo: "MED-040",
       unidade_id: "UN-01",
       estoque_atual: 27,
       estoque_minimo: 30
+    },
+    {
+      codigo: "MED-040",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 18
     },
     {
       codigo: "MED-040",
@@ -32627,6 +32765,12 @@ var seed_default = {
       estoque_minimo: 72
     },
     {
+      codigo: "MED-042",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 48
+    },
+    {
       codigo: "MED-043",
       unidade_id: "UN-01",
       estoque_atual: 2200,
@@ -32652,6 +32796,12 @@ var seed_default = {
     },
     {
       codigo: "MED-044",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 480
+    },
+    {
+      codigo: "MED-044",
       unidade_id: "UN-03",
       estoque_atual: 1080,
       estoque_minimo: 320
@@ -32667,6 +32817,12 @@ var seed_default = {
       unidade_id: "UN-02",
       estoque_atual: 250,
       estoque_minimo: 300
+    },
+    {
+      codigo: "MED-045",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 200
     },
     {
       codigo: "MED-046",
@@ -32709,6 +32865,18 @@ var seed_default = {
       unidade_id: "UN-01",
       estoque_atual: 1100,
       estoque_minimo: 300
+    },
+    {
+      codigo: "MED-048",
+      unidade_id: "UN-02",
+      estoque_atual: 0,
+      estoque_minimo: 180
+    },
+    {
+      codigo: "MED-048",
+      unidade_id: "UN-03",
+      estoque_atual: 0,
+      estoque_minimo: 120
     }
   ],
   sinonimos: [
@@ -33336,10 +33504,14 @@ var RepositorioLocal = class {
         if (sim > this.corte) considerar(s2.codigo, "aproximado", sim);
       }
       if (t2.length >= 3) {
+        const prefixados = [];
         for (const m2 of this.catalogo.values()) {
           const pn = normalizar(m2.principio_ativo);
-          if (pn !== t2 && pn.startsWith(t2)) considerar(m2.codigo, "aproximado", 0.5);
+          if (pn !== t2 && pn.startsWith(t2)) prefixados.push(m2);
         }
+        const distintos = new Set(prefixados.map((m2) => m2.principio_ativo)).size;
+        const valor = distintos >= 2 ? 1 : 0.5;
+        for (const m2 of prefixados) considerar(m2.codigo, "aproximado", valor);
       }
     }
     return [...melhor.entries()].map(([codigo, b2]) => {

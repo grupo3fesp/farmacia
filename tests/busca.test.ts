@@ -11,16 +11,24 @@ test('catálogo: 48 medicamentos, cada um com pelo menos uma unidade', async () 
   assert.equal(codigos.size, 48);
 });
 
-test('seed: distribuição de situações por unidade', async () => {
+test('seed: todo medicamento nas 3 unidades (48 x 3 = 144)', async () => {
   const itens = await repo.listarEstoque();
-  assert.equal(itens.length, 116);
-  const cont = itens.reduce<Record<string, number>>((a, m) => {
-    a[m.situacao] = (a[m.situacao] ?? 0) + 1;
+  assert.equal(itens.length, 144);
+  const porCodigo = itens.reduce<Record<string, number>>((a, m) => {
+    a[m.codigo] = (a[m.codigo] ?? 0) + 1;
     return a;
   }, {});
-  assert.equal(cont['DISPONIVEL'], 73);
-  assert.equal(cont['EM FALTA'], 23);
-  assert.equal(cont['ESTOQUE BAIXO'], 20);
+  assert.ok(Object.values(porCodigo).every((n) => n === 3), 'cada código deve ter 3 unidades');
+});
+
+test('"insulina" → desambiguação entre NPH e regular', async () => {
+  const r = await repo.buscar('insulina');
+  const topo = r.filter((x) => x.semelhanca === r[0].semelhanca).map((x) => x.principio_ativo).sort();
+  assert.deepEqual(topo, ['Insulina NPH humana', 'Insulina regular humana']);
+});
+
+test('"insulina nph" vai direto à NPH', async () => {
+  assert.equal((await repo.buscar('insulina nph'))[0].principio_ativo, 'Insulina NPH humana');
 });
 
 test('zitromax: reconhece Azitromicina (catálogo) e tem unidade em falta', async () => {

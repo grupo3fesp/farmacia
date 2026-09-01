@@ -12,29 +12,32 @@ const seed = JSON.parse(readFileSync(join(raiz, 'src', 'dados', 'seed.json'), 'u
 
 const q = (v) => (v == null ? 'null' : `'${String(v).replace(/'/g, "''")}'`);
 
-/** Distribuicao por unidade a partir do estoque original (UN-01). */
+/** Estoque nas 3 unidades. TODO medicamento existe em TODAS as unidades; onde
+ *  a unidade "nao oferta", o estoque fica 0 (em falta). */
 function estoquesDe(m, i) {
   const base = m.estoque_atual;
   const min = m.estoque_minimo;
-  const linhas = [['UN-01', base, min]]; // Central: sempre, valores originais
 
-  // Bairro Novo (UN-02): ~75% dos itens.
+  // Bairro Novo (UN-02): ~75% ofertam; os demais ficam zerados.
+  let e2 = 0;
   if (i % 4 !== 0) {
-    let e;
-    if (i % 6 === 0) e = 0; // em falta
-    else if (i % 6 === 3) e = Math.round(min * 0.5); // estoque baixo
-    else e = Math.round(base * 0.55);
-    linhas.push(['UN-02', e, Math.max(1, Math.round(min * 0.6))]);
+    if (i % 6 === 0) e2 = 0;
+    else if (i % 6 === 3) e2 = Math.round(min * 0.5); // baixo
+    else e2 = Math.round(base * 0.55);
   }
-  // Vila Esperança (UN-03): ~67% dos itens.
+  // Vila Esperança (UN-03): ~67% ofertam; os demais ficam zerados.
+  let e3 = 0;
   if (i % 3 !== 0) {
-    let e;
-    if (i % 5 === 0) e = 0; // em falta
-    else if (i % 5 === 1) e = Math.round(min * 0.5); // estoque baixo
-    else e = Math.round(base * 0.3);
-    linhas.push(['UN-03', e, Math.max(1, Math.round(min * 0.4))]);
+    if (i % 5 === 0) e3 = 0;
+    else if (i % 5 === 1) e3 = Math.round(min * 0.5); // baixo
+    else e3 = Math.round(base * 0.3);
   }
-  return linhas;
+
+  return [
+    ['UN-01', base, min], // Central: valores originais
+    ['UN-02', e2, Math.max(1, Math.round(min * 0.6))],
+    ['UN-03', e3, Math.max(1, Math.round(min * 0.4))],
+  ];
 }
 
 const out = [];
@@ -69,10 +72,15 @@ out.push(
 );
 out.push('');
 
-// Estoques por unidade
+// Base (UN-01) a partir do seed atual (tabela estoques).
+const baseUN01 = new Map(
+  (seed.estoques ?? []).filter((e) => e.unidade_id === 'UN-01').map((e) => [e.codigo, e]),
+);
+// Estoques por unidade (todas as 3, sempre)
 const linhasEstoque = [];
 seed.medicamentos.forEach((m, idx) => {
-  for (const [uni, est, min] of estoquesDe(m, idx + 1)) {
+  const base = baseUN01.get(m.codigo) ?? { estoque_atual: 0, estoque_minimo: 0 };
+  for (const [uni, est, min] of estoquesDe(base, idx + 1)) {
     linhasEstoque.push(`  (${q(m.codigo)}, ${q(uni)}, ${est}, ${min})`);
   }
 });

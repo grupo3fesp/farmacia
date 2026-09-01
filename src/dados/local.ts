@@ -97,14 +97,19 @@ export class RepositorioLocal implements Repositorio {
         const sim = similaridade(s.termo_norm, t);
         if (sim > this.corte) considerar(s.codigo, 'aproximado', sim);
       }
-      // Nivel 4: prefixo do principio ativo. "acido" -> Ácido fólico E
-      // Ácido acetilsalicílico (empatam -> desambiguacao). Evita que um termo
-      // parcial ambiguo caia direto num unico medicamento.
+      // Nivel 4: prefixo do principio ativo. Se o termo e inicio do nome de 2+
+      // medicamentos com PRINCIPIOS DISTINTOS (ex.: "insulina" -> NPH e regular;
+      // "acido" -> folico e acetilsalicilico), eleva ao topo (1.0) para empatar
+      // e perguntar, mesmo que um deles tenha sinonimo exato. Caso contrario, 0.5.
       if (t.length >= 3) {
+        const prefixados: Catalogo[] = [];
         for (const m of this.catalogo.values()) {
           const pn = normalizar(m.principio_ativo);
-          if (pn !== t && pn.startsWith(t)) considerar(m.codigo, 'aproximado', 0.5);
+          if (pn !== t && pn.startsWith(t)) prefixados.push(m);
         }
+        const distintos = new Set(prefixados.map((m) => m.principio_ativo)).size;
+        const valor = distintos >= 2 ? 1.0 : 0.5;
+        for (const m of prefixados) considerar(m.codigo, 'aproximado', valor);
       }
     }
 
