@@ -131,7 +131,10 @@ export async function handleTwilioInbound(corpo: unknown): Promise<{ status: num
   if (!msg) return { status: 200, xml: montarTwiml([]) };
   try {
     const { mensagens, ignorada } = await atendimento.processar(msg);
-    return { status: 200, xml: montarTwiml(ignorada ? [] : mensagens) };
+    // No WhatsApp, juntamos tudo numa única mensagem: melhor leitura e economiza
+    // o saldo do sandbox (uma bolha por turno em vez de 3 na primeira interação).
+    const saida = ignorada || mensagens.length === 0 ? [] : [mensagens.join('\n\n')];
+    return { status: 200, xml: montarTwiml(saida) };
   } catch (e) {
     console.error('Erro no webhook do Twilio:', (e as Error).message);
     // Responde vazio (200) para o Twilio nao reentregar em loop.

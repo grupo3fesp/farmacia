@@ -33422,7 +33422,8 @@ async function handleTwilioInbound(corpo) {
   if (!msg) return { status: 200, xml: montarTwiml([]) };
   try {
     const { mensagens, ignorada } = await atendimento.processar(msg);
-    return { status: 200, xml: montarTwiml(ignorada ? [] : mensagens) };
+    const saida = ignorada || mensagens.length === 0 ? [] : [mensagens.join("\n\n")];
+    return { status: 200, xml: montarTwiml(saida) };
   } catch (e2) {
     console.error("Erro no webhook do Twilio:", e2.message);
     return { status: 200, xml: montarTwiml([]) };
