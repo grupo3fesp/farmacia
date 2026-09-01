@@ -33539,6 +33539,26 @@ var seed_default = {
     {
       codigo: "MED-034",
       termo: "albendazol mastigavel"
+    },
+    {
+      codigo: "MED-002",
+      termo: "anador"
+    },
+    {
+      codigo: "MED-002",
+      termo: "dipirona sodica"
+    },
+    {
+      codigo: "MED-002",
+      termo: "dipirona 500"
+    },
+    {
+      codigo: "MED-004",
+      termo: "paracetamol 500"
+    },
+    {
+      codigo: "MED-007",
+      termo: "amoxilina"
     }
   ]
 };

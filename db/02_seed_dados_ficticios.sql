@@ -371,7 +371,12 @@ insert into public.sinonimos (codigo, termo, termo_norm) values
   ('MED-016', 'insulina injecao', 'insulina injecao'),
   ('MED-016', 'insulina ampola', 'insulina ampola'),
   ('MED-016', 'insulina injetavel', 'insulina injetavel'),
-  ('MED-034', 'albendazol mastigavel', 'albendazol mastigavel')
+  ('MED-034', 'albendazol mastigavel', 'albendazol mastigavel'),
+  ('MED-002', 'anador', 'anador'),
+  ('MED-002', 'dipirona sodica', 'dipirona sodica'),
+  ('MED-002', 'dipirona 500', 'dipirona 500'),
+  ('MED-004', 'paracetamol 500', 'paracetamol 500'),
+  ('MED-007', 'amoxilina', 'amoxilina')
 on conflict (codigo, termo_norm) do nothing;
 
 commit;

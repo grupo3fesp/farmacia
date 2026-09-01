@@ -114,6 +114,44 @@ const POPULARES = {
   'Adesivo transdérmico': ['adesivo'],
 };
 const existentes = new Set(seed.sinonimos.map((s) => s.codigo + '|' + norm(s.termo)));
+
+// --- Propagacao de termos GENERICOS entre apresentacoes da mesma familia ---
+// Um sinonimo generico (nome/marca/erro que NAO cita forma) vale para todas as
+// apresentacoes do mesmo principio ativo. Ex.: 'amoxilina' (so na capsula) passa
+// a valer tambem na suspensao -> "amoxilina" desambigua, nao cai direto na capsula.
+// Sinonimos que citam forma (gotas, xarope, crianca...) NAO sao propagados.
+const FORMAS = new Set([
+  'gotas', 'gota', 'gts', 'xarope', 'liquido', 'liquida', 'comprimido', 'comp', 'suspensao',
+  'capsula', 'creme', 'pomada', 'locao', 'bombinha', 'spray', 'injecao', 'ampola', 'mastigavel',
+  'solucao', 'frasco', 'crianca', 'infantil', 'bebe', 'adulto', 'sache', 'envelope', 'oral',
+  'injetavel', 'sublingual', 'colirio', 'supositorio', 'adesivo', 'po', 'pediatrico', 'pediatrica',
+]);
+const ehGenerico = (termo) => norm(termo).split(/\s+/).every((w) => !FORMAS.has(w));
+
+const familias = new Map(); // principio_ativo -> Set(codigos)
+for (const m of seed.medicamentos) {
+  if (!familias.has(m.principio_ativo)) familias.set(m.principio_ativo, new Set());
+  familias.get(m.principio_ativo).add(m.codigo);
+}
+const propagados = [];
+for (const codigos of familias.values()) {
+  if (codigos.size < 2) continue;
+  const genericos = new Set();
+  for (const s of seed.sinonimos) {
+    if (codigos.has(s.codigo) && ehGenerico(s.termo)) genericos.add(norm(s.termo));
+  }
+  for (const termo of genericos) {
+    for (const codigo of codigos) {
+      const chave = `${codigo}|${termo}`;
+      if (!existentes.has(chave)) {
+        propagados.push({ codigo, termo });
+        existentes.add(chave);
+      }
+    }
+  }
+}
+
+// --- Termos populares de forma farmaceutica (na apresentacao certa) ---
 const populares = [];
 for (const m of seed.medicamentos) {
   const pops = POPULARES[m.forma_farmaceutica];
@@ -128,7 +166,7 @@ for (const m of seed.medicamentos) {
     }
   }
 }
-const todosSinonimos = [...seed.sinonimos, ...populares];
+const todosSinonimos = [...seed.sinonimos, ...propagados, ...populares];
 
 out.push('insert into public.sinonimos (codigo, termo, termo_norm) values');
 out.push(
