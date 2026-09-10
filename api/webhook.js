@@ -34547,32 +34547,7 @@ function handleWebhookVerify(mode, token, challenge) {
   }
   return { status: 403, texto: "forbidden" };
 }
-async function registrarStatusDebug(corpo) {
-  try {
-    const p2 = corpo;
-    const statuses = p2?.entry?.[0]?.changes?.[0]?.value?.statuses;
-    if (!Array.isArray(statuses) || statuses.length === 0) return;
-    if (!config.supabase.url || !config.supabase.serviceKey) return;
-    const linhas = statuses.map((s2) => ({
-      sessao_hash: "DEBUG_STATUS",
-      termo_digitado: String(s2.id ?? ""),
-      situacao_retornada: String(s2.status ?? ""),
-      motivo_encaminhamento: s2.errors ? JSON.stringify(s2.errors).slice(0, 800) : null
-    }));
-    await fetch(`${config.supabase.url}/rest/v1/consultas_log`, {
-      method: "POST",
-      headers: {
-        apikey: config.supabase.serviceKey,
-        Authorization: `Bearer ${config.supabase.serviceKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(linhas)
-    });
-  } catch {
-  }
-}
 async function handleWebhookMensagem(corpo) {
-  await registrarStatusDebug(corpo);
   if (!canalWhatsApp) return;
   const msg = canalWhatsApp.receber(corpo);
   if (!msg) return;
