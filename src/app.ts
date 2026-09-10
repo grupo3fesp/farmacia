@@ -116,8 +116,45 @@ export function handleWebhookVerify(
   return { status: 403, texto: 'forbidden' };
 }
 
+/**
+ * DEBUG TEMPORARIO (2026-09-09): registra os webhooks de STATUS de entrega da
+ * Meta (sent/delivered/read/failed + codigo de erro) no consultas_log, marcados
+ * com sessao_hash 'DEBUG_STATUS', para diagnosticar por que o envio nao entrega.
+ * REMOVER apos o diagnostico.
+ */
+async function registrarStatusDebug(corpo: unknown): Promise<void> {
+  try {
+    const p = corpo as {
+      entry?: Array<{ changes?: Array<{ value?: { statuses?: Array<Record<string, unknown>> } }> }>;
+    };
+    const statuses = p?.entry?.[0]?.changes?.[0]?.value?.statuses;
+    if (!Array.isArray(statuses) || statuses.length === 0) return;
+    if (!config.supabase.url || !config.supabase.serviceKey) return;
+    const linhas = statuses.map((s) => ({
+      sessao_hash: 'DEBUG_STATUS',
+      termo_digitado: String((s as { id?: unknown }).id ?? ''),
+      situacao_retornada: String((s as { status?: unknown }).status ?? ''),
+      motivo_encaminhamento: (s as { errors?: unknown }).errors
+        ? JSON.stringify((s as { errors?: unknown }).errors).slice(0, 800)
+        : null,
+    }));
+    await fetch(`${config.supabase.url}/rest/v1/consultas_log`, {
+      method: 'POST',
+      headers: {
+        apikey: config.supabase.serviceKey,
+        Authorization: `Bearer ${config.supabase.serviceKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(linhas),
+    });
+  } catch {
+    // diagnostico: nunca interrompe o fluxo do webhook.
+  }
+}
+
 /** POST /webhook — recebe mensagens da Meta (processa apos responder 200). */
 export async function handleWebhookMensagem(corpo: unknown): Promise<void> {
+  await registrarStatusDebug(corpo); // DEBUG TEMPORARIO — remover apos diagnostico
   if (!canalWhatsApp) return;
   const msg = canalWhatsApp.receber(corpo);
   if (!msg) return;
