@@ -101,6 +101,8 @@ cd farmacia
 npm start
 ```
 
+> Sem Git? Baixe o ZIP (veja a [seção 4](#4-passo-1-copiar-o-projeto)), descompacte e rode `npm start` dentro da pasta `farmacia-main`.
+
 Abra <http://localhost:3000>. Converse no simulador (ex.: `dipirona`, `metiformina 850`, `acido`) e altere o estoque no painel lateral para ver a resposta mudar.
 
 > Nesse modo não é preciso `npm install` nem banco: o Node 24 executa o TypeScript direto. As respostas saem do texto padrão, sem IA.
@@ -116,16 +118,50 @@ npm test
 
 ## 4. Passo 1: copiar o projeto
 
-Cada órgão precisa da **sua própria cópia** do código, porque é dela que a Vercel publica o site e é nela que você vai personalizar os textos.
+O repositório <https://github.com/grupo3fesp/farmacia> é **público**: qualquer pessoa baixa o projeto completo, sem pedir acesso. Escolha a forma conforme o objetivo:
 
+| Forma | Quando usar | Precisa de conta no GitHub? |
+|---|---|---|
+| **Download ZIP** | Só olhar o código ou fazer o [teste rápido](#3-teste-rápido-no-seu-computador-5-minutos-sem-contas) | Não |
+| **`git clone`** | Trabalhar no código no seu computador | Não |
+| **Fork** | **Implantar no seu órgão** (é de onde a Vercel publica o site) | Sim |
+
+**Download ZIP (sem instalar nada):**
 1. Entre em <https://github.com/grupo3fesp/farmacia>.
-2. Clique em **Fork** e crie a cópia na sua conta ou na organização do seu órgão.
-3. Clone a **sua** cópia:
+2. Clique no botão verde **Code** → **Download ZIP**.
+3. Descompacte. A pasta se chamará `farmacia-main`. Abra um terminal dentro dela para rodar os comandos deste manual.
+
+**`git clone`:**
+```bash
+git clone https://github.com/grupo3fesp/farmacia.git
+cd farmacia
+npm install
+```
+
+**Fork (para implantar):** cada órgão precisa da **sua própria cópia** no GitHub, porque é dela que a Vercel publica o site e é nela que você vai personalizar os textos.
+1. Entre em <https://github.com/grupo3fesp/farmacia> e clique em **Fork**.
+2. Crie a cópia na sua conta ou na organização do seu órgão.
+3. Baixe a **sua** cópia:
    ```bash
    git clone https://github.com/SEU-USUARIO/farmacia.git
    cd farmacia
    npm install
    ```
+
+> **Prefere um repositório privado?** O GitHub não permite tornar privado um fork de repositório público. Nesse caso, crie um repositório **vazio e privado** na conta do órgão (sem README) e envie para ele uma cópia do projeto:
+> ```bash
+> git clone https://github.com/grupo3fesp/farmacia.git
+> cd farmacia
+> git remote set-url origin https://github.com/SEU-ORGAO/farmacia.git
+> git push -u origin main
+> ```
+
+### O que vem no download, e o que não vem
+- ✅ **Vem:** todo o código, os scripts do banco (`db/`), este manual, as planilhas-modelo (`docs/modelos/`) e os testes automatizados.
+- ❌ **Não vem, de propósito:** chaves, senhas e tokens. O arquivo `.env` com as credenciais do Grupo 3 **nunca** foi enviado ao GitHub. Cada órgão cria as **próprias** contas e chaves (passos 2 e 3 a seguir). Assim, o banco de um órgão fica totalmente separado do de outro.
+- ❌ **Não vem:** a pasta `node_modules` (bibliotecas). Ela é baixada pelo `npm install`.
+
+> As alterações que você fizer ficam **só na sua cópia**. O repositório original do Grupo 3 não é afetado.
 
 ---
 
