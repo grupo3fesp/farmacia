@@ -1,4 +1,11 @@
--- MIGRAÇÃO MULTIUNIDADE - COMPLETA (cole tudo no SQL Editor e RUN)
+-- =====================================================================
+-- SETUP COMPLETO - Assistente Virtual da Farmacia Municipal
+-- GERADO por scripts/gerar-setup-completo.mjs (npm run setup-sql).
+-- NAO editar a mao: edite os arquivos de origem e gere de novo.
+-- Cole TUDO no SQL Editor do Supabase e clique em RUN.
+-- Conteudo: 05_migracao_multiunidade.sql + 01_schema_supabase.sql + 02_seed_dados_ficticios.sql + 03_sessoes.sql
+-- =====================================================================
+-- >>>>> 05_migracao_multiunidade.sql
 
 -- =====================================================================
 -- Migracao para o MODELO MULTIUNIDADE (estoque por unidade).
@@ -14,6 +21,8 @@ drop function if exists public.estoque_medicamento(text);
 drop table    if exists public.estoques  cascade;
 drop table    if exists public.sinonimos cascade;
 drop table    if exists public.medicamentos cascade;
+
+-- >>>>> 01_schema_supabase.sql
 
 -- =====================================================================
 -- Assistente Virtual Inteligente - Farmacia Municipal
@@ -183,6 +192,14 @@ as $$
   with entrada as (
     select lower(extensions.unaccent(coalesce(p_termo, ''))) as t
   ),
+  -- Medicamentos cujo principio ativo COMECA com o termo (prefixo).
+  prefixos as (
+    select m.codigo, m.principio_ativo as pa
+      from public.medicamentos m, entrada e
+     where length(e.t) >= 3
+       and starts_with(lower(extensions.unaccent(m.principio_ativo)), e.t)
+       and lower(extensions.unaccent(m.principio_ativo)) <> e.t
+  ),
   achados as (
     select s.codigo, 'sinonimo_exato'::text as origem, 1.0::real as semelhanca
       from public.sinonimos s, entrada e
@@ -196,12 +213,11 @@ as $$
       from public.sinonimos s, entrada e
      where e.t <> '' and similarity(s.termo_norm, e.t) > 0.42
     union all
-    -- Nivel 4: prefixo do principio ativo ("acido" -> os dois "Ácido...").
-    select m.codigo, 'aproximado'::text, 0.5::real
-      from public.medicamentos m, entrada e
-     where length(e.t) >= 3
-       and starts_with(lower(extensions.unaccent(m.principio_ativo)), e.t)
-       and lower(extensions.unaccent(m.principio_ativo)) <> e.t
+    -- Nivel 4: prefixo do principio ativo. Se casa 2+ principios distintos
+    -- ("insulina", "acido"), eleva a 1.0 para empatar -> desambiguacao; senao 0.5.
+    select p.codigo, 'aproximado'::text,
+           (case when (select count(distinct pa) from prefixos) >= 2 then 1.0 else 0.5 end)::real
+      from prefixos p
   ),
   melhor as (
     select a.codigo, max(a.semelhanca) as semelhanca,
@@ -300,6 +316,8 @@ create policy p_log_insercao on public.consultas_log
   for insert to anon, authenticated with check (true);
 -- Escrita em estoques so pela service_role (backend); anon nao tem policy de escrita.
 
+-- >>>>> 02_seed_dados_ficticios.sql
+
 -- Seed da base FICTICIA - MODELO MULTIUNIDADE (estoque por unidade).
 -- Quantitativos simulados. Gerado por scripts/gerar-multiunidade.mjs.
 
@@ -371,20 +389,25 @@ insert into public.estoques (codigo, unidade_id, estoque_atual, estoque_minimo) 
   ('MED-002', 'UN-03', 0, 24),
   ('MED-003', 'UN-01', 3150, 700),
   ('MED-003', 'UN-02', 350, 420),
+  ('MED-003', 'UN-03', 0, 280),
   ('MED-004', 'UN-01', 42, 50),
+  ('MED-004', 'UN-02', 0, 30),
   ('MED-004', 'UN-03', 13, 20),
   ('MED-005', 'UN-01', 1240, 400),
   ('MED-005', 'UN-02', 682, 240),
   ('MED-005', 'UN-03', 0, 160),
   ('MED-006', 'UN-01', 2600, 600),
   ('MED-006', 'UN-02', 0, 360),
+  ('MED-006', 'UN-03', 0, 240),
   ('MED-007', 'UN-01', 18, 30),
   ('MED-007', 'UN-02', 10, 18),
   ('MED-007', 'UN-03', 5, 12),
   ('MED-008', 'UN-01', 0, 200),
+  ('MED-008', 'UN-02', 0, 120),
   ('MED-008', 'UN-03', 0, 80),
   ('MED-009', 'UN-01', 940, 250),
   ('MED-009', 'UN-02', 125, 150),
+  ('MED-009', 'UN-03', 0, 100),
   ('MED-010', 'UN-01', 1180, 300),
   ('MED-010', 'UN-02', 649, 180),
   ('MED-010', 'UN-03', 0, 120),
@@ -392,6 +415,8 @@ insert into public.estoques (codigo, unidade_id, estoque_atual, estoque_minimo) 
   ('MED-011', 'UN-02', 418, 120),
   ('MED-011', 'UN-03', 100, 80),
   ('MED-012', 'UN-01', 210, 60),
+  ('MED-012', 'UN-02', 0, 36),
+  ('MED-012', 'UN-03', 0, 24),
   ('MED-013', 'UN-01', 8600, 1500),
   ('MED-013', 'UN-02', 4730, 900),
   ('MED-013', 'UN-03', 2580, 600),
@@ -400,20 +425,25 @@ insert into public.estoques (codigo, unidade_id, estoque_atual, estoque_minimo) 
   ('MED-014', 'UN-03', 1020, 360),
   ('MED-015', 'UN-01', 96, 40),
   ('MED-015', 'UN-02', 20, 24),
+  ('MED-015', 'UN-03', 0, 16),
   ('MED-016', 'UN-01', 31, 25),
+  ('MED-016', 'UN-02', 0, 15),
   ('MED-016', 'UN-03', 13, 10),
   ('MED-017', 'UN-01', 12400, 2000),
   ('MED-017', 'UN-02', 6820, 1200),
   ('MED-017', 'UN-03', 3720, 800),
   ('MED-018', 'UN-01', 5900, 1200),
   ('MED-018', 'UN-02', 0, 720),
+  ('MED-018', 'UN-03', 0, 480),
   ('MED-019', 'UN-01', 2100, 800),
   ('MED-019', 'UN-02', 1155, 480),
   ('MED-019', 'UN-03', 630, 320),
   ('MED-020', 'UN-01', 7300, 1200),
+  ('MED-020', 'UN-02', 0, 720),
   ('MED-020', 'UN-03', 0, 480),
   ('MED-021', 'UN-01', 4100, 900),
   ('MED-021', 'UN-02', 450, 540),
+  ('MED-021', 'UN-03', 0, 360),
   ('MED-022', 'UN-01', 880, 900),
   ('MED-022', 'UN-02', 484, 540),
   ('MED-022', 'UN-03', 264, 360),
@@ -421,6 +451,8 @@ insert into public.estoques (codigo, unidade_id, estoque_atual, estoque_minimo) 
   ('MED-023', 'UN-02', 1348, 360),
   ('MED-023', 'UN-03', 735, 240),
   ('MED-024', 'UN-01', 6800, 1500),
+  ('MED-024', 'UN-02', 0, 900),
+  ('MED-024', 'UN-03', 0, 600),
   ('MED-025', 'UN-01', 9200, 1500),
   ('MED-025', 'UN-02', 5060, 900),
   ('MED-025', 'UN-03', 0, 600),
@@ -429,20 +461,25 @@ insert into public.estoques (codigo, unidade_id, estoque_atual, estoque_minimo) 
   ('MED-026', 'UN-03', 500, 400),
   ('MED-027', 'UN-01', 1320, 300),
   ('MED-027', 'UN-02', 150, 180),
+  ('MED-027', 'UN-03', 0, 120),
   ('MED-028', 'UN-01', 640, 200),
+  ('MED-028', 'UN-02', 0, 120),
   ('MED-028', 'UN-03', 192, 80),
   ('MED-029', 'UN-01', 0, 40),
   ('MED-029', 'UN-02', 0, 24),
   ('MED-029', 'UN-03', 0, 16),
   ('MED-030', 'UN-01', 155, 40),
   ('MED-030', 'UN-02', 0, 24),
+  ('MED-030', 'UN-03', 0, 16),
   ('MED-031', 'UN-01', 2900, 500),
   ('MED-031', 'UN-02', 1595, 300),
   ('MED-031', 'UN-03', 250, 200),
   ('MED-032', 'UN-01', 74, 60),
+  ('MED-032', 'UN-02', 0, 36),
   ('MED-032', 'UN-03', 22, 24),
   ('MED-033', 'UN-01', 58, 30),
   ('MED-033', 'UN-02', 15, 18),
+  ('MED-033', 'UN-03', 0, 12),
   ('MED-034', 'UN-01', 1450, 300),
   ('MED-034', 'UN-02', 798, 180),
   ('MED-034', 'UN-03', 435, 120),
@@ -450,6 +487,8 @@ insert into public.estoques (codigo, unidade_id, estoque_atual, estoque_minimo) 
   ('MED-035', 'UN-02', 0, 90),
   ('MED-035', 'UN-03', 0, 60),
   ('MED-036', 'UN-01', 6100, 1200),
+  ('MED-036', 'UN-02', 0, 720),
+  ('MED-036', 'UN-03', 0, 480),
   ('MED-037', 'UN-01', 8800, 1500),
   ('MED-037', 'UN-02', 4840, 900),
   ('MED-037', 'UN-03', 2640, 600),
@@ -458,27 +497,34 @@ insert into public.estoques (codigo, unidade_id, estoque_atual, estoque_minimo) 
   ('MED-038', 'UN-03', 1560, 400),
   ('MED-039', 'UN-01', 620, 200),
   ('MED-039', 'UN-02', 100, 120),
+  ('MED-039', 'UN-03', 0, 80),
   ('MED-040', 'UN-01', 27, 30),
+  ('MED-040', 'UN-02', 0, 18),
   ('MED-040', 'UN-03', 0, 12),
   ('MED-041', 'UN-01', 88, 30),
   ('MED-041', 'UN-02', 48, 18),
   ('MED-041', 'UN-03', 15, 12),
   ('MED-042', 'UN-01', 430, 120),
   ('MED-042', 'UN-02', 0, 72),
+  ('MED-042', 'UN-03', 0, 48),
   ('MED-043', 'UN-01', 2200, 500),
   ('MED-043', 'UN-02', 1210, 300),
   ('MED-043', 'UN-03', 660, 200),
   ('MED-044', 'UN-01', 3600, 800),
+  ('MED-044', 'UN-02', 0, 480),
   ('MED-044', 'UN-03', 1080, 320),
   ('MED-045', 'UN-01', 1900, 500),
   ('MED-045', 'UN-02', 250, 300),
+  ('MED-045', 'UN-03', 0, 200),
   ('MED-046', 'UN-01', 340, 400),
   ('MED-046', 'UN-02', 187, 240),
   ('MED-046', 'UN-03', 200, 160),
   ('MED-047', 'UN-01', 0, 300),
   ('MED-047', 'UN-02', 0, 180),
   ('MED-047', 'UN-03', 0, 120),
-  ('MED-048', 'UN-01', 1100, 300);
+  ('MED-048', 'UN-01', 1100, 300),
+  ('MED-048', 'UN-02', 0, 180),
+  ('MED-048', 'UN-03', 0, 120);
 
 insert into public.sinonimos (codigo, termo, termo_norm) values
   ('MED-001', 'dipirona', 'dipirona'),
@@ -538,6 +584,7 @@ insert into public.sinonimos (codigo, termo, termo_norm) values
   ('MED-015', 'insulina lenta', 'insulina lenta'),
   ('MED-016', 'insulina regular', 'insulina regular'),
   ('MED-016', 'insulina rapida', 'insulina rapida'),
+  ('MED-016', 'insulina', 'insulina'),
   ('MED-017', 'losartana', 'losartana'),
   ('MED-017', 'losartan', 'losartan'),
   ('MED-017', 'losartana 50', 'losartana 50'),
@@ -620,7 +667,89 @@ insert into public.sinonimos (codigo, termo, termo_norm) values
   ('MED-047', 'diazepam', 'diazepam'),
   ('MED-047', 'valium', 'valium'),
   ('MED-048', 'fenitoina', 'fenitoina'),
-  ('MED-048', 'hidantal', 'hidantal')
+  ('MED-048', 'hidantal', 'hidantal'),
+  ('MED-002', 'dipirona xarope', 'dipirona xarope'),
+  ('MED-002', 'dipirona liquido', 'dipirona liquido'),
+  ('MED-004', 'paracetamol xarope', 'paracetamol xarope'),
+  ('MED-004', 'paracetamol liquido', 'paracetamol liquido'),
+  ('MED-007', 'amoxicilina liquido', 'amoxicilina liquido'),
+  ('MED-029', 'prednisolona xarope', 'prednisolona xarope'),
+  ('MED-029', 'prednisolona liquido', 'prednisolona liquido'),
+  ('MED-030', 'dexametasona pomada', 'dexametasona pomada'),
+  ('MED-032', 'salbutamol bombinha', 'salbutamol bombinha'),
+  ('MED-032', 'salbutamol spray', 'salbutamol spray'),
+  ('MED-033', 'beclometasona bombinha', 'beclometasona bombinha'),
+  ('MED-033', 'beclometasona spray', 'beclometasona spray'),
+  ('MED-040', 'nistatina xarope', 'nistatina xarope'),
+  ('MED-040', 'nistatina liquido', 'nistatina liquido'),
+  ('MED-040', 'nistatina suspensao', 'nistatina suspensao'),
+  ('MED-041', 'permetrina locao', 'permetrina locao'),
+  ('MED-041', 'permetrina pomada', 'permetrina pomada'),
+  ('MED-015', 'insulina injecao', 'insulina injecao'),
+  ('MED-015', 'insulina ampola', 'insulina ampola'),
+  ('MED-015', 'insulina injetavel', 'insulina injetavel'),
+  ('MED-016', 'insulina injecao', 'insulina injecao'),
+  ('MED-016', 'insulina ampola', 'insulina ampola'),
+  ('MED-016', 'insulina injetavel', 'insulina injetavel'),
+  ('MED-034', 'albendazol mastigavel', 'albendazol mastigavel'),
+  ('MED-002', 'anador', 'anador'),
+  ('MED-002', 'dipirona sodica', 'dipirona sodica'),
+  ('MED-002', 'dipirona 500', 'dipirona 500'),
+  ('MED-004', 'paracetamol 500', 'paracetamol 500'),
+  ('MED-007', 'amoxilina', 'amoxilina'),
+  ('MED-005', 'biprofeno', 'biprofeno'),
+  ('MED-005', 'ibrufeno', 'ibrufeno'),
+  ('MED-008', 'astomicina', 'astomicina'),
+  ('MED-018', 'nanapril', 'nanapril'),
+  ('MED-019', 'capotril', 'capotril'),
+  ('MED-021', 'andolipino', 'andolipino'),
+  ('MED-029', 'predisilona', 'predisilona'),
+  ('MED-047', 'jazepam', 'jazepam')
 on conflict (codigo, termo_norm) do nothing;
 
 commit;
+
+-- >>>>> 03_sessoes.sql
+
+-- =====================================================================
+-- Estado de sessao persistente (para hospedagem serverless / multi-instancia)
+-- Necessario na Vercel: a memoria local nao e compartilhada entre invocacoes.
+-- Rode este arquivo no SQL Editor DEPOIS do schema e do seed.
+-- Acesso somente pela service_role (backend). RLS bloqueia anon por completo.
+-- =====================================================================
+
+-- Estado conversacional por sessao (desambiguacao pendente + boas-vindas).
+create table if not exists public.sessoes (
+  sessao_hash text primary key,
+  aguardando  text,                              -- 'desambiguacao' | null
+  opcoes      jsonb not null default '[]'::jsonb, -- registros oferecidos (sem dado pessoal)
+  ja_saudou   boolean not null default false,
+  expira_em   timestamptz not null
+);
+
+comment on table public.sessoes is
+  'Estado de sessao do assistente. Sem dado pessoal: so codigos de medicamento e expiracao.';
+
+create index if not exists idx_sessoes_expira on public.sessoes (expira_em);
+
+-- Deduplicacao de mensagens (idempotencia do webhook).
+create table if not exists public.mensagens_vistas (
+  id_mensagem text primary key,
+  expira_em   timestamptz not null
+);
+
+create index if not exists idx_mensagens_vistas_expira on public.mensagens_vistas (expira_em);
+
+-- Limpeza de expirados. Pode ser chamada por pg_cron ou pelo backend.
+create or replace function public.limpar_sessoes_expiradas()
+returns void
+language sql
+as $$
+  delete from public.sessoes        where expira_em < now();
+  delete from public.mensagens_vistas where expira_em < now();
+$$;
+
+-- RLS: nenhuma politica para anon => anon nao le nem escreve. A service_role,
+-- usada apenas no backend, ignora a RLS.
+alter table public.sessoes          enable row level security;
+alter table public.mensagens_vistas enable row level security;

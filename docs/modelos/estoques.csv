@@ -1,0 +1,5 @@
+codigo,unidade_id,estoque_atual,estoque_minimo
+MED-001,UN-01,4820,800
+MED-001,UN-02,0,480
+MED-002,UN-01,120,60
+MED-002,UN-02,15,36

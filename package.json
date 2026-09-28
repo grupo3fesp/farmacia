@@ -9,6 +9,7 @@
   },
   "scripts": {
     "seed": "node scripts/gerar-seed.mjs",
+    "setup-sql": "node scripts/gerar-setup-completo.mjs",
     "build": "node build.mjs",
     "start": "node src/index.ts",
     "dev": "node --watch src/index.ts",

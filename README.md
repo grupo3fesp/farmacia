@@ -6,6 +6,10 @@ orienta sobre uso, não substitui profissional de saúde.
 
 > ⚠️ **Dados fictícios.** Nenhum quantitativo representa estoque real.
 
+📘 **Vai instalar ou replicar a solução no seu órgão?** Siga o
+[**Manual de Instalação e Replicação**](docs/MANUAL_INSTALACAO.md): contas, banco, IA,
+publicação, carga dos seus dados (com modelos de planilha) e ativação do WhatsApp.
+
 O contexto completo do projeto está em [`CLAUDE.md`](CLAUDE.md). Este README é o guia de execução.
 
 ## Requisitos
@@ -49,8 +53,9 @@ npm run seed
 
 ## Ligar o Supabase (busca no banco real)
 
-1. Siga [`docs/03_passo_a_passo_supabase.md`](docs/03_passo_a_passo_supabase.md): crie o
-   projeto e rode `db/01_schema_supabase.sql` e `db/02_seed_dados_ficticios.sql`.
+1. Crie o projeto no Supabase e rode, no SQL Editor, o arquivo único
+   `db/00_setup_completo.sql` (schema + seed fictício + sessões). Detalhes na seção 5 do
+   [manual](docs/MANUAL_INSTALACAO.md#5-passo-2-criar-o-banco-no-supabase).
 2. `npm install` (baixa `@supabase/supabase-js`).
 3. Copie `.env.example` para `.env`, preencha `SUPABASE_URL` / `SUPABASE_ANON_KEY` /
    `SUPABASE_SERVICE_ROLE_KEY` e defina `REPOSITORIO=supabase`.
@@ -58,9 +63,10 @@ npm run seed
 
 ## Ligar a redação por IA (opcional)
 
-Sem `ANTHROPIC_API_KEY`, a resposta é montada por um template determinístico (sempre
-correto). Para redação em linguagem natural: `npm install`, preencha `ANTHROPIC_API_KEY`
-no `.env` e reinicie. A IA recebe **apenas** o registro devolvido pelo banco — nunca
+Sem chave de IA, a resposta é montada por um template determinístico (sempre correto).
+Para redação em linguagem natural, defina `IA_PROVEDOR=gemini` e `GEMINI_API_KEY` (Google
+AI Studio, tier grátis; modelo padrão `gemini-flash-lite-latest`) ou `IA_PROVEDOR=anthropic`
+e `ANTHROPIC_API_KEY`. A IA recebe **apenas** o registro devolvido pelo banco — nunca
 decide disponibilidade.
 
 ## WhatsApp (fases B e C)
